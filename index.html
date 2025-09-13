@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ابزار انتخاب واحد (وب)</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1 style="margin:0 0 8px 0">ابزار انتخاب واحد (وب)</h1>
+        <div class="toolbar">
+            <button id="btnAdd" class="btn btn-primary">افزودن درس</button>
+            <button id="btnEdit" class="btn">ویرایش انتخاب‌شده</button>
+            <button id="btnDelete" class="btn btn-danger">حذف انتخاب‌شده</button>
+            <button id="btnCopyCodes" class="btn">کپی کد دروس</button>
+            <span style="flex:1 1 auto"></span>
+            <button id="btnThemeToggle" class="btn">تغییر تم</button>
+            <button id="btnImportFile" class="btn">ورود فایل</button>
+            <button id="btnPickFile" class="btn">ذخیره</button>
+            <div class="dropdown">
+                <button class="btn btn-ok">خروجی</button>
+                <div class="dropdown-content">
+                    <a href="#" id="btnExportPDF">PDF</a>
+                    <a href="#" id="btnExportPNG">PNG</a>
+                    <a href="#" id="btnExportJPEG">JPEG</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="panel grid-wrap" id="plannerPanel">
+            <div class="hours" id="hours">
+                <div class="tick" style="top: 32px;">08:00</div>
+                <div class="tick" style="top: 90px;">09:00</div>
+                <div class="tick" style="top: 150px;">10:00</div>
+                <div class="tick" style="top: 210px;">11:00</div>
+                <div class="tick" style="top: 270px;">12:00</div>
+                <div class="tick" style="top: 330px;">13:00</div>
+                <div class="tick" style="top: 392px;">14:00</div>
+                <div class="tick" style="top: 453px;">15:00</div>
+                <div class="tick" style="top: 510px;">16:00</div>
+                <div class="tick" style="top: 570px;">17:00</div>
+                <div class="tick" style="top: 635px;">18:00</div>
+                <div class="tick" style="top: 690px;">19:00</div>
+            </div>
+            <div class="week">
+                <div class="week-header" id="weekHeader"></div>
+                <div class="week-body" id="weekBody"></div>
+            </div>
+        </div>
+
+        <div class="panel" style="margin-top:12px" id="tablePanel">
+            <div class="forms" id="form">
+                <div>
+                    <label>کد درس</label>
+                    <input id="code" placeholder="40123" />
+                </div>
+                <div>
+                    <label>نام درس</label>
+                    <input id="name" placeholder="برنامه‌نویسی پیشرفته" />
+                </div>
+                <div>
+                    <label>نام استاد</label>
+                    <input id="prof" placeholder="دکتر ..." />
+                </div>
+                <div>
+                    <label>تعداد واحد</label>
+                    <input id="units" type="number" step="0.5" placeholder="3" />
+                </div>
+                <div>
+                    <label>روز هفته</label>
+                    <select id="day"></select>
+                </div>
+                <div>
+                    <label>ساعت شروع</label>
+                    <input id="start" placeholder="16 یا 16.30" />
+                </div>
+                <div>
+                    <label>تا</label>
+                    <input id="end" placeholder="18.30" />
+                </div>
+                <div>
+                    <label>تاریخ امتحان (YYYY-MM-DD)</label>
+                    <input id="examDate" placeholder="2025-06-20" />
+                </div>
+                <div>
+                    <label>ساعت امتحان (HH:MM)</label>
+                    <input id="examTime" placeholder="09:30" />
+                </div>
+            </div>
+
+            <table id="table">
+                <thead>
+                    <tr>
+                        <th>کد درس</th>
+                        <th>نام درس</th>
+                        <th>استاد</th>
+                        <th>واحد</th>
+                        <th>روز</th>
+                        <th>ساعت کلاس</th>
+                        <th>امتحان</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+
+            <div class="status">
+                <span><span class="badge" id="totals">مجموع واحد: 0 | تعداد دروس: 0</span></span>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

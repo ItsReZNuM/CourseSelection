@@ -1,0 +1,345 @@
+@font-face {
+    font-family: 'DanaFaNum';
+    font-style: normal;
+    font-weight: normal;
+    /* مرورگر به ترتیب فایل‌ها را بررسی می‌کند، woff2 بهترین گزینه است */
+    src: url('font/DanaFaNum.woff2') format('woff2'),
+         url('font/DanaFaNum.woff') format('woff'),
+         url('font/DanaFaNum.ttf') format('truetype');
+}
+
+:root {
+    /* Dark Theme (Default) */
+    --bg: #0b0c0f;
+    --card: #11141a;
+    --muted: #aab0b7;
+    --text: #e9edf2;
+    --accent: #5b8def;
+    --grid: #1e2430;
+    --ok: #1db954;
+    --warn: #fbbc05;
+    --danger: #ef4444;
+    --border: #202634;
+    --input-bg: #0c1016;
+    --shadow: 0 10px 25px rgba(0, 0, 0, .25);
+}
+
+[data-theme="light"] {
+    /* Light Theme */
+    --bg: #f0f2f5;
+    --card: #ffffff;
+    --muted: #65676b;
+    --text: #050505;
+    --accent: #1877f2;
+    --grid: #dce1e7;
+    --ok: #42b72a;
+    --warn: #f7b928;
+    --danger: #fa383e;
+    --border: #ced0d4;
+    --input-bg: #e4e6eb;
+    --shadow: 0 10px 25px rgba(0, 0, 0, .1);
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    /* "DanaFaNum" اکنون به فونتی که خودمان تعریف کردیم اشاره دارد */
+    font: 14px/1.6 "DanaFaNum", "Dana", "IRANSans", "Vazirmatn", "Tahoma", "Segoe UI", system-ui;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 16px;
+}
+
+.toolbar {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+button,
+select,
+input {
+    font: inherit;
+}
+
+.btn {
+    background: var(--card);
+    border: 1px solid var(--border);
+    padding: 8px 12px;
+    border-radius: 12px;
+    color: var(--text);
+    cursor: pointer;
+    box-shadow: var(--shadow);
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.btn:hover {
+    border-color: var(--accent);
+}
+
+.btn-primary {
+    background: var(--accent);
+    border-color: transparent;
+    color: white;
+}
+
+.btn-danger {
+    background: var(--danger);
+    border-color: transparent;
+    color: white;
+}
+
+.btn-ok {
+    background: var(--ok);
+    border-color: transparent;
+    color: white;
+}
+
+.panel {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.grid-wrap {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: 12px;
+}
+
+.hours {
+    background: var(--card);
+    border: 1px dashed var(--border);
+    border-radius: 12px;
+    position: relative;
+    padding-top: 39px;
+    /* Alignment Fix */
+}
+
+.hours .tick {
+    position: absolute;
+    right: 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.week {
+    position: relative;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.week-header {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    border-bottom: 1px solid var(--border);
+}
+
+.week-header div {
+    padding: 8px 6px;
+    text-align: center;
+    color: var(--muted);
+}
+
+.week-body {
+    position: relative;
+    height: 720px;
+}
+
+.vcol {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-left: 1px solid var(--grid);
+}
+
+.hrow {
+    position: absolute;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed var(--grid);
+}
+
+.course {
+    position: absolute;
+    border-radius: 10px;
+    padding: 6px 8px;
+    color: #0b0c0f;
+    font-weight: 700;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
+    overflow: hidden;
+    font-size: 12px;
+}
+
+.course .title {
+    font-size: 13px;
+    font-weight: bold;
+}
+
+.course .meta {
+    font-size: 11px;
+    opacity: .9;
+}
+
+.forms {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 8px;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.forms label {
+    font-size: 12px;
+    color: var(--muted);
+}
+
+.forms input,
+.forms select {
+    width: 100%;
+    background: var(--input-bg);
+    color: var(--text);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px;
+    box-sizing: border-box;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th,
+td {
+    border-bottom: 1px solid var(--border);
+    padding: 8px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+th {
+    color: var(--muted);
+}
+
+tr.selected {
+    outline: 2px solid var(--accent);
+}
+
+.status {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-top: 8px;
+    color: var(--muted);
+}
+
+.badge {
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--input-bg);
+    border: 1px solid var(--border);
+}
+
+/* --- Export Dropdown Styles --- */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: var(--card);
+    min-width: 100px;
+    box-shadow: var(--shadow);
+    z-index: 1;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+}
+
+.dropdown-content a {
+    color: var(--text);
+    padding: 10px 14px;
+    text-decoration: none;
+    display: block;
+    text-align: center;
+}
+
+.dropdown-content a:hover {
+    background-color: var(--input-bg);
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+@media (max-width: 900px) {
+    .grid-wrap {
+        grid-template-columns: 1fr;
+    }
+
+    .hours {
+        display: none;
+    }
+}
+
+/* --- Toast Notification Styles --- */
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.toast {
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    opacity: 0;
+    transform: translateX(120%);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.toast.success {
+    background-color: var(--ok);
+}
+
+.toast.error {
+    background-color: var(--danger);
+}
+
+.toast.info {
+    background-color: var(--accent);
+}
