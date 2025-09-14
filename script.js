@@ -234,8 +234,9 @@ function drawCourses() {
     const y2 = (en - START_HOUR * 60) * PX_PER_MIN;
     const el = document.createElement('div');
     el.className = 'course';
-    el.style.right = x1 + "px";
-    el.style.width = (colW - 12) + "px";
+// فقط از right + width استفاده کن تا html2canvas هم درست اسنپ‌شات بگیره
+    el.style.right = (x1 - 2) + "px";            // 2px به راست شیفت؛ اگر هنوز ذره‌ای چپ بود، این -2 رو -3 کن
+    el.style.width = (colW - 12) + "px";         // قبلاً معادل left/x2 بود
     el.style.top = y1 + "px";
     el.style.height = (y2 - y1 - 2) + "px";
     el.style.background = colorFor(c.name);

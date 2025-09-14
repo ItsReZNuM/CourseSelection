@@ -4,8 +4,8 @@
     font-weight: normal;
     /* مرورگر به ترتیب فایل‌ها را بررسی می‌کند، woff2 بهترین گزینه است */
     src: url('font/DanaFaNum.woff2') format('woff2'),
-         url('font/DanaFaNum.woff') format('woff'),
-         url('font/DanaFaNum.ttf') format('truetype');
+        url('font/DanaFaNum.woff') format('woff'),
+        url('font/DanaFaNum.ttf') format('truetype');
 }
 
 :root {
@@ -346,19 +346,56 @@ tr.selected {
 
 /* بهینه‌سازی تایپوگرافی کارت‌های کلاس برای موبایل */
 @media (max-width: 600px) {
-  .week-header div {
+    .week-header div {
+        font-size: 12px;
+        padding: 6px 4px;
+    }
+
+    .course {
+        font-size: 11px;
+        /* کوچک‌تر از 12px قبلی */
+        padding: 4px 6px;
+        /* فشرده‌تر برای جاگیری بهتر */
+        line-height: 1.4;
+    }
+
+    .course .title {
+        font-size: 12px;
+        /* کوچک‌تر از 13px */
+    }
+
+    .course .meta {
+        font-size: 10px;
+        /* کوچک‌تر از 11px */
+    }
+}
+
+/* تیون‌کردن تایپوگرافی جدول لیست دروس برای جاگیری بهتر متن‌ها */
+#tablePanel table {
+    table-layout: fixed;
+    /* عرض ستون‌ها ثابت تا متن بیرون نزنه */
+}
+
+#tablePanel th,
+#tablePanel td {
     font-size: 12px;
-    padding: 6px 4px;
-  }
-  .course {
-    font-size: 11px;      /* کوچک‌تر از 12px قبلی */
-    padding: 4px 6px;     /* فشرده‌تر برای جاگیری بهتر */
-    line-height: 1.4;
-  }
-  .course .title {
-    font-size: 12px;      /* کوچک‌تر از 13px */
-  }
-  .course .meta {
-    font-size: 10px;      /* کوچک‌تر از 11px */
-  }
+    /* کمی کوچک‌تر از حالت فعلی */
+    padding: 6px 8px;
+    /* کمی فشرده‌تر */
+    overflow: hidden;
+    /* اگر متن خیلی بلند بود */
+    text-overflow: ellipsis;
+    /* سه‌نقطه بزن */
+    white-space: nowrap;
+    /* روی یک خط نگه می‌داریم تا ردیف‌ها جمع‌وجور بمونن */
+}
+
+/* اگر فقط روی موبایل می‌خوای کوچک‌تر باشه، می‌تونی این رو هم اضافه کنی: */
+@media (max-width: 600px) {
+
+    #tablePanel th,
+    #tablePanel td {
+        font-size: 11px;
+        padding: 5px 6px;
+    }
 }
