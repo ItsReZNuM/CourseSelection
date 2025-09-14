@@ -56,8 +56,17 @@ function toggleTheme() {
 }
 
 // --------------------------- ابزار زمان ---------------------------
+function toEnglishDigits(str) {
+  if (str == null) return "";
+  return String(str)
+    .replace(/[۰-۹]/g, ch => String(ch.charCodeAt(0) - 0x06F0))
+    .replace(/[٠-٩]/g, ch => String(ch.charCodeAt(0) - 0x0660))
+    .replace(/[\u066B\u066C\u060C]/g, ".")
+    .replace(/[\uFF1A\uFE55]/g, ":");
+}
+
 function normalizeTimeStr(t) {
-  t = (t || "").toString().trim();
+  t = toEnglishDigits((t || "").toString().trim());
   if (!t) return "";
   let hh, mm;
   if (t.includes(":")) [hh, mm] = t.split(":");
@@ -225,7 +234,12 @@ function drawCourses() {
     const y2 = (en - START_HOUR * 60) * PX_PER_MIN;
     const el = document.createElement('div');
     el.className = 'course';
-    el.style.right = x1 + "px"; el.style.left = (ui.weekBody.clientWidth - x2) + "px"; el.style.top = y1 + "px"; el.style.height = (y2 - y1 - 2) + "px"; el.style.background = colorFor(c.name); el.dataset.id = c.id;
+    el.style.right = x1 + "px";
+    el.style.width = (colW - 12) + "px";
+    el.style.top = y1 + "px";
+    el.style.height = (y2 - y1 - 2) + "px";
+    el.style.background = colorFor(c.name);
+    el.dataset.id = c.id;
     el.innerHTML = `<div class="title">${c.name} (${c.code})</div><div class="meta">${normalizeTimeStr(c.start)} تا ${normalizeTimeStr(c.end)}</div><div class="meta">استاد: ${c.professor || '—'}</div>${c.exam_date && c.exam_time ? `<div class="meta">امتحان: ${c.exam_date} ${normalizeTimeStr(c.exam_time)}</div>` : ''}`;
     el.addEventListener('click', () => selectRow(c.id));
     ui.weekBody.appendChild(el);
@@ -267,6 +281,9 @@ function fillDayOptions() { ui.form.day.innerHTML = DAYS.map(d => `<option value
 function readForm() {
   const values = {};
   for (const key in ui.form) { values[key] = ui.form[key].value.trim(); }
+  ["code", "units", "start", "end", "examDate", "examTime"].forEach(k => {
+    values[k] = toEnglishDigits(values[k]);
+  });
   if (!values.name) throw new Error('نام درس را وارد کنید.');
   if (!values.code) throw new Error('کد درس را وارد کنید.');
   if (!DAYS.includes(values.day)) throw new Error('روز هفته نامعتبر است.');

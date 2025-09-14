@@ -343,3 +343,22 @@ tr.selected {
 .toast.info {
     background-color: var(--accent);
 }
+
+/* بهینه‌سازی تایپوگرافی کارت‌های کلاس برای موبایل */
+@media (max-width: 600px) {
+  .week-header div {
+    font-size: 12px;
+    padding: 6px 4px;
+  }
+  .course {
+    font-size: 11px;      /* کوچک‌تر از 12px قبلی */
+    padding: 4px 6px;     /* فشرده‌تر برای جاگیری بهتر */
+    line-height: 1.4;
+  }
+  .course .title {
+    font-size: 12px;      /* کوچک‌تر از 13px */
+  }
+  .course .meta {
+    font-size: 10px;      /* کوچک‌تر از 11px */
+  }
+}
