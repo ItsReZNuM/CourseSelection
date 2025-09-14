@@ -271,7 +271,7 @@ function readForm() {
   if (!values.code) throw new Error('کد درس را وارد کنید.');
   if (!DAYS.includes(values.day)) throw new Error('روز هفته نامعتبر است.');
   const stMin = parseTimeToMinutes(values.start), enMin = parseTimeToMinutes(values.end);
-  if (!(stMin < enMin)) throw new Error('ساعت پایان باید بزرگ‌تر از شروع باشد.');
+  if (!(stMin < enMin)) throw new Error('ساعت پایان باید بزرگتر از ساعت شروع باشد ( اگر باز هم به مشکل خوردید، از اعداد انگلیسی استفاده کنید )');
   if (stMin < START_HOUR * 60 || enMin > END_HOUR * 60) throw new Error(`ساعت کلاس باید بین ${START_HOUR}:00 تا ${END_HOUR}:00 باشد.`);
   if (values.examDate && values.examTime) { if (!parseExamDateTime(values.examDate, values.examTime)) throw new Error('تاریخ/ساعت امتحان نامعتبر است.'); }
   return { code: values.code, name: values.name, professor: values.prof, units: parseFloat(values.units || '0'), day: values.day, start: values.start, end: values.end, exam_date: values.examDate, exam_time: values.examTime };
