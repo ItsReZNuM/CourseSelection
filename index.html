@@ -71,21 +71,15 @@
                     <label>تعداد واحد</label>
                     <input id="units" type="number" step="0.5" placeholder="3" />
                 </div>
-                <div>
-                    <label>روز هفته</label>
-                    <select id="day"></select>
+
+                <div id="sessions-container">
                 </div>
-                <div>
-                    <label>ساعت شروع</label>
-                    <input id="start" placeholder="16 یا 16.30" />
-                </div>
-                <div>
-                    <label>تا</label>
-                    <input id="end" placeholder="18.30" />
+                <div class="form-control-full-width">
+                    <button id="btnAddSession" class="btn" type="button">افزودن کلاس دیگر</button>
                 </div>
                 <div>
                     <label>تاریخ امتحان (YYYY-MM-DD)</label>
-                    <input id="examDate" placeholder="1404-09-09" />
+                    <input id="examDate" placeholder="2025-06-20" />
                 </div>
                 <div>
                     <label>ساعت امتحان (HH:MM)</label>
@@ -100,8 +94,8 @@
                         <th>نام درس</th>
                         <th>استاد</th>
                         <th>واحد</th>
-                        <th>روز</th>
-                        <th>ساعت کلاس</th>
+                        <th>روز(ها)</th>
+                        <th>ساعت(های) کلاس</th>
                         <th>امتحان</th>
                     </tr>
                 </thead>
