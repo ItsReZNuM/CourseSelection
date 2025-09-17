@@ -2,14 +2,12 @@
     font-family: 'DanaFaNum';
     font-style: normal;
     font-weight: normal;
-    /* مرورگر به ترتیب فایل‌ها را بررسی می‌کند، woff2 بهترین گزینه است */
     src: url('font/DanaFaNum.woff2') format('woff2'),
         url('font/DanaFaNum.woff') format('woff'),
         url('font/DanaFaNum.ttf') format('truetype');
 }
 
 :root {
-    /* Dark Theme (Default) */
     --bg: #0b0c0f;
     --card: #11141a;
     --muted: #aab0b7;
@@ -25,7 +23,6 @@
 }
 
 [data-theme="light"] {
-    /* Light Theme */
     --bg: #f0f2f5;
     --card: #ffffff;
     --muted: #65676b;
@@ -49,7 +46,6 @@ body {
     margin: 0;
     background: var(--bg);
     color: var(--text);
-    /* "DanaFaNum" اکنون به فونتی که خودمان تعریف کردیم اشاره دارد */
     font: 14px/1.6 "DanaFaNum", "Dana", "IRANSans", "Vazirmatn", "Tahoma", "Segoe UI", system-ui;
     transition: background 0.3s ease, color 0.3s ease;
 }
@@ -128,7 +124,6 @@ input {
     border-radius: 12px;
     position: relative;
     padding-top: 39px;
-    /* Alignment Fix */
 }
 
 .hours .tick {
@@ -202,17 +197,21 @@ input {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
     gap: 8px;
-    align-items: center;
-    margin-bottom: 12px;
+    align-items: end;
 }
 
-.forms label {
+.forms label,
+.session-row label {
     font-size: 12px;
     color: var(--muted);
+    display: block;
+    margin-bottom: 4px;
 }
 
 .forms input,
-.forms select {
+.forms select,
+.session-row input,
+.session-row select {
     width: 100%;
     background: var(--input-bg);
     color: var(--text);
@@ -221,6 +220,55 @@ input {
     padding: 8px;
     box-sizing: border-box;
     transition: background 0.3s ease, color 0.3s ease;
+}
+
+.form-divider {
+    border: none;
+    border-top: 1px solid var(--border);
+    margin: 16px 0;
+}
+
+.no-exam-toggle {
+    margin: 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+#exam-fields-container.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.sessions-header {
+    margin: -8px 0 12px 0;
+    font-size: 16px;
+}
+
+#sessions-container .session-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr auto;
+    gap: 8px;
+    align-items: end;
+    margin-bottom: 8px;
+}
+
+.btn-delete-session {
+    background: transparent;
+    border: none;
+    color: var(--danger);
+    cursor: pointer;
+    font-size: 20px;
+    padding: 5px;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    line-height: 1;
+}
+
+.btn-delete-session:hover {
+    background: var(--danger);
+    color: white;
 }
 
 table {
@@ -260,7 +308,6 @@ tr.selected {
     border: 1px solid var(--border);
 }
 
-/* --- Export Dropdown Styles --- */
 .dropdown {
     position: relative;
     display: inline-block;
@@ -304,7 +351,6 @@ tr.selected {
     }
 }
 
-/* --- Toast Notification Styles --- */
 #toast-container {
     position: fixed;
     top: 20px;
@@ -343,39 +389,3 @@ tr.selected {
 .toast.info {
     background-color: var(--accent);
 }
-
-/* --- BEGIN: NEW STYLES FOR MULTIPLE SESSIONS --- */
-#sessions-container {
-    grid-column: 1 / -1;
-    /* Make this container span all columns */
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin-top: 8px;
-    margin-bottom: 8px;
-}
-
-.session-entry {
-    display: flex;
-    gap: 8px;
-    align-items: flex-end;
-    /* Align button with input bottoms */
-    border: 1px solid var(--grid);
-    border-radius: 10px;
-    padding: 10px;
-    background-color: var(--input-bg);
-}
-
-.session-inputs {
-    flex-grow: 1;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    gap: 8px;
-}
-
-.form-control-full-width {
-    grid-column: 1 / -1;
-    /* Make container span all columns */
-}
-
-/* --- END: NEW STYLES --- */

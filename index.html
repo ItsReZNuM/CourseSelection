@@ -14,8 +14,7 @@
     <div class="container">
         <h1 style="margin:0 0 8px 0">ابزار انتخاب واحد (وب)</h1>
         <div class="toolbar">
-            <button id="btnAdd" class="btn btn-primary">افزودن درس</button>
-            <button id="btnEdit" class="btn">ویرایش انتخاب‌شده</button>
+            <button id="btnAdd" class="btn btn-primary">افزودن / ویرایش درس</button>
             <button id="btnDelete" class="btn btn-danger">حذف انتخاب‌شده</button>
             <button id="btnCopyCodes" class="btn">کپی کد دروس</button>
             <span style="flex:1 1 auto"></span>
@@ -71,21 +70,54 @@
                     <label>تعداد واحد</label>
                     <input id="units" type="number" step="0.5" placeholder="3" />
                 </div>
+            </div>
 
-                <div id="sessions-container">
-                </div>
-                <div class="form-control-full-width">
-                    <button id="btnAddSession" class="btn" type="button">افزودن کلاس دیگر</button>
+            <div class="no-exam-toggle">
+                <input type="checkbox" id="noExam">
+                <label for="noExam">این درس امتحان ندارد</label>
+            </div>
+
+            <div class="forms" id="exam-fields-container">
+                <div>
+                    <label>روز امتحان</label>
+                    <input id="examDay" type="number" placeholder="20" />
                 </div>
                 <div>
-                    <label>تاریخ امتحان (YYYY-MM-DD)</label>
-                    <input id="examDate" placeholder="2025-06-20" />
+                    <label>ماه امتحان</label>
+                    <input id="examMonth" type="number" placeholder="6" />
                 </div>
                 <div>
-                    <label>ساعت امتحان (HH:MM)</label>
+                    <label>سال امتحان</label>
+                    <input id="examYear" type="number" placeholder="1404" />
+                </div>
+                <div>
+                    <label>ساعت امتحان</label>
                     <input id="examTime" placeholder="09:30" />
                 </div>
             </div>
+
+            <hr class="form-divider">
+            <h3 class="sessions-header">جلسات کلاس</h3>
+
+            <div id="sessions-container">
+                <div class="session-row">
+                    <div>
+                        <label>روز هفته</label>
+                        <select class="day"></select>
+                    </div>
+                    <div>
+                        <label>ساعت شروع</label>
+                        <input class="start" placeholder="16" />
+                    </div>
+                    <div>
+                        <label>تا</label>
+                        <input class="end" placeholder="18.30" />
+                    </div>
+                    <button class="btn-delete-session" style="visibility: hidden;">🗑️</button>
+                </div>
+            </div>
+            <button id="btnAddSession" class="btn" style="margin-top: 8px;">+ افزودن جلسه جدید</button>
+            <hr class="form-divider">
 
             <table id="table">
                 <thead>
@@ -94,8 +126,7 @@
                         <th>نام درس</th>
                         <th>استاد</th>
                         <th>واحد</th>
-                        <th>روز(ها)</th>
-                        <th>ساعت(های) کلاس</th>
+                        <th style="width: 200px;">روز و ساعت کلاس</th>
                         <th>امتحان</th>
                     </tr>
                 </thead>
@@ -109,7 +140,6 @@
     </div>
 
     <div id="toast-container"></div>
-
     <script src="script.js"></script>
 </body>
 
