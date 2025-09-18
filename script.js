@@ -237,7 +237,7 @@ function renderTable() {
     if (c.exam_date === null) examTxt = 'بدون امتحان';
     else if (c.exam_date && c.exam_time) {
       const examDateFormatted = c.exam_date.split('-').reverse().join('-');
-      examTxt = `${examDateFormatted} ${normalizeTimeStr(c.exam_time)}`;
+      examTxt = `${examDateFormatted} | ${normalizeTimeStr(c.exam_time)}`;
     }
 
     tr.innerHTML = `<td>${c.code || ''}</td><td>${c.name}</td><td>${c.professor || ''}</td><td>${c.units}</td><td style="white-space: normal;">${sessionTexts}</td><td>${examTxt}</td>`;
