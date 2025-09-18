@@ -218,7 +218,7 @@ function drawCourses() {
       el.style.background = colorFor(c.name); el.dataset.courseId = c.id;
       let examText = '—';
       if (c.exam_date === null) examText = 'بدون امتحان';
-      else if (c.exam_date && c.exam_time) examText = `امتحان: ${c.exam_date.split('-').reverse().join('-')} ${normalizeTimeStr(c.exam_time)}`;
+      else if (c.exam_date && c.exam_time) examText = `امتحان: ${c.exam_date.split('-').reverse().join('-')} | ${normalizeTimeStr(c.exam_time)}`;
       el.innerHTML = `<div class="title">${c.name} (${c.code})</div><div class="meta">${s.day} | ${normalizeTimeStr(s.start)} تا ${normalizeTimeStr(s.end)}</div><div class="meta">استاد: ${c.professor || '—'}</div><div class="meta">${examText}</div>`;
       el.addEventListener('click', () => selectRow(c.id)); ui.weekBody.appendChild(el);
     });
