@@ -1,0 +1,154 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'DanaFaNum';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/DanaFaNum.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/JetBrainsMono.ttf') format('truetype');
+}
+
+@theme {
+  --font-sans: 'DanaFaNum', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  /* Added card color to fix tooltip transparency */
+  --color-card: var(--card);
+  --color-primary: var(--accent);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --color-border: var(--border-color);
+}
+
+@layer base {
+  :root {
+    --bg: #f5f7fa;
+    --text: #050505;
+    --card: #ffffff;
+    /* Light mode card background */
+    --accent: #1877f2;
+    --muted: #65676b;
+    --danger: #fa383e;
+    --ok: #42b72a;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: #050507;
+    --text: #e9edf2;
+    --card: #11141a;
+    /* Dark mode card background */
+    --accent: #5b8def;
+    --muted: #aab0b7;
+    --danger: #ef4444;
+    --ok: #1db954;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(17, 20, 26, 0.4);
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+    background-image: radial-gradient(at 0% 0%, rgba(91, 141, 239, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.03) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--border-color)] shadow-lg rounded-2xl;
+  }
+
+  .glass-btn {
+    @apply flex items-center justify-center bg-black/5 dark:bg-white/5 backdrop-blur-md border border-[var(--border-color)] shadow-sm transition-all duration-300 hover:bg-black/10 dark:hover:bg-white/10 hover:shadow-md active:scale-95 disabled:opacity-50 disabled:active:scale-100 rounded-xl;
+  }
+
+  .glass-input {
+    @apply w-full bg-black/5 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-foreground placeholder:text-muted/60;
+  }
+}
+
+.rmdp-wrapper,
+.rmdp-container {
+  z-index: 60 !important;
+}
+
+.rmdp-bg {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root:not(.dark)::view-transition-old(root) {
+  z-index: 2;
+}
+
+:root:not(.dark)::view-transition-new(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 2;
+}
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

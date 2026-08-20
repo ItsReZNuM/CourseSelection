@@ -1,0 +1,2353 @@
+﻿
+====================================================================================================
+PROJECT DUMP
+ROOT: E:\test\CourseSelection\course-planner
+====================================================================================================
+
+====================================================================================================
+FILE: .gitignore
+====================================================================================================
+
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+
+dumper.bat
+
+
+
+====================================================================================================
+FILE: AGENTS.md
+====================================================================================================
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->
+
+
+
+
+====================================================================================================
+FILE: CLAUDE.md
+====================================================================================================
+
+@AGENTS.md
+
+
+
+
+====================================================================================================
+FILE: eslint.config.mjs
+====================================================================================================
+
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+
+
+
+
+====================================================================================================
+FILE: next.config.ts
+====================================================================================================
+
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  /* config options here */
+  reactCompiler: true,
+};
+
+export default nextConfig;
+
+
+
+
+====================================================================================================
+FILE: next-env.d.ts
+====================================================================================================
+
+/// <reference types="next" />
+/// <reference types="next/image-types/global" />
+import "./.next/dev/types/routes.d.ts";
+import "./.next/dev/types/root-params.d.ts";
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
+
+
+
+
+====================================================================================================
+FILE: package.json
+====================================================================================================
+
+{
+  "name": "course-planner",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "html-to-image": "^1.11.13",
+    "jspdf": "^4.2.1",
+    "lucide-react": "^1.33.0",
+    "next": "16.3.1",
+    "react": "19.2.8",
+    "react-dom": "19.2.8",
+    "react-hot-toast": "^2.6.0",
+    "react-multi-date-picker": "^4.5.2",
+    "zustand": "^5.0.15"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "babel-plugin-react-compiler": "1.0.0",
+    "eslint": "^9",
+    "eslint-config-next": "16.3.1",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+
+
+
+
+====================================================================================================
+FILE: postcss.config.mjs
+====================================================================================================
+
+const config = {
+  plugins: {
+    "@tailwindcss/postcss": {},
+  },
+};
+
+export default config;
+
+
+
+
+====================================================================================================
+FILE: README.md
+====================================================================================================
+
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+
+
+
+====================================================================================================
+FILE: src\app\globals.css
+====================================================================================================
+
+@import "tailwindcss";
+
+@font-face {
+  font-family: 'DanaFaNum';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/DanaFaNum.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'JetBrainsMono';
+  font-style: normal;
+  font-weight: normal;
+  src: url('/font/JetBrainsMono.ttf') format('truetype');
+}
+
+@theme {
+  --font-sans: 'DanaFaNum', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+
+  --color-background: var(--bg);
+  --color-foreground: var(--text);
+  /* Added card color to fix tooltip transparency */
+  --color-card: var(--card);
+  --color-primary: var(--accent);
+  --color-muted: var(--muted);
+  --color-danger: var(--danger);
+  --color-ok: var(--ok);
+  --color-border: var(--border-color);
+}
+
+@layer base {
+  :root {
+    --bg: #f5f7fa;
+    --text: #050505;
+    --card: #ffffff;
+    /* Light mode card background */
+    --accent: #1877f2;
+    --muted: #65676b;
+    --danger: #fa383e;
+    --ok: #42b72a;
+    --border-color: rgba(0, 0, 0, 0.1);
+    --glass-bg: rgba(255, 255, 255, 0.6);
+    color-scheme: light;
+  }
+
+  .dark {
+    --bg: #050507;
+    --text: #e9edf2;
+    --card: #11141a;
+    /* Dark mode card background */
+    --accent: #5b8def;
+    --muted: #aab0b7;
+    --danger: #ef4444;
+    --ok: #1db954;
+    --border-color: rgba(255, 255, 255, 0.08);
+    --glass-bg: rgba(17, 20, 26, 0.4);
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased transition-colors duration-300;
+    background-image: radial-gradient(at 0% 0%, rgba(91, 141, 239, 0.05) 0px, transparent 50%),
+      radial-gradient(at 100% 100%, rgba(239, 68, 68, 0.03) 0px, transparent 50%);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .glass-panel {
+    @apply bg-[var(--glass-bg)] backdrop-blur-xl border border-[var(--border-color)] shadow-lg rounded-2xl;
+  }
+
+  .glass-btn {
+    @apply flex items-center justify-center bg-black/5 dark:bg-white/5 backdrop-blur-md border border-[var(--border-color)] shadow-sm transition-all duration-300 hover:bg-black/10 dark:hover:bg-white/10 hover:shadow-md active:scale-95 disabled:opacity-50 disabled:active:scale-100 rounded-xl;
+  }
+
+  .glass-input {
+    @apply w-full bg-black/5 dark:bg-white/5 border border-[var(--border-color)] rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary/30 transition-all text-foreground placeholder:text-muted/60;
+  }
+}
+
+.rmdp-wrapper,
+.rmdp-container {
+  z-index: 60 !important;
+}
+
+.rmdp-bg {
+  background-color: rgba(0, 0, 0, 0.4) !important;
+  backdrop-filter: blur(4px) !important;
+}
+
+/* View Transitions */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+:root:not(.dark)::view-transition-old(root) {
+  z-index: 2;
+}
+
+:root:not(.dark)::view-transition-new(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-old(root) {
+  z-index: 1;
+}
+
+.dark::view-transition-new(root) {
+  z-index: 2;
+}
+
+
+@keyframes slideUp {
+  from {
+    transform: translateY(100%);
+    opacity: 0.5;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+
+
+====================================================================================================
+FILE: src\app\icon.tsx
+====================================================================================================
+
+import { ImageResponse } from "next/og";
+
+export const size = { width: 32, height: 32 };
+export const contentType = "image/png";
+
+export default function Icon() {
+    return new ImageResponse(
+        (
+            <div
+                style={{
+                    background: "transparent",
+                    width: "100%",
+                    height: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}
+            >
+                {/* Simplified pixel-perfect replica of the logo for 32x32 viewports */}
+                <svg viewBox="0 0 100 100" width="32" height="32" fill="none">
+                    <path d="M50 15L85 32.5L50 50L15 32.5L50 15Z" fill="#1877f2" />
+                    <path d="M25 43.5V65C25 75 35 83 50 83C65 83 75 75 75 65V43.5L50 56L25 43.5Z" fill="#1877f2" opacity="0.85" />
+                </svg>
+            </div>
+        ),
+        { ...size }
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\app\layout.tsx
+====================================================================================================
+
+import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "ابزار انتخاب واحد",
+  description: "مدیریت واحد و کمک به برنامه ریزی",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  return (
+    <html lang="fa" dir="rtl" className="dark">
+      <body className="min-h-screen flex flex-col font-sans">
+        {children}
+
+        <Toaster
+          position="top-center"
+          toastOptions={{
+            duration: 4000,
+            className: '!bg-[var(--glass-bg)] !backdrop-blur-2xl !border !border-[var(--border-color)] !text-foreground !shadow-2xl !rounded-2xl',
+            style: {
+              background: 'transparent',
+              boxShadow: 'none',
+              padding: '12px 20px',
+              fontFamily: 'var(--font-sans)',
+            }
+          }}
+        />
+      </body>
+    </html>
+  );
+}
+
+
+
+====================================================================================================
+FILE: src\app\page.tsx
+====================================================================================================
+
+"use client";
+
+import { useEffect } from "react";
+import Topbar from "@/components/layout/Topbar";
+import DesktopGrid from "@/components/course/DesktopGrid";
+import CourseForm from "@/components/form/CourseForm";
+import MobileTimeline from "@/components/course/MobileTimeline";
+import { useCourseStore } from "@/store/useCourseStore";
+
+export default function Home() {
+  const { theme } = useCourseStore();
+
+  useEffect(() => {
+    document.documentElement.classList.toggle("dark", theme === "dark");
+  }, [theme]);
+
+  return (
+    <main className="container mx-auto p-4 max-w-7xl relative pb-20">
+      {/* نوار ابزار بالا */}
+      <Topbar />
+
+      {/* فرم افزودن درس */}
+      <CourseForm />
+
+      {/* جدول مخصوص دسکتاپ (در موبایل مخفی است) */}
+      <DesktopGrid />
+
+      {/* تایم‌لاین مخصوص موبایل (در دسکتاپ مخفی است) */}
+      <MobileTimeline />
+
+    </main>
+  );
+}
+
+
+
+====================================================================================================
+FILE: src\components\course\CourseCard.tsx
+====================================================================================================
+
+"use client";
+
+import { Course, Session } from "@/types";
+import { parseTimeToMinutes, colorFor } from "@/utils/helpers";
+import { START_HOUR, PX_PER_MIN, TOP_OFFSET, DAYS } from "./DesktopGrid";
+import { useCourseStore } from "@/store/useCourseStore";
+import { User, BookOpen, CalendarDays, Clock } from "lucide-react";
+import DateObject from "react-date-object";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+
+interface Props {
+    course: Course;
+    session: Session;
+    dayIndex: number;
+}
+
+export default function CourseCard({ course, session, dayIndex }: Props) {
+    const { selectedCourseId, setSelectedCourseId } = useCourseStore();
+    const isSelected = selectedCourseId === course.id;
+
+    const startMin = parseTimeToMinutes(session.start);
+    const endMin = parseTimeToMinutes(session.end);
+
+    const top = TOP_OFFSET + (startMin - START_HOUR * 60) * PX_PER_MIN + 3;
+    const height = Math.max((endMin - startMin) * PX_PER_MIN - 6, 15);
+
+    const widthPct = 100 / DAYS.length;
+    const baseColor = colorFor(course.name);
+    const glassBg = baseColor.replace('hsl', 'hsla').replace(')', ', 0.15)');
+    const borderColor = baseColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
+
+    // Smart Positioning Logic
+    const isLate = startMin >= 15 * 60;
+    const isLeftEdge = dayIndex >= 3;
+
+    const yPosition = isLate ? "bottom-full mb-2" : "top-full mt-2";
+    const xPosition = isLeftEdge ? "left-0" : "right-0";
+    const transformOrigin = `origin-${isLate ? "bottom" : "top"}-${isLeftEdge ? "left" : "right"}`;
+
+    // Helper: محاسبه اتوماتیک نام روز امتحان
+    const getExamDay = (dateStr: string) => {
+        if (!dateStr) return "";
+        try {
+            const date = new DateObject({ date: dateStr, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa });
+            return date.format("dddd");
+        } catch (e) {
+            return "";
+        }
+    };
+
+    return (
+        <div
+            onClick={() => setSelectedCourseId(course.id)}
+            className={`absolute p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-50 ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : ""
+                }`}
+            style={{
+                top: `${top}px`,
+                height: `${height}px`,
+                right: `calc(${dayIndex * widthPct}% + 4px)`,
+                width: `calc(${widthPct}% - 8px)`,
+                backgroundColor: glassBg,
+                backdropFilter: "blur(12px)",
+                WebkitBackdropFilter: "blur(12px)",
+                border: `1px solid ${borderColor}`,
+                borderRight: `4px solid ${baseColor}`,
+            }}
+        >
+            <div className="h-full w-full flex flex-col items-center justify-center text-center overflow-hidden text-foreground">
+                <span className="font-bold text-[11px] md:text-[13px] leading-snug line-clamp-2 px-1">
+                    {course.name}
+                </span>
+                <span className="font-mono text-[10px] md:text-[11px] opacity-80 mt-1.5 bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded-md">
+                    {session.start} - {session.end}
+                </span>
+            </div>
+
+            {/* Desktop Tooltip - Redesigned to match Mobile BottomSheet layout */}
+            <div className={`hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
+                <div>
+                    <h3 className="font-bold text-primary text-base mb-0.5">{course.name}</h3>
+                    <p className="font-mono text-xs text-muted">{course.code}</p>
+                </div>
+
+                <div className="h-px w-full bg-border my-1"></div>
+
+                <div className="flex flex-col gap-2 text-sm text-foreground">
+                    <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                        <div className="flex items-center gap-1.5 text-muted text-xs">
+                            <User size={14} />
+                            <span>استاد</span>
+                        </div>
+                        <span className="font-bold text-xs">{course.professor || "نامشخص"}</span>
+                    </div>
+
+                    <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                        <div className="flex items-center gap-1.5 text-muted text-xs">
+                            <BookOpen size={14} />
+                            <span>تعداد واحد</span>
+                        </div>
+                        <span className="font-mono text-xs font-bold">{course.units}</span>
+                    </div>
+
+                    {course.exam_date ? (
+                        <>
+                            <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                                <div className="flex items-center gap-1.5 text-muted text-xs">
+                                    <CalendarDays size={14} />
+                                    <span>روز امتحان</span>
+                                </div>
+                                <span className="text-xs font-bold text-primary">{getExamDay(course.exam_date)}</span>
+                            </div>
+
+                            <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                                <div className="flex items-center gap-1.5 text-muted text-xs">
+                                    <CalendarDays size={14} />
+                                    <span>تاریخ امتحان</span>
+                                </div>
+                                <span className="font-mono text-xs text-primary font-bold" dir="ltr">{course.exam_date}</span>
+                            </div>
+
+                            {course.exam_time && (
+                                <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                                    <div className="flex items-center gap-1.5 text-muted text-xs">
+                                        <Clock size={14} />
+                                        <span>ساعت امتحان</span>
+                                    </div>
+                                    <span className="font-mono text-xs text-primary font-bold">{course.exam_time}</span>
+                                </div>
+                            )}
+                        </>
+                    ) : (
+                        <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-2 rounded-xl">
+                            <div className="flex items-center gap-1.5 text-muted text-xs">
+                                <CalendarDays size={14} />
+                                <span>امتحان</span>
+                            </div>
+                            <span className="text-xs text-muted/80">ندارد</span>
+                        </div>
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\course\DesktopGrid.tsx
+====================================================================================================
+
+"use client";
+
+import { useCourseStore } from "@/store/useCourseStore";
+import CourseCard from "./CourseCard";
+
+export const DAYS = ["شنبه", "یکشنبه", "دوشنبه", "سه‌شنبه", "چهارشنبه", "پنجشنبه"];
+export const START_HOUR = 8;
+export const END_HOUR = 19;
+export const PX_PER_MIN = 1.3;
+export const TOP_OFFSET = 40;
+
+export default function DesktopGrid() {
+    const courses = useCourseStore((state) => state.courses);
+
+    const hours = Array.from({ length: END_HOUR - START_HOUR + 1 }, (_, i) => START_HOUR + i);
+    const totalHeight = (END_HOUR - START_HOUR) * 60 * PX_PER_MIN;
+
+    return (
+        <div id="schedule-grid" className="hidden md:flex glass-panel overflow-hidden w-full relative mt-4">
+            <div className="w-16 border-l border-border bg-black/5 dark:bg-white/5 shrink-0 z-10">
+                <div className="h-12 border-b border-border"></div>
+                <div className="relative" style={{ height: `${totalHeight + TOP_OFFSET + 40}px` }}>
+                    {hours.map((h) => (
+                        <div
+                            key={h}
+                            className="absolute right-0 w-full text-center text-[11px] font-mono text-muted -translate-y-1/2"
+                            style={{ top: `${TOP_OFFSET + (h - START_HOUR) * 60 * PX_PER_MIN}px` }}
+                        >
+                            {h.toString().padStart(2, "0")}:00
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="flex-1 flex flex-col relative">
+                <div className="flex h-12 border-b border-border bg-black/5 dark:bg-white/5 z-10">
+                    {DAYS.map((day) => (
+                        <div key={day} className="flex-1 flex items-center justify-center text-sm font-bold text-muted border-l border-border last:border-l-0">
+                            {day}
+                        </div>
+                    ))}
+                </div>
+
+                <div className="relative w-full overflow-hidden" style={{ height: `${totalHeight + TOP_OFFSET + 40}px` }}>
+                    {hours.map((h) => (
+                        <div key={`h-${h}`} className="absolute w-full border-t border-dashed border-border opacity-40" style={{ top: `${TOP_OFFSET + (h - START_HOUR) * 60 * PX_PER_MIN}px` }}></div>
+                    ))}
+
+                    <div className="absolute inset-0 flex pointer-events-none">
+                        {DAYS.map((_, i) => (
+                            <div key={`v-${i}`} className="flex-1 border-l border-border opacity-40 last:border-l-0"></div>
+                        ))}
+                    </div>
+
+                    {courses.map((course) =>
+                        course.sessions.map((session, index) => {
+                            const dayIndex = DAYS.indexOf(session.day);
+                            if (dayIndex === -1) return null;
+
+                            return (
+                                <CourseCard
+                                    key={`${course.id}-${index}`}
+                                    course={course}
+                                    session={session}
+                                    dayIndex={dayIndex}
+                                />
+                            );
+                        })
+                    )}
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\course\MobileTimeline.tsx
+====================================================================================================
+
+"use client";
+
+import { useState } from "react";
+import { useCourseStore } from "@/store/useCourseStore";
+import { Course } from "@/types";
+import { DAYS } from "./DesktopGrid";
+import { colorFor, parseTimeToMinutes } from "@/utils/helpers";
+import BottomSheet from "../ui/BottomSheet";
+
+export default function MobileTimeline() {
+    const courses = useCourseStore((state) => state.courses);
+    const [activeDay, setActiveDay] = useState<string>(DAYS[0]);
+    const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+
+    // Extract all sessions for the currently selected day
+    const daySessions = courses.flatMap((course) => {
+        const sessionsForDay = course.sessions.filter((s) => s.day === activeDay);
+        return sessionsForDay.map((session) => ({ course, session }));
+    });
+
+    // Sort sessions by start time
+    daySessions.sort((a, b) => parseTimeToMinutes(a.session.start) - parseTimeToMinutes(b.session.start));
+
+    return (
+        <div className="md:hidden flex flex-col mt-4 pb-10">
+            {/* Horizontal Scrollable Tabs for Days */}
+            <div className="flex overflow-x-auto no-scrollbar gap-2 mb-6 px-1 py-1">
+                {DAYS.map((day) => (
+                    <button
+                        key={day}
+                        onClick={() => setActiveDay(day)}
+                        className={`shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${activeDay === day
+                                ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
+                                : "glass-btn text-muted hover:text-foreground"
+                            }`}
+                    >
+                        {day}
+                    </button>
+                ))}
+            </div>
+
+            {/* Timeline List */}
+            <div className="flex flex-col gap-4">
+                {daySessions.length === 0 ? (
+                    <div className="glass-panel p-8 text-center text-muted flex flex-col items-center justify-center border-dashed border-2">
+                        <span className="text-4xl mb-3">😴</span>
+                        <p className="font-bold">کلاسی در این روز نداری!</p>
+                    </div>
+                ) : (
+                    daySessions.map(({ course, session }, index) => {
+                        const baseColor = colorFor(course.name);
+                        const glassBg = baseColor.replace('hsl', 'hsla').replace(')', ', 0.1)');
+                        const borderColor = baseColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
+
+                        return (
+                            <div
+                                key={`${course.id}-${index}`}
+                                onClick={() => setSelectedCourse(course)}
+                                className="relative flex items-stretch gap-4 cursor-pointer group active:scale-[0.98] transition-transform"
+                            >
+                                {/* Time Column */}
+                                <div className="flex flex-col items-center shrink-0 w-14">
+                                    <span className="font-mono text-xs font-bold text-foreground bg-black/5 dark:bg-white/10 px-2 py-1 rounded-lg">
+                                        {session.start}
+                                    </span>
+                                    {/* Timeline line */}
+                                    <div className="w-px h-full bg-border my-1"></div>
+                                    <span className="font-mono text-[10px] text-muted">
+                                        {session.end}
+                                    </span>
+                                </div>
+
+                                {/* Course Card (Glassmorphism) */}
+                                <div
+                                    className="flex-1 rounded-2xl p-4 shadow-sm border backdrop-blur-md"
+                                    style={{
+                                        backgroundColor: glassBg,
+                                        border: `1px solid ${borderColor}`,
+                                        borderRight: `4px solid ${baseColor}`,
+                                    }}
+                                >
+                                    <h3 className="font-bold text-sm mb-1 text-foreground leading-snug">
+                                        {course.name}
+                                    </h3>
+                                    <div className="flex items-center justify-between mt-3">
+                                        <span className="text-xs text-muted">استاد: {course.professor || "-"}</span>
+                                        <span className="font-mono text-[10px] bg-black/5 dark:bg-white/10 px-2 py-1 rounded text-muted">
+                                            {course.code}
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        );
+                    })
+                )}
+            </div>
+
+            {/* Mobile Bottom Sheet (Modal) */}
+            <BottomSheet
+                course={selectedCourse}
+                onClose={() => setSelectedCourse(null)}
+            />
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\form\CourseForm.tsx
+====================================================================================================
+
+"use client";
+
+import { useState, useEffect } from "react";
+import { useCourseStore } from "@/store/useCourseStore";
+import { Plus, Save, X, Edit2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { Session } from "@/types";
+import { DAYS } from "../course/DesktopGrid";
+import { parseTimeToMinutes, overlap } from "@/utils/helpers";
+import AnimatedCheckbox from "../ui/AnimatedCheckbox";
+import WheelTimePicker from "../ui/WheelTimePicker";
+
+import DatePicker from "react-multi-date-picker";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
+
+const initialSession: Session = { day: DAYS[0], start: "", end: "" };
+
+export default function CourseForm() {
+    const { courses, addCourse, updateCourse, selectedCourseId, setSelectedCourseId, theme } = useCourseStore();
+
+    const [code, setCode] = useState("");
+    const [name, setName] = useState("");
+    const [professor, setProfessor] = useState("");
+    const [units, setUnits] = useState("");
+
+    const [noExam, setNoExam] = useState(false);
+    const [examDate, setExamDate] = useState<string>("");
+    const [examTime, setExamTime] = useState<string>("");
+    const [sessions, setSessions] = useState<Session[]>([{ ...initialSession }]);
+
+    useEffect(() => {
+        if (selectedCourseId) {
+            const course = courses.find((c) => c.id === selectedCourseId);
+            if (course) {
+                setCode(course.code);
+                setName(course.name);
+                setProfessor(course.professor || "");
+                setUnits(course.units ? course.units.toString() : "");
+                setNoExam(course.exam_date === null);
+                setExamDate(course.exam_date || "");
+                setExamTime(course.exam_time || "");
+                setSessions(JSON.parse(JSON.stringify(course.sessions)));
+            }
+        } else {
+            setCode(""); setName(""); setProfessor(""); setUnits("");
+            setNoExam(false); setExamDate(""); setExamTime("");
+            setSessions([{ ...initialSession }]);
+        }
+    }, [selectedCourseId, courses]);
+
+    const updateSession = (index: number, field: keyof Session, value: string) => {
+        const newSessions = [...sessions];
+        newSessions[index][field] = value;
+        setSessions(newSessions);
+    };
+
+    const addSessionRow = () => setSessions([...sessions, { ...initialSession }]);
+    const removeSessionRow = (index: number) => {
+        if (sessions.length > 1) setSessions(sessions.filter((_, i) => i !== index));
+    };
+
+    const checkConflict = (newSessions: Session[], ignoreId: number | null) => {
+        for (const newSess of newSessions) {
+            if (!newSess.start || !newSess.end) continue;
+            const st = parseTimeToMinutes(newSess.start);
+            const en = parseTimeToMinutes(newSess.end);
+
+            for (const course of courses) {
+                if (course.id === ignoreId) continue;
+                for (const existSess of course.sessions) {
+                    if (
+                        existSess.day === newSess.day &&
+                        overlap(st, en, parseTimeToMinutes(existSess.start), parseTimeToMinutes(existSess.end))
+                    ) {
+                        return course.name;
+                    }
+                }
+            }
+        }
+        return null;
+    };
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault();
+
+        if (!name || !code) return toast.error("نام و کد درس الزامی است.");
+
+        for (let i = 0; i < sessions.length; i++) {
+            const s = sessions[i];
+            if (!s.start || !s.end) return toast.error(`ساعت شروع و پایان جلسه ${i + 1} الزامی است.`);
+            if (parseTimeToMinutes(s.start) >= parseTimeToMinutes(s.end)) {
+                return toast.error(`در جلسه ${i + 1}، ساعت پایان باید بعد از شروع باشد.`);
+            }
+        }
+
+        const conflict = checkConflict(sessions, selectedCourseId);
+        if (conflict) return toast.error(`تداخل زمانی با درس "${conflict}"!`);
+
+        const courseData = {
+            code,
+            name,
+            professor,
+            units: parseFloat(units) || 0,
+            exam_date: noExam ? null : examDate,
+            exam_time: noExam ? null : examTime,
+            sessions,
+        };
+
+        if (selectedCourseId) {
+            updateCourse(selectedCourseId, courseData);
+            toast.success("درس با موفقیت ویرایش شد.");
+            setSelectedCourseId(null);
+        } else {
+            addCourse({ id: Date.now(), ...courseData });
+            toast.success("درس با موفقیت به برنامه اضافه شد.");
+            setCode(""); setName(""); setProfessor(""); setUnits("");
+            setNoExam(false); setExamDate(""); setExamTime("");
+            setSessions([{ ...initialSession }]);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="glass-panel p-4 md:p-6 mb-6 overflow-visible relative z-[60]">
+            <div className="flex items-center justify-between mb-4 border-b border-border pb-2">
+                <h2 className="text-lg font-bold text-primary">
+                    {selectedCourseId ? "ویرایش درس" : "افزودن درس جدید"}
+                </h2>
+                {selectedCourseId && (
+                    <button type="button" onClick={() => setSelectedCourseId(null)} className="text-xs text-danger hover:underline">
+                        لغو ویرایش
+                    </button>
+                )}
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div>
+                    <label className="block text-xs text-muted mb-1.5 ml-1">کد درس</label>
+                    <input value={code} onChange={e => setCode(e.target.value)} className="glass-input font-mono text-left" placeholder="e.g: 40123" dir="ltr" />
+                </div>
+                <div>
+                    <label className="block text-xs text-muted mb-1.5 ml-1">نام درس</label>
+                    <input value={name} onChange={e => setName(e.target.value)} className="glass-input" placeholder="مثال: برنامه‌نویسی پیشرفته" />
+                </div>
+                <div>
+                    <label className="block text-xs text-muted mb-1.5 ml-1">نام استاد</label>
+                    <input value={professor} onChange={e => setProfessor(e.target.value)} className="glass-input" placeholder="مثال: دکتر محمدنیا" />
+                </div>
+                <div>
+                    <label className="block text-xs text-muted mb-1.5 ml-1">تعداد واحد</label>
+                    <input value={units} onChange={e => setUnits(e.target.value)} type="number" step="0.5" min="0" className="glass-input font-mono text-center" placeholder="3" />
+                </div>
+            </div>
+
+            <div className="bg-black/5 dark:bg-white/5 p-4 rounded-xl border border-border mb-6 relative">
+                <div className="mb-5">
+                    <AnimatedCheckbox checked={noExam} onChange={setNoExam} label="این درس امتحان ندارد" />
+                </div>
+
+                <div className={`grid grid-cols-1 md:grid-cols-2 gap-4 transition-opacity ${noExam ? 'opacity-30 pointer-events-none' : 'opacity-100'}`}>
+                    <div className="flex flex-col">
+                        <label className="block text-xs text-muted mb-1.5 ml-1">تاریخ امتحان</label>
+                        <DatePicker
+                            calendar={persian}
+                            locale={persian_fa}
+                            value={examDate}
+                            onChange={(date) => setExamDate(date?.format("YYYY/MM/DD") || "")}
+                            inputClass="glass-input font-sans w-full text-center"
+                            containerClassName="w-full"
+                            placeholder="انتخاب تاریخ"
+                            calendarPosition="bottom-right"
+                            fixMainPosition={true}
+                            className={theme === "dark" ? "bg-dark" : ""}
+                        />
+                    </div>
+                    <div className="flex flex-col">
+                        <label className="block text-xs text-muted mb-1.5 ml-1">ساعت امتحان</label>
+                        <WheelTimePicker
+                            value={examTime}
+                            onChange={setExamTime}
+                            placeholder="انتخاب ساعت امتحان"
+                        />
+                    </div>
+                </div>
+            </div>
+
+            <div className="mb-6 relative">
+                <h3 className="text-sm font-bold mb-3 border-b border-border pb-2">جلسات کلاس</h3>
+                <div className="flex flex-col gap-3">
+                    {sessions.map((session, index) => (
+                        <div key={index} className="grid grid-cols-2 md:flex md:flex-nowrap items-end gap-3 p-3 md:p-0 bg-black/5 md:bg-transparent rounded-xl border border-border md:border-transparent">
+                            <div className="col-span-2 md:col-span-1 md:w-48 shrink-0">
+                                <label className="block text-[10px] md:text-xs text-muted mb-1">روز هفته</label>
+                                <select value={session.day} onChange={e => updateSession(index, 'day', e.target.value)} className="glass-input h-[42px] cursor-pointer">
+                                    {DAYS.map(d => <option key={d} value={d} style={{ backgroundColor: 'var(--card)', color: 'var(--text)' }}>{d}</option>)}
+                                </select>
+                            </div>
+                            <div className="col-span-1 md:flex-1 flex flex-col">
+                                <label className="block text-[10px] md:text-xs text-muted mb-1">ساعت شروع</label>
+                                <WheelTimePicker
+                                    value={session.start}
+                                    onChange={(val) => updateSession(index, 'start', val)}
+                                    placeholder="شروع"
+                                    className="h-[42px]"
+                                />
+                            </div>
+                            <div className="col-span-1 md:flex-1 flex flex-col">
+                                <label className="block text-[10px] md:text-xs text-muted mb-1">ساعت پایان</label>
+                                <WheelTimePicker
+                                    value={session.end}
+                                    onChange={(val) => updateSession(index, 'end', val)}
+                                    placeholder="پایان"
+                                    className="h-[42px]"
+                                />
+                            </div>
+                            {sessions.length > 1 && (
+                                <button type="button" onClick={() => removeSessionRow(index)} className="col-span-2 md:col-span-1 glass-btn p-2.5 text-danger border-danger/20 hover:bg-danger/10 h-[42px] shrink-0 mt-2 md:mt-0">
+                                    <X size={16} className="mx-auto" />
+                                </button>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <button type="button" onClick={addSessionRow} className="mt-4 md:mt-3 text-xs flex items-center gap-1 text-primary hover:text-primary/80 transition-colors px-2 py-1">
+                    <Plus size={14} /> افزودن جلسه دیگر برای این درس
+                </button>
+            </div>
+
+            <div className="flex justify-end pt-4 mt-2 border-t border-border">
+                <button
+                    type="submit"
+                    className="group relative z-10 flex w-full md:w-auto items-center justify-center gap-2 overflow-hidden rounded-xl border border-border px-8 py-2.5 font-bold shadow-lg transition-all active:scale-95"
+                >
+                    <div className="absolute inset-0 -z-20 bg-[var(--glass-bg)] backdrop-blur-md"></div>
+                    <div className="absolute -left-full top-1/2 -z-10 aspect-square w-full -translate-y-1/2 rounded-full bg-primary transition-all duration-700 ease-out group-hover:left-0 group-hover:scale-150"></div>
+
+                    <span className="relative z-10 text-foreground transition-colors duration-300 group-hover:text-white">
+                        {selectedCourseId ? "ثبت تغییرات" : "ذخیره درس"}
+                    </span>
+
+                    <div className="relative z-10 flex items-center justify-center rounded-full border border-border bg-black/5 dark:bg-white/5 p-1.5 transition-all duration-300 group-hover:border-transparent group-hover:bg-white/20 text-foreground group-hover:text-white">
+                        {selectedCourseId ? <Edit2 size={18} /> : <Save size={18} />}
+                    </div>
+                </button>
+            </div>
+        </form>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\layout\Topbar.tsx
+====================================================================================================
+
+"use client";
+
+import { useState } from "react";
+import { useCourseStore } from "@/store/useCourseStore";
+import { Plus, Trash2, Download, Copy } from "lucide-react";
+import toast from "react-hot-toast";
+import ThemeToggle from "../ui/ThemeToggle";
+import ExportModal from "../ui/ExportModal";
+import Logo from "../ui/Logo";
+import ConfirmModal from "../ui/ConfirmModal";
+
+export default function Topbar() {
+    const { courses, selectedCourseId, deleteCourse, setSelectedCourseId } = useCourseStore();
+    const [isExportMenuOpen, setIsExportMenuOpen] = useState(false);
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+    const totalUnits = courses.reduce((sum, course) => sum + (course.units || 0), 0);
+    const selectedCourse = courses.find(c => c.id === selectedCourseId);
+
+    const handleDeleteClick = () => {
+        if (!selectedCourseId) {
+            toast.error("ابتدا یک درس را از جدول انتخاب کنید.");
+            return;
+        }
+        setIsConfirmOpen(true);
+    };
+
+    const executeDelete = () => {
+        if (selectedCourseId) {
+            deleteCourse(selectedCourseId);
+            toast.success("درس با موفقیت حذف شد.");
+        }
+        setIsConfirmOpen(false);
+    };
+
+    const handleCopyCodes = () => {
+        if (courses.length === 0) return toast.error("درسی برای کپی وجود ندارد.");
+        const codes = courses.map((c) => `${c.code} - ${c.name}`).join("\n");
+        navigator.clipboard.writeText(codes);
+        toast.success("کد دروس در کلیپ‌بورد کپی شد.");
+    };
+
+    return (
+        <>
+            <header className="glass-panel flex items-center justify-between p-2 md:p-4 mb-4 md:mb-6 sticky top-2 md:top-4 z-[70]">
+
+                <div className="flex items-center gap-2 md:gap-4 shrink-0">
+                    <Logo className="w-9 h-9 md:w-11 md:h-11 shrink-0" />
+
+                    <div className="flex flex-col justify-center">
+                        <h1 className="text-base md:text-xl font-bold text-foreground leading-tight whitespace-nowrap mb-1 md:mb-1.5">
+                            ابزار انتخاب واحد                        </h1>
+
+                        <div className="flex items-center gap-1.5 md:gap-2">
+                            <div className="flex items-center gap-1 bg-black/5 dark:bg-white/10 px-2 py-0.5 rounded-md border border-[var(--border-color)]">
+                                <span className="text-[9px] md:text-[11px] text-muted font-bold">دروس:</span>
+                                <span className="text-[10px] md:text-xs font-mono font-bold text-foreground">{courses.length}</span>
+                            </div>
+                            <div className="flex items-center gap-1 bg-primary/10 px-2 py-0.5 rounded-md border border-primary/20">
+                                <span className="text-[9px] md:text-[11px] text-primary font-bold">واحد:</span>
+                                <span className="text-[10px] md:text-xs font-mono font-bold text-primary">{totalUnits}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-1.5 md:gap-3 shrink-0 py-3 px-2 -my-3 -mx-2">
+                    <button
+                        onClick={() => setSelectedCourseId(null)}
+                        className="glass-btn px-2 py-1.5 md:px-4 md:py-2 flex gap-1 md:gap-2 text-primary border-primary/20 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors"
+                    >
+                        <Plus className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="hidden sm:inline text-xs md:text-sm font-bold mt-0.5">افزودن درس</span>
+                    </button>
+
+                    <button
+                        onClick={handleDeleteClick}
+                        className="glass-btn px-2 py-1.5 md:px-4 md:py-2 flex gap-1 md:gap-2 text-danger border-danger/20 hover:bg-danger hover:text-white dark:hover:bg-danger transition-colors"
+                    >
+                        <Trash2 className="w-4 h-4 md:w-5 md:h-5" />
+                        <span className="hidden sm:inline text-xs md:text-sm font-bold mt-0.5">حذف</span>
+                    </button>
+
+                    <div className="hidden sm:block w-px h-6 md:h-8 bg-border mx-0.5 md:mx-1"></div>
+
+                    <button onClick={handleCopyCodes} className="glass-btn p-1.5 md:p-2 hover:bg-black/10 dark:hover:bg-white/10" aria-label="Copy Codes">
+                        <Copy className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+
+                    <button onClick={() => setIsExportMenuOpen(true)} className="glass-btn p-1.5 md:p-2 hover:bg-black/10 dark:hover:bg-white/10" aria-label="Download Menu">
+                        <Download className="w-4 h-4 md:w-5 md:h-5" />
+                    </button>
+
+                    <div className="w-px h-6 md:h-8 bg-border mx-0.5 md:mx-1"></div>
+                    <ThemeToggle />
+                </div>
+            </header>
+
+            <ExportModal isOpen={isExportMenuOpen} onClose={() => setIsExportMenuOpen(false)} />
+
+            {/* فراخوانی کامپوننت تاییدیه */}
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={executeDelete}
+                courseName={selectedCourse?.name || "انتخاب شده"}
+            />
+        </>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\AnimatedCheckbox.tsx
+====================================================================================================
+
+"use client";
+
+import React from "react";
+
+interface Props {
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+    label: string;
+}
+
+export default function AnimatedCheckbox({ checked, onChange, label }: Props) {
+    return (
+        <label className="flex items-center gap-3 cursor-pointer select-none group">
+            <div className="relative flex items-center justify-center">
+                <input
+                    type="checkbox"
+                    className="hidden"
+                    checked={checked}
+                    onChange={(e) => onChange(e.target.checked)}
+                />
+                <svg viewBox="0 0 64 64" className="w-6 h-6 overflow-visible">
+                    <path
+                        d="M 0 16 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 16 L 32 48 L 64 16 V 8 A 8 8 90 0 0 56 0 H 8 A 8 8 90 0 0 0 8 V 56 A 8 8 90 0 0 8 64 H 56 A 8 8 90 0 0 64 56 V 16"
+                        className="fill-none stroke-muted group-hover:stroke-primary stroke-[5px]"
+                        style={{
+                            /* Inline styles guarantee the animation runs regardless of Tailwind compiler limits */
+                            transition: "stroke-dasharray 0.5s ease, stroke-dashoffset 0.5s ease, stroke 0.3s ease",
+                            strokeDasharray: checked ? "70.51 9999999" : "241 9999999",
+                            strokeDashoffset: checked ? -262.27 : 0,
+                            stroke: checked ? "var(--color-primary)" : "",
+                        }}
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                    />
+                </svg>
+            </div>
+            <span className="text-sm text-foreground transition-colors group-hover:text-primary">
+                {label}
+            </span>
+        </label>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\BottomSheet.tsx
+====================================================================================================
+
+"use client";
+
+import { useEffect, useState } from "react";
+import { useCourseStore } from "@/store/useCourseStore";
+import { Course } from "@/types";
+import { X, Clock, CalendarDays, User, BookOpen, Edit2, Trash2 } from "lucide-react";
+import toast from "react-hot-toast";
+import ConfirmModal from "./ConfirmModal";
+import DateObject from "react-date-object";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+
+interface Props {
+    course: Course | null;
+    onClose: () => void;
+}
+
+export default function BottomSheet({ course, onClose }: Props) {
+    const { setSelectedCourseId, deleteCourse } = useCourseStore();
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+
+    useEffect(() => {
+        if (course) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+            setIsConfirmOpen(false);
+        }
+        return () => { document.body.style.overflow = "unset"; };
+    }, [course]);
+
+    if (!course) return null;
+
+    const handleEdit = () => {
+        setSelectedCourseId(course.id);
+        onClose();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    };
+
+    const handleDeleteClick = () => {
+        setIsConfirmOpen(true);
+    };
+
+    const executeDelete = () => {
+        deleteCourse(course.id);
+        toast.success("درس با موفقیت حذف شد.");
+        setIsConfirmOpen(false);
+        onClose();
+    };
+
+    const getExamDay = (dateStr: string) => {
+        if (!dateStr) return "";
+        try {
+            const date = new DateObject({ date: dateStr, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa });
+            return date.format("dddd");
+        } catch (e) {
+            return "";
+        }
+    };
+
+    return (
+        <>
+            <div className="fixed inset-0 z-[99999] flex flex-col justify-end md:hidden">
+                <div className="absolute inset-0 bg-black/40 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+
+                <div className="relative bg-card/95 backdrop-blur-3xl border-t border-[var(--border-color)] rounded-t-[32px] p-6 pb-8 shadow-2xl animate-slide-up flex flex-col max-h-[85vh]">
+                    <div className="w-12 h-1.5 bg-black/10 dark:bg-white/20 rounded-full mx-auto mb-6 shrink-0"></div>
+
+                    <button onClick={onClose} className="absolute top-6 left-6 p-2 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors">
+                        <X size={20} />
+                    </button>
+
+                    <div className="pr-2 mb-6 shrink-0">
+                        <h2 className="text-xl font-bold text-primary mb-1">{course.name}</h2>
+                        <p className="font-mono text-sm text-muted">{course.code}</p>
+                    </div>
+
+                    <div className="flex flex-col gap-3 overflow-y-auto mb-6 no-scrollbar shrink">
+                        <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                            <div className="flex items-center gap-2 text-muted">
+                                <User size={18} />
+                                <span className="text-sm">استاد</span>
+                            </div>
+                            <span className="font-bold text-sm">{course.professor || "نامشخص"}</span>
+                        </div>
+
+                        <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                            <div className="flex items-center gap-2 text-muted">
+                                <BookOpen size={18} />
+                                <span className="text-sm">تعداد واحد</span>
+                            </div>
+                            <span className="font-mono bg-black/5 dark:bg-white/10 px-3 py-1 rounded-lg font-bold">
+                                {course.units}
+                            </span>
+                        </div>
+
+                        {course.exam_date ? (
+                            <>
+                                <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                    <div className="flex items-center gap-2 text-muted">
+                                        <CalendarDays size={18} />
+                                        <span className="text-sm">روز امتحان</span>
+                                    </div>
+                                    <span className="text-sm font-bold text-primary bg-primary/10 px-3 py-1.5 rounded-lg">
+                                        {getExamDay(course.exam_date)}
+                                    </span>
+                                </div>
+
+                                <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                    <div className="flex items-center gap-2 text-muted">
+                                        <CalendarDays size={18} />
+                                        <span className="text-sm">تاریخ امتحان</span>
+                                    </div>
+                                    <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold" dir="ltr">
+                                        {course.exam_date}
+                                    </span>
+                                </div>
+                            </>
+                        ) : (
+                            <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                <div className="flex items-center gap-2 text-muted">
+                                    <CalendarDays size={18} />
+                                    <span className="text-sm">امتحان</span>
+                                </div>
+                                <span className="text-xs text-muted/80 bg-black/5 dark:bg-white/5 px-2 py-1 rounded">ندارد</span>
+                            </div>
+                        )}
+
+                        {course.exam_time && (
+                            <div className="flex items-center justify-between bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                <div className="flex items-center gap-2 text-muted">
+                                    <Clock size={18} />
+                                    <span className="text-sm">ساعت امتحان</span>
+                                </div>
+                                <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold">
+                                    {course.exam_time}
+                                </span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className="flex items-center gap-3 pt-4 border-t border-[var(--border-color)] shrink-0">
+                        <button onClick={handleEdit} className="glass-btn flex-1 py-3 bg-primary/10 text-primary border-primary/20 hover:bg-primary hover:text-white flex items-center justify-center gap-2">
+                            <Edit2 size={18} />
+                            <span className="font-bold">ویرایش</span>
+                        </button>
+
+                        <button onClick={handleDeleteClick} className="glass-btn flex-1 py-3 bg-danger/10 text-danger border-danger/20 hover:bg-danger hover:text-white flex items-center justify-center gap-2">
+                            <Trash2 size={18} />
+                            <span className="font-bold">حذف</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <ConfirmModal
+                isOpen={isConfirmOpen}
+                onClose={() => setIsConfirmOpen(false)}
+                onConfirm={executeDelete}
+                courseName={course.name}
+            />
+        </>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\ConfirmModal.tsx
+====================================================================================================
+
+"use client";
+
+import { AlertTriangle, Trash2 } from "lucide-react";
+
+interface Props {
+    isOpen: boolean;
+    onClose: () => void;
+    onConfirm: () => void;
+    courseName: string;
+}
+
+export default function ConfirmModal({ isOpen, onClose, onConfirm, courseName }: Props) {
+    if (!isOpen) return null;
+
+    return (
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4">
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+
+            {/* Modal Container */}
+            <div className="glass-panel p-6 w-full max-w-xs relative z-10 animate-slide-up bg-[var(--card)]/95 flex flex-col items-center text-center">
+
+                {/* Warning Icon */}
+                <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-4 border border-danger/20">
+                    <AlertTriangle size={28} className="text-danger" />
+                </div>
+
+                <h3 className="text-lg font-bold text-foreground mb-2">حذف درس</h3>
+
+                <p className="text-sm text-muted mb-8 leading-relaxed">
+                    آیا مطمئن هستید که می‌خواهید درس <br />
+                    <span className="font-bold text-primary">«{courseName}»</span> <br />
+                    را حذف کنید؟
+                </p>
+
+                {/* Actions */}
+                <div className="flex items-center justify-between w-full gap-3">
+                    <button
+                        onClick={onClose}
+                        className="glass-btn flex-1 py-3 text-sm text-muted hover:text-foreground font-bold transition-all"
+                    >
+                        انصراف
+                    </button>
+                    <button
+                        onClick={onConfirm}
+                        className="glass-btn flex-1 py-3 text-sm bg-danger text-white border-transparent hover:bg-danger/90 font-bold shadow-md shadow-danger/20 transition-all flex items-center justify-center gap-2"
+                    >
+                        <Trash2 size={16} />
+                        حذف
+                    </button>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\ExportModal.tsx
+====================================================================================================
+
+"use client";
+
+import { useState } from "react";
+import { useCourseStore } from "@/store/useCourseStore";
+import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { toPng, toJpeg } from "html-to-image";
+import jsPDF from "jspdf";
+
+interface Props {
+    isOpen: boolean;
+    onClose: () => void;
+}
+
+export default function ExportModal({ isOpen, onClose }: Props) {
+    const { courses, importCourses } = useCourseStore();
+    const [isCapturing, setIsCapturing] = useState(false);
+
+    if (!isOpen && !isCapturing) return null;
+
+    const handleExportJSON = () => {
+        if (courses.length === 0) return toast.error("برنامه‌ای برای خروجی وجود ندارد.");
+        const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(courses));
+        const link = document.createElement("a");
+        link.href = dataStr;
+        link.download = "my-course-schedule.json";
+        link.click();
+        toast.success("فایل JSON دانلود شد.");
+        onClose();
+    };
+
+    const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            try {
+                const data = JSON.parse(event.target?.result as string);
+                if (Array.isArray(data)) {
+                    importCourses(data);
+                    toast.success("برنامه با موفقیت وارد شد!");
+                    onClose();
+                } else {
+                    throw new Error("Invalid format");
+                }
+            } catch (err) {
+                toast.error("فایل انتخاب شده نامعتبر است.");
+            }
+        };
+        reader.readAsText(file);
+    };
+
+    const captureGrid = async (asJpeg = false) => {
+        setIsCapturing(true);
+        onClose(); 
+
+        await new Promise(r => setTimeout(r, 100));
+
+        const element = document.getElementById("schedule-grid");
+        if (!element) throw new Error("جدول پیدا نشد.");
+
+        const originalCssText = element.style.cssText;
+        const isDark = document.documentElement.classList.contains('dark');
+
+        element.style.setProperty('display', 'flex', 'important');
+        element.style.setProperty('width', '1000px', 'important'); 
+        element.style.setProperty('padding', '24px', 'important');
+        element.style.setProperty('background-color', isDark ? '#050507' : '#f5f7fa', 'important');
+        element.style.setProperty('border-radius', '16px', 'important');
+
+        await new Promise(r => setTimeout(r, 150));
+
+        const width = element.offsetWidth;
+        const height = element.offsetHeight;
+
+        const options = {
+            quality: 0.9,
+            pixelRatio: 1.5,
+            style: { margin: '0' },
+            cacheBust: true,
+        };
+
+        const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
+
+        element.style.cssText = originalCssText;
+        setIsCapturing(false);
+
+        return { dataUrl, width, height };
+    };
+
+    const handleExportPNG = async () => {
+        if (courses.length === 0) return toast.error("جدول خالی است!");
+        try {
+            const { dataUrl } = await captureGrid(false); 
+            const link = document.createElement("a");
+            link.download = "my-schedule.png";
+            link.href = dataUrl;
+            link.click();
+            toast.success("عکس با موفقیت ذخیره شد.");
+        } catch (error) {
+            console.error("PNG rendering error:", error);
+            setIsCapturing(false);
+            toast.error("خطا در تولید عکس.");
+        }
+    };
+
+    const handleExportPDF = async () => {
+        if (courses.length === 0) return toast.error("جدول خالی است!");
+        try {
+            const { dataUrl, width, height } = await captureGrid(true);
+
+            if (isNaN(width) || isNaN(height) || width === 0) throw new Error("Invalid dimensions");
+
+            const pdf = new jsPDF("p", "mm", "a4");
+            const pdfWidth = pdf.internal.pageSize.getWidth();
+            const pdfHeight = (height * pdfWidth) / width;
+
+            pdf.addImage(dataUrl, "JPEG", 0, 10, pdfWidth, pdfHeight, undefined, 'FAST');
+            pdf.save("my-schedule.pdf");
+            toast.success("فایل PDF با موفقیت ذخیره شد.");
+        } catch (error) {
+            console.error("PDF rendering error:", error);
+            setIsCapturing(false);
+            toast.error("خطا در تولید PDF.");
+        }
+    };
+
+    return (
+        <>
+
+            {isCapturing && (
+                <div className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-background/80 backdrop-blur-2xl transition-all">
+                    <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
+                    <h2 className="text-xl font-bold text-primary animate-pulse">در حال آماده‌سازی خروجی...</h2>
+                    <p className="text-sm text-muted mt-2">لطفاً چند لحظه صبر کنید</p>
+                </div>
+            )}
+
+            {/* مودال انتخاب فرمت خروجی */}
+            {isOpen && !isCapturing && (
+                <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+
+                    <div className="glass-panel p-6 w-full max-w-sm relative z-10 animate-slide-up bg-card/95">
+                        <button onClick={onClose} className="absolute top-4 left-4 p-2 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors">
+                            <X size={18} />
+                        </button>
+
+                        <h3 className="text-lg font-bold text-primary mb-6 border-b border-border pb-2 pr-1">خروجی و اشتراک‌گذاری</h3>
+
+                        <div className="flex flex-col gap-4">
+                            <button onClick={handleExportPNG} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                <ImageIcon size={18} className="text-primary shrink-0" />
+                                <span className="text-sm font-bold">دانلود به صورت عکس (PNG)</span>
+                            </button>
+
+                            <button onClick={handleExportPDF} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                <FileText size={18} className="text-danger shrink-0" />
+                                <span className="text-sm font-bold">دانلود به صورت فایل PDF</span>
+                            </button>
+
+                            <div className="h-px w-full bg-border my-1"></div>
+
+                            <button onClick={handleExportJSON} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                <FileJson size={18} className="text-ok shrink-0" />
+                                <span className="text-sm font-bold">خروجی فایل JSON (بکاپ)</span>
+                            </button>
+
+                            <label className="glass-btn !justify-start !px-5 py-3 gap-4 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                <Upload size={18} className="text-muted shrink-0" />
+                                <span className="text-sm font-bold">وارد کردن برنامه (Import)</span>
+                                <input type="file" accept=".json" className="hidden" onChange={handleImportJSON} />
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\Logo.tsx
+====================================================================================================
+
+"use client";
+
+import React from "react";
+
+export default function Logo({ className = "w-10 h-10" }: { className?: string }) {
+    return (
+        <svg
+            viewBox="0 0 100 100"
+            className={className}
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+        >
+            <defs>
+                <linearGradient id="logo-grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stopColor="var(--color-primary, #5b8def)" />
+                    <stop offset="100%" stopColor="#1877f2" />
+                </linearGradient>
+                <filter id="glow" x="-10%" y="-10%" width="120%" height="120%">
+                    <feDropShadow dx="0" dy="4" stdDeviation="4" floodColor="#1877f2" floodOpacity="0.3" />
+                </filter>
+            </defs>
+
+            <path
+                d="M50 15L85 32.5L50 50L15 32.5L50 15Z"
+                fill="url(#logo-grad)"
+                filter="url(#glow)"
+            />
+            <path
+                d="M25 43.5V65C25 75 35 83 50 83C65 83 75 75 75 65V43.5L50 56L25 43.5Z"
+                fill="url(#logo-grad)"
+                opacity="0.85"
+            />
+            <path
+                d="M50 56L80 41V68L50 83V56Z"
+                fill="#ffffff"
+                opacity="0.15"
+            />
+        </svg>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\ThemeToggle.tsx
+====================================================================================================
+
+"use client";
+
+import { useCourseStore } from "@/store/useCourseStore";
+
+export default function ThemeToggle() {
+    const { theme, toggleTheme } = useCourseStore();
+    const isDark = theme === "dark";
+
+    // Handle the click and trigger the circular View Transition API
+    const handleToggle = (e: React.MouseEvent<HTMLDivElement>) => {
+        e.preventDefault();
+
+        if (!document.startViewTransition) {
+            toggleTheme();
+            return;
+        }
+
+        const x = e.clientX;
+        const y = e.clientY;
+        const endRadius = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+        );
+
+        const transition = document.startViewTransition(() => {
+            toggleTheme();
+        });
+
+        transition.ready.then(() => {
+            const clipPath = [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${endRadius}px at ${x}px ${y}px)`,
+            ];
+
+            document.documentElement.animate(
+                {
+                    clipPath: isDark ? [...clipPath].reverse() : clipPath,
+                },
+                {
+                    duration: 500,
+                    easing: "ease-in-out",
+                    pseudoElement: isDark
+                        ? "::view-transition-old(root)"
+                        : "::view-transition-new(root)",
+                }
+            );
+        });
+    };
+
+    return (
+        <div
+            className="relative flex items-center justify-center cursor-pointer shrink-0"
+            onClick={handleToggle}
+        >
+            <svg
+                viewBox="0 0 69.667 44"
+                xmlns="http://www.w3.org/2000/svg"
+                className="w-12 h-auto md:w-14 drop-shadow-sm"
+            >
+                <g transform="translate(3.5 3.5)">
+                    {/* Main Container Background */}
+                    <g transform="matrix(1, 0, 0, 1, -3.5, -3.5)">
+                        <rect
+                            fill={isDark ? "#2b4360" : "#83cbd8"}
+                            transform="translate(3.5 3.5)"
+                            rx="17.5"
+                            height={35}
+                            width="60.667"
+                            style={{ transition: "fill 0.4s ease" }}
+                        />
+                    </g>
+
+                    {/* Sliding Button Group */}
+                    <g
+                        transform={`translate(${isDark ? 28 : 2.333}, 2.333)`}
+                        style={{ transition: "transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)" }}
+                    >
+                        {/* Sun */}
+                        <g style={{ opacity: isDark ? 0 : 1, transition: "opacity 0.3s ease" }}>
+                            <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+                                <circle fill="#f8e664" transform="translate(5.83 5.83)" r="15.167" cy="15.167" cx="15.167" />
+                            </g>
+                            <g transform="matrix(1, 0, 0, 1, -5.83, -5.83)">
+                                <path fill="rgba(246,254,247,0.29)" transform="translate(9.33 9.33)" d="M11.667,0A11.667,11.667,0,1,1,0,11.667,11.667,11.667,0,0,1,11.667,0Z" />
+                            </g>
+                            <circle fill="#fcf4b9" transform="translate(8.167 8.167)" r={7} cy={7} cx={7} />
+                        </g>
+
+                        {/* Moon */}
+                        <g style={{ opacity: isDark ? 1 : 0, transition: "opacity 0.3s ease" }}>
+                            <g transform="matrix(1, 0, 0, 1, -31.5, -5.83)">
+                                <circle fill="#cce6ee" transform="translate(31.5 5.83)" r="15.167" cy="15.167" cx="15.167" />
+                            </g>
+                            <g fill="#a6cad0" transform="translate(-24.415 -1.009)">
+                                <circle transform="translate(43.009 4.496)" r={2} cy={2} cx={2} />
+                                <circle transform="translate(39.366 17.952)" r={2} cy={2} cx={2} />
+                                <circle transform="translate(33.016 8.044)" r={1} cy={1} cx={1} />
+                                <circle transform="translate(51.081 18.888)" r={1} cy={1} cx={1} />
+                                <circle transform="translate(33.016 22.503)" r={1} cy={1} cx={1} />
+                                <circle transform="translate(50.081 10.53)" r="1.5" cy="1.5" cx="1.5" />
+                            </g>
+                        </g>
+                    </g>
+
+                    {/* Clouds (Light Mode Background) */}
+                    <g
+                        transform="matrix(1, 0, 0, 1, -3.5, -3.5)"
+                        style={{ opacity: isDark ? 0 : 1, transition: "opacity 0.4s ease" }}
+                    >
+                        <path fill="#fff" transform="translate(-3466.47 -160.94)" d="M3512.81,173.815a4.463,4.463,0,0,1,2.243.62.95.95,0,0,1,.72-1.281,4.852,4.852,0,0,1,2.623.519c.034.02-.5-1.968.281-2.716a2.117,2.117,0,0,1,2.829-.274,1.821,1.821,0,0,1,.854,1.858c.063.037,2.594-.049,3.285,1.273s-.865,2.544-.807,2.626a12.192,12.192,0,0,1,2.278.892c.553.448,1.106,1.992-1.62,2.927a7.742,7.742,0,0,1-3.762-.3c-1.28-.49-1.181-2.65-1.137-2.624s-1.417,2.2-2.623,2.2a4.172,4.172,0,0,1-2.394-1.206,3.825,3.825,0,0,1-2.771.774c-3.429-.46-2.333-3.267-2.2-3.55A3.721,3.721,0,0,1,3512.81,173.815Z" />
+                    </g>
+
+                    {/* Stars (Dark Mode Background) */}
+                    <g
+                        fill="#def8ff"
+                        transform="translate(3.585 1.325)"
+                        style={{ opacity: isDark ? 1 : 0, transition: "opacity 0.4s ease" }}
+                    >
+                        <path transform="matrix(-1, 0.017, -0.017, -1, 24.231, 3.055)" d="M.774,0,.566.559,0,.539.458.933.25,1.492l.485-.361.458.394L1.024.953,1.509.592.943.572Z" />
+                        <path transform="matrix(-0.777, 0.629, -0.629, -0.777, 23.185, 12.358)" d="M1.341.529.836.472.736,0,.505.46,0,.4.4.729l-.231.46L.605.932l.4.326L.9.786Z" />
+                        <path transform="matrix(0.438, 0.899, -0.899, 0.438, 23.177, 29.735)" d="M.015,1.065.475.9l.285.365L.766.772l.46-.164L.745.494.751,0,.481.407,0,.293.285.658Z" />
+                        <path transform="translate(12.677 0.388) rotate(104)" d="M1.161,1.6,1.059,1,1.574.722.962.607.86,0,.613.572,0,.457.446.881.2,1.454l.516-.274Z" />
+                        <path transform="matrix(-0.07, 0.998, -0.998, -0.07, 11.066, 15.457)" d="M.873,1.648l.114-.62L1.579.945,1.03.62,1.144,0,.706.464.157.139.438.7,0,1.167l.592-.083Z" />
+                        <path transform="translate(8.326 28.061) rotate(11)" d="M.593,0,.638.724,0,.982l.7.211.045.724.36-.64.7.211L1.342.935,1.7.294,1.063.552Z" />
+                        <path transform="translate(5.012 5.962) rotate(172)" d="M.816,0,.5.455,0,.311.323.767l-.312.455.516-.215.323.456L.827.911,1.343.7.839.552Z" />
+                        <path transform="translate(2.218 14.616) rotate(169)" d="M1.261,0,.774.571.114.3.487.967,0,1.538.728,1.32l.372.662.047-.749.728-.218L1.215.749Z" />
+                    </g>
+                </g>
+            </svg>
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\WheelTimePicker.tsx
+====================================================================================================
+
+"use client";
+
+import { useState, useRef, useEffect, UIEvent } from "react";
+import { createPortal } from "react-dom"; 
+import { Clock, Check, X } from "lucide-react";
+
+interface Props {
+    value: string;
+    onChange: (time: string) => void;
+    placeholder?: string;
+    className?: string;
+}
+
+const HOURS = Array.from({ length: 24 }, (_, i) => i.toString().padStart(2, "0"));
+const MINUTES = ["00", "15", "30", "45"];
+const ITEM_HEIGHT = 44;
+
+export default function WheelTimePicker({ value, onChange, placeholder = "--:--", className = "" }: Props) {
+    const [isOpen, setIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false); 
+
+    const [selectedHour, setSelectedHour] = useState("08");
+    const [selectedMinute, setSelectedMinute] = useState("00");
+
+    const hourRef = useRef<HTMLDivElement>(null);
+    const minuteRef = useRef<HTMLDivElement>(null);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    // قفل کردن اسکرول صفحه وقتی پنل باز است
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => { document.body.style.overflow = "unset"; };
+    }, [isOpen]);
+
+    useEffect(() => {
+        if (isOpen) {
+            if (value && value.includes(":")) {
+                const [h, m] = value.split(":");
+                setSelectedHour(h.padStart(2, "0"));
+                const snappedMinute = MINUTES.includes(m) ? m : "00";
+                setSelectedMinute(snappedMinute);
+            }
+        }
+    }, [value, isOpen]);
+
+    useEffect(() => {
+        if (isOpen) {
+            setTimeout(() => {
+                const hIndex = HOURS.indexOf(selectedHour);
+                const mIndex = MINUTES.indexOf(selectedMinute);
+                if (hourRef.current && hIndex !== -1) {
+                    hourRef.current.scrollTop = hIndex * ITEM_HEIGHT;
+                }
+                if (minuteRef.current && mIndex !== -1) {
+                    minuteRef.current.scrollTop = mIndex * ITEM_HEIGHT;
+                }
+            }, 10);
+        }
+    }, [isOpen]);
+
+    // هندل کردن اسکرولِ موس در دسکتاپ
+    useEffect(() => {
+        const hRef = hourRef.current;
+        const mRef = minuteRef.current;
+
+        const handleWheel = (e: WheelEvent, ref: HTMLDivElement | null, maxItems: number) => {
+            if (!ref) return;
+            e.preventDefault();
+            const currentIndex = Math.round(ref.scrollTop / ITEM_HEIGHT);
+            let nextIndex = currentIndex + Math.sign(e.deltaY);
+            nextIndex = Math.max(0, Math.min(nextIndex, maxItems - 1));
+            ref.scrollTo({ top: nextIndex * ITEM_HEIGHT, behavior: 'smooth' });
+        };
+
+        const onHourWheel = (e: WheelEvent) => handleWheel(e, hRef, HOURS.length);
+        const onMinuteWheel = (e: WheelEvent) => handleWheel(e, mRef, MINUTES.length);
+
+        hRef?.addEventListener("wheel", onHourWheel, { passive: false });
+        mRef?.addEventListener("wheel", onMinuteWheel, { passive: false });
+
+        return () => {
+            hRef?.removeEventListener("wheel", onHourWheel);
+            mRef?.removeEventListener("wheel", onMinuteWheel);
+        };
+    }, [isOpen]);
+
+    // هندل کردن اسکرول در موبایل
+    const handleHourScroll = (e: UIEvent<HTMLDivElement>) => {
+        const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
+        if (HOURS[index] && HOURS[index] !== selectedHour) {
+            setSelectedHour(HOURS[index]);
+        }
+    };
+
+    const handleMinuteScroll = (e: UIEvent<HTMLDivElement>) => {
+        const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
+        if (MINUTES[index] && MINUTES[index] !== selectedMinute) {
+            setSelectedMinute(MINUTES[index]);
+        }
+    };
+
+    const handleConfirm = () => {
+        onChange(`${selectedHour}:${selectedMinute}`);
+        setIsOpen(false);
+    };
+
+    return (
+        <div className="relative w-full">
+            <button
+                type="button"
+                onClick={() => setIsOpen(true)}
+                className={`glass-input flex items-center justify-between text-center cursor-pointer transition-all ${className}`}
+            >
+                <Clock size={16} className="text-muted shrink-0" />
+                <span className={value ? "text-foreground font-bold font-mono w-full" : "text-muted/60 font-sans w-full"}>
+                    {value || placeholder}
+                </span>
+                <div className="w-4 shrink-0"></div>
+            </button>
+
+
+            {isOpen && mounted && createPortal(
+                <div className="fixed top-0 left-0 w-full h-[100dvh] z-[999999] flex flex-col justify-end md:items-center md:justify-center p-0 md:p-4">
+
+                    <div className="absolute inset-0 bg-black/80 backdrop-blur-xl md:bg-black/20 md:backdrop-blur-sm animate-fade-in" onClick={() => setIsOpen(false)}></div>
+
+                    <div className="relative w-full md:w-[340px] mt-auto md:mt-0 bg-[var(--card)]/95 backdrop-blur-3xl border-t md:border border-[var(--border-color)] rounded-t-[32px] md:rounded-3xl p-6 pb-10 md:pb-6 shadow-2xl animate-slide-up flex flex-col items-center">
+
+                        <div className="w-12 h-1.5 bg-black/10 dark:bg-white/20 rounded-full mx-auto mb-6 shrink-0 md:hidden"></div>
+
+                        <h4 className="text-lg font-bold text-primary mb-6">انتخاب ساعت</h4>
+
+                        <div className="w-full bg-black/5 dark:bg-white/5 rounded-3xl p-3 border border-[var(--border-color)]">
+
+                            <div className="flex w-full justify-around mb-2 px-6 z-20" dir="ltr">
+                                <span className="text-[12px] font-bold text-muted w-full text-center">ساعت</span>
+                                <span className="text-[12px] font-bold text-muted w-full text-center">دقیقه</span>
+                            </div>
+
+                            <div className="relative w-full flex items-center justify-center gap-2 h-[180px] overflow-hidden" dir="ltr">
+
+                                <div className="absolute inset-x-2 top-1/2 -translate-y-1/2 h-[44px] bg-primary/20 rounded-xl border border-primary/40 pointer-events-none z-0"></div>
+
+                                <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-[var(--card)] to-transparent pointer-events-none z-20"></div>
+                                <div className="absolute inset-x-0 bottom-0 h-14 bg-gradient-to-t from-[var(--card)] to-transparent pointer-events-none z-20"></div>
+
+                                <div className="flex flex-col items-center flex-1 h-full z-10">
+                                    <div
+                                        ref={hourRef}
+                                        onScroll={handleHourScroll}
+                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory scroll-smooth flex flex-col items-center"
+                                        style={{ paddingTop: '68px', paddingBottom: '68px' }}
+                                    >
+                                        {HOURS.map((hour) => (
+                                            <div
+                                                key={`h-${hour}`}
+                                                className={`h-[44px] shrink-0 snap-center flex items-center justify-center font-mono text-xl transition-all duration-200 cursor-pointer w-full select-none ${selectedHour === hour ? "text-primary font-bold scale-110" : "text-muted/60 hover:text-foreground"
+                                                    }`}
+                                                onClick={() => {
+                                                    hourRef.current?.scrollTo({ top: HOURS.indexOf(hour) * ITEM_HEIGHT, behavior: 'smooth' });
+                                                }}
+                                            >
+                                                {hour}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+
+                                <div className="flex items-center justify-center h-full z-10 pb-1">
+                                    <span className="text-2xl font-mono font-bold text-primary/70 animate-pulse">:</span>
+                                </div>
+
+                                <div className="flex flex-col items-center flex-1 h-full z-10">
+                                    <div
+                                        ref={minuteRef}
+                                        onScroll={handleMinuteScroll}
+                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory scroll-smooth flex flex-col items-center"
+                                        style={{ paddingTop: '68px', paddingBottom: '68px' }}
+                                    >
+                                        {MINUTES.map((minute) => (
+                                            <div
+                                                key={`m-${minute}`}
+                                                className={`h-[44px] shrink-0 snap-center flex items-center justify-center font-mono text-xl transition-all duration-200 cursor-pointer w-full select-none ${selectedMinute === minute ? "text-primary font-bold scale-110" : "text-muted/60 hover:text-foreground"
+                                                    }`}
+                                                onClick={() => {
+                                                    minuteRef.current?.scrollTo({ top: MINUTES.indexOf(minute) * ITEM_HEIGHT, behavior: 'smooth' });
+                                                }}
+                                            >
+                                                {minute}
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="flex items-center justify-between w-full gap-3 mt-6">
+                            <button
+                                type="button"
+                                onClick={() => setIsOpen(false)}
+                                className="glass-btn flex-1 py-3.5 text-sm text-danger border-danger/20 bg-danger/5 hover:bg-danger hover:text-white font-bold transition-all"
+                            >
+                                <X size={18} className="inline mr-2" />
+                                انصراف
+                            </button>
+                            <button
+                                type="button"
+                                onClick={handleConfirm}
+                                className="glass-btn flex-1 py-3.5 text-sm bg-primary text-white border-transparent hover:bg-primary/90 font-bold shadow-md shadow-primary/20 transition-all"
+                            >
+                                <Check size={18} className="inline mr-2" />
+                                تأیید
+                            </button>
+                        </div>
+                    </div>
+                </div>,
+                document.body
+            )}
+        </div>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\store\useCourseStore.ts
+====================================================================================================
+
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
+import { Course } from '../types';
+
+interface CourseState {
+    courses: Course[];
+    selectedCourseId: number | null;
+    theme: 'dark' | 'light';
+
+    addCourse: (course: Course) => void;
+    updateCourse: (id: number, updatedCourse: Partial<Course>) => void;
+    deleteCourse: (id: number) => void;
+    setSelectedCourseId: (id: number | null) => void;
+    toggleTheme: () => void;
+    importCourses: (courses: Course[]) => void;
+}
+
+export const useCourseStore = create<CourseState>()(
+    persist(
+        (set) => ({
+            courses: [],
+            selectedCourseId: null,
+            theme: 'dark', 
+
+            addCourse: (course) =>
+                set((state) => ({ courses: [...state.courses, course] })),
+
+            updateCourse: (id, updatedCourse) =>
+                set((state) => ({
+                    courses: state.courses.map((c) =>
+                        c.id === id ? { ...c, ...updatedCourse } : c
+                    ),
+                })),
+
+            deleteCourse: (id) =>
+                set((state) => ({
+                    courses: state.courses.filter((c) => c.id !== id),
+                    selectedCourseId: state.selectedCourseId === id ? null : state.selectedCourseId,
+                })),
+
+            setSelectedCourseId: (id) => set({ selectedCourseId: id }),
+
+            toggleTheme: () =>
+                set((state) => {
+                    const newTheme = state.theme === 'dark' ? 'light' : 'dark';
+                    document.documentElement.classList.toggle('dark', newTheme === 'dark');
+                    return { theme: newTheme };
+                }),
+
+            importCourses: (courses) => set({ courses }),
+        }),
+        {
+            name: 'course-planner-storage', 
+        }
+    )
+);
+
+
+
+====================================================================================================
+FILE: src\types\index.ts
+====================================================================================================
+
+export interface Session {
+  day: string;
+  start: string; 
+  end: string;
+}
+
+export interface Course {
+  id: number;
+  code: string;
+  name: string;
+  professor: string;
+  units: number;
+  exam_date: string | null;
+  exam_time: string | null;
+  sessions: Session[];
+}
+
+
+
+====================================================================================================
+FILE: src\utils\helpers.ts
+====================================================================================================
+
+// src/utils/helpers.ts
+
+import { Course, Session } from "../types";
+
+// Normalize time strings (e.g. 8.5 to 08:30)
+export function normalizeTimeStr(t: string | number): string {
+    let str = (t || "").toString().trim();
+    if (!str) return "";
+    let hh = "00", mm = "00";
+    if (str.includes(":")) [hh, mm] = str.split(":");
+    else if (str.includes(".")) [hh, mm] = str.split(".");
+    else { hh = str; mm = "00"; }
+
+    hh = hh.padStart(2, "0");
+    if (mm.length === 1) {
+        const m = Math.round(parseFloat("0." + mm) * 60) || 0;
+        mm = String(m);
+    }
+    mm = (mm + "00").slice(0, 2);
+    return `${hh}:${mm}`;
+}
+
+// Convert time to minutes (e.g. 8:30 to 510)
+export function parseTimeToMinutes(t: string): number {
+    const n = normalizeTimeStr(t);
+    const [h, m] = n.split(":").map(Number);
+    if (isNaN(h) || isNaN(m)) return NaN;
+    return h * 60 + m;
+}
+
+// Check time overlap
+export function overlap(a1: number, a2: number, b1: number, b2: number): boolean {
+    return Math.max(a1, b1) < Math.min(a2, b2);
+}
+
+// Generate vibrant colors for glassmorphism
+export function colorFor(key: string): string {
+    let h = 0;
+    for (let i = 0; i < key.length; i++) {
+        h = ((h << 5) - h) + key.charCodeAt(i);
+        h |= 0;
+    }
+    const hue = Math.abs(h) % 360;
+    // Increased saturation and adjusted lightness for vivid but clean colors
+    return `hsl(${hue}, 85%, 60%)`;
+}
+
+
+
+====================================================================================================
+FILE: tsconfig.json
+====================================================================================================
+
+{
+  "compilerOptions": {
+    "target": "ES2017",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": ["./src/*"]
+    }
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ],
+  "exclude": ["node_modules"]
+}
+
+
+
+
+====================================================================================================
+PROJECT TREE
+====================================================================================================
+
+|-- public
+    |-- font
+|-- src
+    |-- app
+        |-- globals.css
+        |-- icon.tsx
+        |-- layout.tsx
+        |-- page.tsx
+    |-- components
+        |-- course
+            |-- CourseCard.tsx
+            |-- DesktopGrid.tsx
+            |-- MobileTimeline.tsx
+        |-- form
+            |-- CourseForm.tsx
+        |-- layout
+            |-- Topbar.tsx
+        |-- ui
+            |-- AnimatedCheckbox.tsx
+            |-- BottomSheet.tsx
+            |-- ConfirmModal.tsx
+            |-- ExportModal.tsx
+            |-- Logo.tsx
+            |-- ThemeToggle.tsx
+            |-- WheelTimePicker.tsx
+    |-- store
+        |-- useCourseStore.ts
+    |-- types
+        |-- index.ts
+    |-- utils
+        |-- helpers.ts
+|-- .gitignore
+|-- AGENTS.md
+|-- CLAUDE.md
+|-- eslint.config.mjs
+|-- next.config.ts
+|-- next-env.d.ts
+|-- package.json
+|-- postcss.config.mjs
+|-- README.md
+|-- tsconfig.json
