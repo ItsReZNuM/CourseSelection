@@ -145,7 +145,7 @@ export default function CourseForm() {
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">نام استاد</label>
-                    <input value={professor} onChange={e => setProfessor(e.target.value)} className="glass-input" placeholder="مثال: دکتر محمدنیا" />
+                    <input value={professor} onChange={e => setProfessor(e.target.value)} className="glass-input" placeholder="دکتر ...." />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">تعداد واحد</label>
