@@ -53,7 +53,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
     const captureGrid = async (asJpeg = false) => {
         setIsCapturing(true);
-        onClose(); 
+        onClose();
 
         await new Promise(r => setTimeout(r, 100));
 
@@ -63,13 +63,17 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         const originalCssText = element.style.cssText;
         const isDark = document.documentElement.classList.contains('dark');
 
+        // FIXED: Add export-mode class to temporarily disable backdrop-filters
+        element.classList.add('export-mode');
+
         element.style.setProperty('display', 'flex', 'important');
-        element.style.setProperty('width', '1000px', 'important'); 
+        element.style.setProperty('width', '1000px', 'important');
         element.style.setProperty('padding', '24px', 'important');
         element.style.setProperty('background-color', isDark ? '#050507' : '#f5f7fa', 'important');
         element.style.setProperty('border-radius', '16px', 'important');
 
-        await new Promise(r => setTimeout(r, 150));
+        // FIXED: Increased timeout to 400ms to ensure mobile browsers finish layout rendering
+        await new Promise(r => setTimeout(r, 400));
 
         const width = element.offsetWidth;
         const height = element.offsetHeight;
@@ -83,6 +87,8 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
         const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
 
+        // Cleanup
+        element.classList.remove('export-mode');
         element.style.cssText = originalCssText;
         setIsCapturing(false);
 
@@ -92,7 +98,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
     const handleExportPNG = async () => {
         if (courses.length === 0) return toast.error("جدول خالی است!");
         try {
-            const { dataUrl } = await captureGrid(false); 
+            const { dataUrl } = await captureGrid(false);
             const link = document.createElement("a");
             link.download = "my-schedule.png";
             link.href = dataUrl;

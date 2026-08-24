@@ -1,3 +1,4 @@
+// src/components/course/CourseCard.tsx
 "use client";
 
 import { Course, Session } from "@/types";
@@ -22,15 +23,17 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     const startMin = parseTimeToMinutes(session.start);
     const endMin = parseTimeToMinutes(session.end);
 
+    // محاسبه مدت زمان کلاس به دقیقه برای مدیریت فضای کارت
+    const durationMin = endMin - startMin;
+
     const top = TOP_OFFSET + (startMin - START_HOUR * 60) * PX_PER_MIN + 3;
-    const height = Math.max((endMin - startMin) * PX_PER_MIN - 6, 15);
+    const height = Math.max(durationMin * PX_PER_MIN - 6, 15);
 
     const widthPct = 100 / DAYS.length;
     const baseColor = colorFor(course.name);
     const glassBg = baseColor.replace('hsl', 'hsla').replace(')', ', 0.15)');
     const borderColor = baseColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
 
-    // Smart Positioning Logic
     const isLate = startMin >= 15 * 60;
     const isLeftEdge = dayIndex >= 3;
 
@@ -38,7 +41,6 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     const xPosition = isLeftEdge ? "left-0" : "right-0";
     const transformOrigin = `origin-${isLate ? "bottom" : "top"}-${isLeftEdge ? "left" : "right"}`;
 
-    // Helper: محاسبه اتوماتیک نام روز امتحان
     const getExamDay = (dateStr: string) => {
         if (!dateStr) return "";
         try {
@@ -52,7 +54,7 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     return (
         <div
             onClick={() => setSelectedCourseId(course.id)}
-            className={`absolute p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-50 ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : ""
+            className={`absolute p-1.5 md:p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-50 backdrop-blur-md ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : ""
                 }`}
             style={{
                 top: `${top}px`,
@@ -60,22 +62,40 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                 right: `calc(${dayIndex * widthPct}% + 4px)`,
                 width: `calc(${widthPct}% - 8px)`,
                 backgroundColor: glassBg,
-                backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
                 border: `1px solid ${borderColor}`,
                 borderRight: `4px solid ${baseColor}`,
             }}
         >
             <div className="h-full w-full flex flex-col items-center justify-center text-center overflow-hidden text-foreground">
-                <span className="font-bold text-[11px] md:text-[13px] leading-snug line-clamp-2 px-1">
+                <span className="font-bold text-[10px] md:text-[13px] leading-snug line-clamp-2 px-1 shrink-0">
                     {course.name}
                 </span>
-                <span className="font-mono text-[10px] md:text-[11px] opacity-80 mt-1.5 bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded-md">
+                <span className="font-mono text-[9px] md:text-[11px] opacity-80 mt-1 bg-black/5 dark:bg-white/10 px-1.5 py-0.5 rounded-md shrink-0">
                     {session.start} - {session.end}
                 </span>
+
+                {/* 
+                  هوش مصنوعی UI: 
+                  اطلاعات امتحان فقط زمانی روی خود کارت رندر می‌شود که کلاس حداقل 85 دقیقه طول بکشد.
+                  این کار از فشرده‌شدن و مخفی‌شدن اسم درس در کلاس‌های 1 ساعته جلوگیری می‌کند!
+                */}
+                {course.exam_date && durationMin >= 85 && (
+                    <div className="flex flex-col items-center mt-1.5 w-full px-1 shrink-0">
+                        {/* FIXED: Using a flex container with LTR dir for the date to prevent reverse rendering */}
+                        <div className="flex items-center justify-center gap-1 text-[8px] md:text-[9px] font-bold text-primary bg-primary/10 px-1 py-0.5 rounded w-full overflow-hidden">
+                            <span className="shrink-0">{getExamDay(course.exam_date)}</span>
+                            <span dir="ltr" className="truncate font-mono">{course.exam_date}</span>
+                        </div>
+                        {course.exam_time && (
+                            <span className="text-[8px] md:text-[9px] font-mono font-bold text-primary mt-0.5 shrink-0" dir="ltr">
+                                {course.exam_time}
+                            </span>
+                        )}
+                    </div>
+                )}
             </div>
 
-            {/* Desktop Tooltip - Redesigned to match Mobile BottomSheet layout */}
+            {/* Desktop Hover Tooltip */}
             <div className={`hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
                 <div>
                     <h3 className="font-bold text-primary text-base mb-0.5">{course.name}</h3>
@@ -125,7 +145,7 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                                         <Clock size={14} />
                                         <span>ساعت امتحان</span>
                                     </div>
-                                    <span className="font-mono text-xs text-primary font-bold">{course.exam_time}</span>
+                                    <span className="font-mono text-xs text-primary font-bold" dir="ltr">{course.exam_time}</span>
                                 </div>
                             )}
                         </>

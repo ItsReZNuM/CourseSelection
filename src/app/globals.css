@@ -152,3 +152,9 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+.export-mode,
+.export-mode * {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
