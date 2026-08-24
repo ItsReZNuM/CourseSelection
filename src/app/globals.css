@@ -158,3 +158,33 @@
   backdrop-filter: none !important;
   -webkit-backdrop-filter: none !important;
 }
+
+@keyframes heartbeat {
+
+  0%,
+  100% {
+    transform: scale(1);
+  }
+
+  14% {
+    transform: scale(1.25);
+  }
+
+  28% {
+    transform: scale(1);
+  }
+
+  42% {
+    transform: scale(1.25);
+  }
+
+  70% {
+    transform: scale(1);
+  }
+}
+
+.animate-heartbeat {
+  animation: heartbeat 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  display: inline-block;
+  transform-origin: center;
+}

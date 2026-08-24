@@ -1,3 +1,4 @@
+// src/app/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -5,6 +6,7 @@ import Topbar from "@/components/layout/Topbar";
 import DesktopGrid from "@/components/course/DesktopGrid";
 import CourseForm from "@/components/form/CourseForm";
 import MobileTimeline from "@/components/course/MobileTimeline";
+import Footer from "@/components/layout/Footer"; // 👈 ایمپورت فوتر
 import { useCourseStore } from "@/store/useCourseStore";
 
 export default function Home() {
@@ -15,7 +17,8 @@ export default function Home() {
   }, [theme]);
 
   return (
-    <main className="container mx-auto p-4 max-w-7xl relative pb-20">
+    <main className="container mx-auto p-4 max-w-7xl relative min-h-screen flex flex-col pb-8">
+
       {/* نوار ابزار بالا */}
       <Topbar />
 
@@ -27,6 +30,12 @@ export default function Home() {
 
       {/* تایم‌لاین مخصوص موبایل (در دسکتاپ مخفی است) */}
       <MobileTimeline />
+
+      {/* اسپیسر برای هل دادن فوتر به پایین (در صورت کم بودن محتوا) */}
+      <div className="flex-1"></div>
+
+      {/* 👈 فوتر امضای شما */}
+      <Footer />
 
     </main>
   );
