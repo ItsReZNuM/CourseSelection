@@ -1,4 +1,3 @@
-// src/components/layout/Footer.tsx
 "use client";
 
 export default function Footer() {
@@ -50,15 +49,21 @@ export default function Footer() {
             {/* Signature Texts */}
             <div className="flex flex-col md:flex-row items-center gap-2 md:gap-5 text-[11px] md:text-xs font-bold text-muted/80 bg-black/5 dark:bg-white/5 px-6 py-2.5 rounded-2xl border border-[var(--border-color)] backdrop-blur-sm">
 
-                <span className="flex items-center gap-1.5">
+                <a
+                    href="https://portfolio-five-steel-86.vercel.app/"
+                    target="_blank"
+                    className="flex items-center gap-1.5">
                     ساخته شده با <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> توسط رضا محمدنیا
-                </span>
+                </a>
 
                 <span className="hidden md:block w-1 h-1 rounded-full bg-border"></span>
 
-                <span className="flex items-center gap-1.5 font-mono" dir="ltr">
+                <a
+                    href="https://portfolio-five-steel-86.vercel.app/"
+                    target="_blank"
+                    className="flex items-center gap-1.5 font-mono" dir="ltr">
                     Made with <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> By ItsReZNuM
-                </span>
+                </a>
 
             </div>
         </footer>

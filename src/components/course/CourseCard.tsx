@@ -1,4 +1,3 @@
-// src/components/course/CourseCard.tsx
 "use client";
 
 import { Course, Session } from "@/types";
@@ -74,14 +73,8 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                     {session.start} - {session.end}
                 </span>
 
-                {/* 
-                  هوش مصنوعی UI: 
-                  اطلاعات امتحان فقط زمانی روی خود کارت رندر می‌شود که کلاس حداقل 85 دقیقه طول بکشد.
-                  این کار از فشرده‌شدن و مخفی‌شدن اسم درس در کلاس‌های 1 ساعته جلوگیری می‌کند!
-                */}
                 {course.exam_date && durationMin >= 85 && (
                     <div className="flex flex-col items-center mt-1.5 w-full px-1 shrink-0">
-                        {/* FIXED: Using a flex container with LTR dir for the date to prevent reverse rendering */}
                         <div className="flex items-center justify-center gap-1 text-[8px] md:text-[9px] font-bold text-primary bg-primary/10 px-1 py-0.5 rounded w-full overflow-hidden">
                             <span className="shrink-0">{getExamDay(course.exam_date)}</span>
                             <span dir="ltr" className="truncate font-mono">{course.exam_date}</span>

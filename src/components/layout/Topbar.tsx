@@ -1,4 +1,3 @@
-// src/components/layout/Topbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -43,7 +42,6 @@ export default function Topbar() {
 
     return (
         <>
-            {/* FIXED RESPONSIVENESS: Adjusted gaps and padding for <420px screens */}
             <header className="glass-panel flex items-center justify-between p-2 md:p-4 mb-4 md:mb-6 sticky top-2 md:top-4 z-[70] gap-1">
 
                 <div className="flex items-center gap-1.5 md:gap-4 min-w-0 shrink">
@@ -97,7 +95,6 @@ export default function Topbar() {
 
                     <div className="w-px h-4 sm:h-6 md:h-8 bg-border mx-0.5 md:mx-1"></div>
 
-                    {/* ThemeToggle scale down applied internally via CSS wrapper */}
                     <div className="scale-[0.8] sm:scale-90 md:scale-100 origin-center shrink-0">
                         <ThemeToggle />
                     </div>

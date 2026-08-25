@@ -63,7 +63,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         const originalCssText = element.style.cssText;
         const isDark = document.documentElement.classList.contains('dark');
 
-        // FIXED: Add export-mode class to temporarily disable backdrop-filters
         element.classList.add('export-mode');
 
         element.style.setProperty('display', 'flex', 'important');
@@ -72,7 +71,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         element.style.setProperty('background-color', isDark ? '#050507' : '#f5f7fa', 'important');
         element.style.setProperty('border-radius', '16px', 'important');
 
-        // FIXED: Increased timeout to 400ms to ensure mobile browsers finish layout rendering
         await new Promise(r => setTimeout(r, 400));
 
         const width = element.offsetWidth;

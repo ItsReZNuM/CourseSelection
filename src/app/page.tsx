@@ -1,4 +1,3 @@
-// src/app/page.tsx
 "use client";
 
 import { useEffect } from "react";
@@ -6,7 +5,7 @@ import Topbar from "@/components/layout/Topbar";
 import DesktopGrid from "@/components/course/DesktopGrid";
 import CourseForm from "@/components/form/CourseForm";
 import MobileTimeline from "@/components/course/MobileTimeline";
-import Footer from "@/components/layout/Footer"; // 👈 ایمپورت فوتر
+import Footer from "@/components/layout/Footer"; 
 import { useCourseStore } from "@/store/useCourseStore";
 
 export default function Home() {
@@ -34,7 +33,7 @@ export default function Home() {
       {/* اسپیسر برای هل دادن فوتر به پایین (در صورت کم بودن محتوا) */}
       <div className="flex-1"></div>
 
-      {/* 👈 فوتر امضای شما */}
+      {/*  فوتر   */}
       <Footer />
 
     </main>
