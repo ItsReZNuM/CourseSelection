@@ -1,7 +1,8 @@
+// src/components/ui/WheelTimePicker.tsx
 "use client";
 
 import { useState, useRef, useEffect, UIEvent } from "react";
-import { createPortal } from "react-dom"; 
+import { createPortal } from "react-dom";
 import { Clock, Check, X } from "lucide-react";
 
 interface Props {
@@ -17,7 +18,7 @@ const ITEM_HEIGHT = 44;
 
 export default function WheelTimePicker({ value, onChange, placeholder = "--:--", className = "" }: Props) {
     const [isOpen, setIsOpen] = useState(false);
-    const [mounted, setMounted] = useState(false); 
+    const [mounted, setMounted] = useState(false);
 
     const [selectedHour, setSelectedHour] = useState("08");
     const [selectedMinute, setSelectedMinute] = useState("00");
@@ -25,62 +26,78 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
     const hourRef = useRef<HTMLDivElement>(null);
     const minuteRef = useRef<HTMLDivElement>(null);
 
+    // استفاده از Ref برای قفل کردن موقعیت و جلوگیری از گیج شدن موس هنگام انیمیشن
+    const targetHourIndex = useRef(8);
+    const targetMinuteIndex = useRef(0);
+
     useEffect(() => {
         setMounted(true);
     }, []);
 
-    // قفل کردن اسکرول صفحه وقتی پنل باز است
     useEffect(() => {
         if (isOpen) {
             document.body.style.overflow = "hidden";
+
+            let targetHour = "08";
+            let targetMinute = "00";
+
+            if (value && value.includes(":")) {
+                const [h, m] = value.split(":");
+                targetHour = h.padStart(2, "0");
+                targetMinute = MINUTES.includes(m) ? m : "00";
+            }
+
+            setSelectedHour(targetHour);
+            setSelectedMinute(targetMinute);
+
+            targetHourIndex.current = HOURS.indexOf(targetHour);
+            targetMinuteIndex.current = MINUTES.indexOf(targetMinute);
+
+            // FIXED: ایجاد افکتِ جذابِ «شمردن» از صفر تا رسیدن به ساعت تنظیم‌شده
+            setTimeout(() => {
+                hourRef.current?.scrollTo({ top: targetHourIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
+                minuteRef.current?.scrollTo({ top: targetMinuteIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
+            }, 100);
+
         } else {
             document.body.style.overflow = "unset";
         }
         return () => { document.body.style.overflow = "unset"; };
-    }, [isOpen]);
+    }, [isOpen, value]);
 
+    // FIXED: سیستم قدرتمند مدیریت چرخ موس (Wheel) که از باگ خوردن بین فریم‌ها جلوگیری میکنه
     useEffect(() => {
-        if (isOpen) {
-            if (value && value.includes(":")) {
-                const [h, m] = value.split(":");
-                setSelectedHour(h.padStart(2, "0"));
-                const snappedMinute = MINUTES.includes(m) ? m : "00";
-                setSelectedMinute(snappedMinute);
-            }
-        }
-    }, [value, isOpen]);
+        if (!isOpen) return;
 
-    useEffect(() => {
-        if (isOpen) {
-            setTimeout(() => {
-                const hIndex = HOURS.indexOf(selectedHour);
-                const mIndex = MINUTES.indexOf(selectedMinute);
-                if (hourRef.current && hIndex !== -1) {
-                    hourRef.current.scrollTop = hIndex * ITEM_HEIGHT;
-                }
-                if (minuteRef.current && mIndex !== -1) {
-                    minuteRef.current.scrollTop = mIndex * ITEM_HEIGHT;
-                }
-            }, 10);
-        }
-    }, [isOpen]);
-
-    // هندل کردن اسکرولِ موس در دسکتاپ
-    useEffect(() => {
         const hRef = hourRef.current;
         const mRef = minuteRef.current;
 
-        const handleWheel = (e: WheelEvent, ref: HTMLDivElement | null, maxItems: number) => {
-            if (!ref) return;
+        let isThrottledH = false;
+        let isThrottledM = false;
+
+        const onHourWheel = (e: WheelEvent) => {
             e.preventDefault();
-            const currentIndex = Math.round(ref.scrollTop / ITEM_HEIGHT);
-            let nextIndex = currentIndex + Math.sign(e.deltaY);
-            nextIndex = Math.max(0, Math.min(nextIndex, maxItems - 1));
-            ref.scrollTo({ top: nextIndex * ITEM_HEIGHT, behavior: 'smooth' });
+            if (isThrottledH) return;
+            isThrottledH = true;
+
+            const direction = Math.sign(e.deltaY);
+            targetHourIndex.current = Math.max(0, Math.min(targetHourIndex.current + direction, HOURS.length - 1));
+            hRef?.scrollTo({ top: targetHourIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
+
+            setTimeout(() => { isThrottledH = false; }, 120);
         };
 
-        const onHourWheel = (e: WheelEvent) => handleWheel(e, hRef, HOURS.length);
-        const onMinuteWheel = (e: WheelEvent) => handleWheel(e, mRef, MINUTES.length);
+        const onMinuteWheel = (e: WheelEvent) => {
+            e.preventDefault();
+            if (isThrottledM) return;
+            isThrottledM = true;
+
+            const direction = Math.sign(e.deltaY);
+            targetMinuteIndex.current = Math.max(0, Math.min(targetMinuteIndex.current + direction, MINUTES.length - 1));
+            mRef?.scrollTo({ top: targetMinuteIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
+
+            setTimeout(() => { isThrottledM = false; }, 120);
+        };
 
         hRef?.addEventListener("wheel", onHourWheel, { passive: false });
         mRef?.addEventListener("wheel", onMinuteWheel, { passive: false });
@@ -91,9 +108,9 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
         };
     }, [isOpen]);
 
-    // هندل کردن اسکرول در موبایل
     const handleHourScroll = (e: UIEvent<HTMLDivElement>) => {
         const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
+        targetHourIndex.current = index;
         if (HOURS[index] && HOURS[index] !== selectedHour) {
             setSelectedHour(HOURS[index]);
         }
@@ -101,6 +118,7 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
 
     const handleMinuteScroll = (e: UIEvent<HTMLDivElement>) => {
         const index = Math.round(e.currentTarget.scrollTop / ITEM_HEIGHT);
+        targetMinuteIndex.current = index;
         if (MINUTES[index] && MINUTES[index] !== selectedMinute) {
             setSelectedMinute(MINUTES[index]);
         }
@@ -124,7 +142,6 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
                 </span>
                 <div className="w-4 shrink-0"></div>
             </button>
-
 
             {isOpen && mounted && createPortal(
                 <div className="fixed top-0 left-0 w-full h-[100dvh] z-[999999] flex flex-col justify-end md:items-center md:justify-center p-0 md:p-4">
@@ -155,7 +172,8 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
                                     <div
                                         ref={hourRef}
                                         onScroll={handleHourScroll}
-                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory scroll-smooth flex flex-col items-center"
+                                        // FIXED: Removed conflicting CSS class (scroll-smooth)
+                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory flex flex-col items-center"
                                         style={{ paddingTop: '68px', paddingBottom: '68px' }}
                                     >
                                         {HOURS.map((hour) => (
@@ -164,7 +182,8 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
                                                 className={`h-[44px] shrink-0 snap-center flex items-center justify-center font-mono text-xl transition-all duration-200 cursor-pointer w-full select-none ${selectedHour === hour ? "text-primary font-bold scale-110" : "text-muted/60 hover:text-foreground"
                                                     }`}
                                                 onClick={() => {
-                                                    hourRef.current?.scrollTo({ top: HOURS.indexOf(hour) * ITEM_HEIGHT, behavior: 'smooth' });
+                                                    targetHourIndex.current = HOURS.indexOf(hour);
+                                                    hourRef.current?.scrollTo({ top: targetHourIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
                                                 }}
                                             >
                                                 {hour}
@@ -181,7 +200,8 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
                                     <div
                                         ref={minuteRef}
                                         onScroll={handleMinuteScroll}
-                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory scroll-smooth flex flex-col items-center"
+                                        // FIXED: Removed conflicting CSS class (scroll-smooth)
+                                        className="w-full h-full overflow-y-auto no-scrollbar snap-y snap-mandatory flex flex-col items-center"
                                         style={{ paddingTop: '68px', paddingBottom: '68px' }}
                                     >
                                         {MINUTES.map((minute) => (
@@ -190,7 +210,8 @@ export default function WheelTimePicker({ value, onChange, placeholder = "--:--"
                                                 className={`h-[44px] shrink-0 snap-center flex items-center justify-center font-mono text-xl transition-all duration-200 cursor-pointer w-full select-none ${selectedMinute === minute ? "text-primary font-bold scale-110" : "text-muted/60 hover:text-foreground"
                                                     }`}
                                                 onClick={() => {
-                                                    minuteRef.current?.scrollTo({ top: MINUTES.indexOf(minute) * ITEM_HEIGHT, behavior: 'smooth' });
+                                                    targetMinuteIndex.current = MINUTES.indexOf(minute);
+                                                    minuteRef.current?.scrollTo({ top: targetMinuteIndex.current * ITEM_HEIGHT, behavior: 'smooth' });
                                                 }}
                                             >
                                                 {minute}

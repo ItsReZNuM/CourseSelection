@@ -54,8 +54,8 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     return (
         <div
             onClick={() => setSelectedCourseId(course.id)}
-            // FIXED: hover:z-[70] ensures hovered cards completely overlap selected ones (z-[55])
-            className={`absolute p-1.5 md:p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-all duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-[70] backdrop-blur-md ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : "z-10"
+            // FIXED: Replaced transition-all with specific transitions to make z-index update INSTANTLY!
+            className={`absolute p-1.5 md:p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-transform transition-colors transition-shadow duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-[70] backdrop-blur-md ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : "z-10"
                 }`}
             style={{
                 top: `${top}px`,
