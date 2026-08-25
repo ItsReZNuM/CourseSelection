@@ -1,3 +1,4 @@
+// src/components/layout/Footer.tsx
 "use client";
 
 export default function Footer() {
@@ -46,26 +47,23 @@ export default function Footer() {
                 </a>
             </div>
 
-            {/* Signature Texts */}
-            <div className="flex flex-col md:flex-row items-center gap-2 md:gap-5 text-[11px] md:text-xs font-bold text-muted/80 bg-black/5 dark:bg-white/5 px-6 py-2.5 rounded-2xl border border-[var(--border-color)] backdrop-blur-sm">
-
-                <a
-                    href="https://portfolio-five-steel-86.vercel.app/"
-                    target="_blank"
-                    className="flex items-center gap-1.5">
-                    ساخته شده با <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> توسط رضا محمدنیا
-                </a>
+            {/* FIXED: Turned the entire box into a clickable link to your portfolio and highlighted the names */}
+            <a
+                href="https://portfolio-five-steel-86.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex flex-col md:flex-row items-center gap-2 md:gap-5 text-[11px] md:text-xs font-bold text-muted/80 bg-black/5 dark:bg-white/5 px-6 py-2.5 rounded-2xl border border-[var(--border-color)] backdrop-blur-sm transition-all hover:bg-black/10 dark:hover:bg-white/10 hover:shadow-md cursor-pointer group"
+            >
+                <span className="flex items-center gap-1.5">
+                    ساخته شده با <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> توسط <span className="text-black dark:text-white font-extrabold group-hover:text-primary transition-colors">رضا محمدنیا</span>
+                </span>
 
                 <span className="hidden md:block w-1 h-1 rounded-full bg-border"></span>
 
-                <a
-                    href="https://portfolio-five-steel-86.vercel.app/"
-                    target="_blank"
-                    className="flex items-center gap-1.5 font-mono" dir="ltr">
-                    Made with <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> By ItsReZNuM
-                </a>
-
-            </div>
+                <span className="flex items-center gap-1.5 font-mono" dir="ltr">
+                    Made with <span className="text-danger animate-heartbeat text-sm md:text-base">❤️</span> By <span className="text-black dark:text-white font-extrabold group-hover:text-primary transition-colors">ItsReZNuM</span>
+                </span>
+            </a>
         </footer>
     );
 }
