@@ -1,6 +1,5 @@
-// src/app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import { Toaster } from "react-hot-toast";
+import CustomToaster from "@/components/ui/CustomToaster"; 
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -37,19 +36,8 @@ export default function RootLayout({
       <body className="min-h-screen flex flex-col font-sans">
         {children}
 
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 4000,
-            className: '!bg-[var(--glass-bg)] !backdrop-blur-2xl !border !border-[var(--border-color)] !text-foreground !shadow-2xl !rounded-2xl',
-            style: {
-              background: 'transparent',
-              boxShadow: 'none',
-              padding: '12px 20px',
-              fontFamily: 'var(--font-sans)',
-            }
-          }}
-        />
+        <CustomToaster />
+
       </body>
     </html>
   );
