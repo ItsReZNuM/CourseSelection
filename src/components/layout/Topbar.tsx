@@ -1,3 +1,4 @@
+// src/components/layout/Topbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,6 +9,7 @@ import ThemeToggle from "../ui/ThemeToggle";
 import ExportModal from "../ui/ExportModal";
 import Logo from "../ui/Logo";
 import ConfirmModal from "../ui/ConfirmModal";
+import InstallAppBtn from "../ui/InstallAppBtn";
 
 export default function Topbar() {
     const { courses, selectedCourseId, deleteCourse, setSelectedCourseId } = useCourseStore();
@@ -48,7 +50,6 @@ export default function Topbar() {
                     <Logo className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 shrink-0" />
 
                     <div className="flex flex-col justify-center min-w-0">
-                        {/* Title gets truncated on ultra-small screens */}
                         <h1 className="text-sm sm:text-base md:text-xl font-bold text-foreground leading-tight truncate mb-0.5 md:mb-1.5">
                             ابزار انتخاب واحد
                         </h1>
@@ -67,6 +68,10 @@ export default function Topbar() {
                 </div>
 
                 <div className="flex items-center gap-1 sm:gap-1.5 md:gap-3 shrink-0 py-3 px-1 sm:px-2 -my-3 -mx-2">
+
+                    {/* 👈 دکمه نصب در موبایل مخفی میشه و فقط تو دسکتاپ میاد */}
+                    <InstallAppBtn className="hidden md:flex p-1.5 md:px-4 md:py-2" />
+
                     <button
                         onClick={() => setSelectedCourseId(null)}
                         className="glass-btn p-1.5 sm:px-2 sm:py-1.5 md:px-4 md:py-2 flex gap-1 md:gap-2 text-primary border-primary/20 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors shrink-0"

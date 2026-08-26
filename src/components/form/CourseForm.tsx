@@ -1,3 +1,4 @@
+// src/components/form/CourseForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -9,6 +10,7 @@ import { DAYS } from "../course/DesktopGrid";
 import { parseTimeToMinutes, overlap } from "@/utils/helpers";
 import AnimatedCheckbox from "../ui/AnimatedCheckbox";
 import WheelTimePicker from "../ui/WheelTimePicker";
+import InstallAppBtn from "../ui/InstallAppBtn"; // 👈 ایمپورت دکمه نصب
 
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -133,6 +135,9 @@ export default function CourseForm() {
                     </button>
                 )}
             </div>
+
+            {/* 👈 دکمه نصب اپلیکیشن؛ فقط در موبایل و به صورت یک بنر عریض نمایش داده می‌شود */}
+            <InstallAppBtn className="flex md:hidden w-full py-3 mb-5 text-sm" />
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div>
