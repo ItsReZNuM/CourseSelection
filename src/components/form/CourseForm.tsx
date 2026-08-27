@@ -10,7 +10,7 @@ import { DAYS } from "../course/DesktopGrid";
 import { parseTimeToMinutes, overlap } from "@/utils/helpers";
 import AnimatedCheckbox from "../ui/AnimatedCheckbox";
 import WheelTimePicker from "../ui/WheelTimePicker";
-import InstallAppBtn from "../ui/InstallAppBtn"; // 👈 ایمپورت دکمه نصب
+import InstallAppBtn from "../ui/InstallAppBtn";
 
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -18,6 +18,12 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 
 const initialSession: Session = { day: DAYS[0], start: "", end: "" };
+
+const toEnglishDigits = (value: string) => {
+    return value
+        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
+        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
+};
 
 export default function CourseForm() {
     const { courses, addCourse, updateCourse, selectedCourseId, setSelectedCourseId, theme } = useCourseStore();
@@ -136,25 +142,48 @@ export default function CourseForm() {
                 )}
             </div>
 
-            {/* 👈 دکمه نصب اپلیکیشن؛ فقط در موبایل و به صورت یک بنر عریض نمایش داده می‌شود */}
             <InstallAppBtn className="flex md:hidden w-full py-3 mb-5 text-sm" />
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">کد درس</label>
-                    <input value={code} onChange={e => setCode(e.target.value)} className="glass-input font-mono text-left" placeholder="e.g: 40123" dir="ltr" />
+                    <input
+                        value={code}
+                        onChange={e => setCode(toEnglishDigits(e.target.value))}
+                        className="glass-input font-mono text-left"
+                        placeholder="e.g: 40123"
+                        dir="ltr"
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">نام درس</label>
-                    <input value={name} onChange={e => setName(e.target.value)} className="glass-input" placeholder="مثال: برنامه‌نویسی پیشرفته" />
+                    <input
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        className="glass-input"
+                        placeholder="مثال: برنامه‌نویسی پیشرفته"
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">نام استاد</label>
-                    <input value={professor} onChange={e => setProfessor(e.target.value)} className="glass-input" placeholder="دکتر ...." />
+                    <input
+                        value={professor}
+                        onChange={e => setProfessor(e.target.value)}
+                        className="glass-input"
+                        placeholder="دکتر ...."
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">تعداد واحد</label>
-                    <input value={units} onChange={e => setUnits(e.target.value)} type="number" step="0.5" min="0" className="glass-input font-mono text-center" placeholder="3" />
+                    <input
+                        value={units}
+                        onChange={e => setUnits(toEnglishDigits(e.target.value))}
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        className="glass-input font-mono text-center"
+                        placeholder="3"
+                    />
                 </div>
             </div>
 
