@@ -1,4 +1,3 @@
-// src/components/form/CourseForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -7,7 +6,7 @@ import { Plus, Save, X, Edit2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Session } from "@/types";
 import { DAYS } from "../course/DesktopGrid";
-import { parseTimeToMinutes, overlap } from "@/utils/helpers";
+import { parseTimeToMinutes, overlap, toEnglishDigits } from "@/utils/helpers";
 import AnimatedCheckbox from "../ui/AnimatedCheckbox";
 import WheelTimePicker from "../ui/WheelTimePicker";
 import InstallAppBtn from "../ui/InstallAppBtn";
@@ -18,12 +17,6 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 
 const initialSession: Session = { day: DAYS[0], start: "", end: "" };
-
-const toEnglishDigits = (value: string) => {
-    return value
-        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
-        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
-};
 
 export default function CourseForm() {
     const { courses, addCourse, updateCourse, selectedCourseId, setSelectedCourseId, theme } = useCourseStore();

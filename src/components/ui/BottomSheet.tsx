@@ -9,7 +9,7 @@ import ConfirmModal from "./ConfirmModal";
 import DateObject from "react-date-object";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-
+import { toEnglishDigits } from "@/utils/helpers";
 interface Props {
     course: Course | null;
     onClose: () => void;
@@ -112,7 +112,7 @@ export default function BottomSheet({ course, onClose }: Props) {
                                         <span className="text-sm">تاریخ امتحان</span>
                                     </div>
                                     <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold" dir="ltr">
-                                        {course.exam_date}
+                                        {toEnglishDigits(course.exam_date)}
                                     </span>
                                 </div>
                             </>
@@ -132,8 +132,8 @@ export default function BottomSheet({ course, onClose }: Props) {
                                     <Clock size={18} />
                                     <span className="text-sm">ساعت امتحان</span>
                                 </div>
-                                <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold">
-                                    {course.exam_time}
+                                <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold" dir="ltr">
+                                    {toEnglishDigits(course.exam_time)}
                                 </span>
                             </div>
                         )}

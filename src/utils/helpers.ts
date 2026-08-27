@@ -1,4 +1,3 @@
-// src/utils/helpers.ts
 
 import { Course, Session } from "../types";
 
@@ -41,6 +40,12 @@ export function colorFor(key: string): string {
         h |= 0;
     }
     const hue = Math.abs(h) % 360;
-    // Increased saturation and adjusted lightness for vivid but clean colors
     return `hsl(${hue}, 85%, 60%)`;
+}
+
+export function toEnglishDigits(str: string): string {
+    if (!str) return "";
+    return str
+        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
+        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
 }
