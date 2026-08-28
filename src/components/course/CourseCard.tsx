@@ -88,7 +88,7 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                 )}
             </div>
 
-            <div className={`hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
+            <div className={`card-tooltip hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
                 <div>
                     <h3 className="font-bold text-primary text-base mb-0.5">{course.name}</h3>
                     <p className="font-mono text-xs text-muted">{course.code}</p>

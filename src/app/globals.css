@@ -159,6 +159,14 @@
   -webkit-backdrop-filter: none !important;
 }
 
+/* جلوگیری از نمایش تولتیپ هاور کارت‌ها در خروجی عکس/پی‌دی‌اف.
+   مودال export بلافاصله بسته می‌شود و اگر ماوس روی یک کارت باشد،
+   مرورگر حالت hover را فعال نگه می‌دارد؛ همین باعث می‌شد پنل
+   بلوردار تولتیپ در تصویر نهایی گرفته شود. */
+.export-mode .card-tooltip {
+  display: none !important;
+}
+
 @keyframes heartbeat {
 
   0%,
