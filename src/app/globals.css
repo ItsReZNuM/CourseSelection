@@ -97,19 +97,11 @@
   mix-blend-mode: normal;
 }
 
-:root:not(.dark)::view-transition-old(root) {
-  z-index: 2;
-}
-
-:root:not(.dark)::view-transition-new(root) {
+::view-transition-old(root) {
   z-index: 1;
 }
 
-.dark::view-transition-old(root) {
-  z-index: 1;
-}
-
-.dark::view-transition-new(root) {
+::view-transition-new(root) {
   z-index: 2;
 }
 

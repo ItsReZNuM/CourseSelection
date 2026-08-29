@@ -6,7 +6,6 @@ export default function ThemeToggle() {
     const { theme, toggleTheme } = useCourseStore();
     const isDark = theme === "dark";
 
-    // Handle the click and trigger the circular View Transition API
     const handleToggle = (e: React.MouseEvent<HTMLDivElement>) => {
         e.preventDefault();
 
@@ -34,14 +33,12 @@ export default function ThemeToggle() {
 
             document.documentElement.animate(
                 {
-                    clipPath: isDark ? [...clipPath].reverse() : clipPath,
+                    clipPath: clipPath,
                 },
                 {
                     duration: 500,
                     easing: "ease-in-out",
-                    pseudoElement: isDark
-                        ? "::view-transition-old(root)"
-                        : "::view-transition-new(root)",
+                    pseudoElement: "::view-transition-new(root)",
                 }
             );
         });
