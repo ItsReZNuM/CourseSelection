@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { Toaster, toast } from "react-hot-toast";
 
 export default function CustomToaster() {
-    
+
     useEffect(() => {
         const handleToastClick = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
@@ -13,10 +13,10 @@ export default function CustomToaster() {
                 toast.dismiss();
             }
         };
-        
+
         const stopProgressAnimationEnd = (e: AnimationEvent) => {
             if (e.animationName === 'toast-progress') {
-                e.stopPropagation(); 
+                e.stopPropagation();
             }
         };
 
@@ -31,7 +31,8 @@ export default function CustomToaster() {
 
     return (
         <>
-            <style dangerouslySetInnerHTML={{__html: `
+            <style dangerouslySetInnerHTML={{
+                __html: `
                 .clickable-toast {
                     position: relative;
                     overflow: hidden;
@@ -46,7 +47,6 @@ export default function CustomToaster() {
                     width: 100%;
                     background: var(--color-primary);
                     opacity: 0.8;
-                    /* زمان دقیقاً ۴.۳ ثانیه تنظیم شد (۴ ثانیه ماندگاری + ۳۰۰ میلی‌ثانیه ورود) */
                     animation: toast-progress 4.3s linear forwards;
                 }
 
@@ -62,6 +62,8 @@ export default function CustomToaster() {
 
             <Toaster
                 position="top-center"
+                // 👈 این خط اضافه شد تا توست بالاتر از همه‌ی مودال‌ها قرار بگیرد
+                containerStyle={{ zIndex: 9999999 }}
                 toastOptions={{
                     duration: 4000,
                     className: '!bg-[var(--glass-bg)] !backdrop-blur-2xl !border !border-[var(--border-color)] !text-foreground !shadow-2xl !rounded-2xl !cursor-pointer clickable-toast transition-transform active:scale-[0.98]',
