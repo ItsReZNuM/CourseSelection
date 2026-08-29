@@ -7,7 +7,8 @@ import DesktopGrid from "@/components/course/DesktopGrid";
 import CourseForm from "@/components/form/CourseForm";
 import MobileTimeline from "@/components/course/MobileTimeline";
 import Footer from "@/components/layout/Footer";
-import WelcomeModal from "@/components/ui/WelcomeModal"; // 👈 ایمپورت کامپوننت جدید
+import WelcomeModal from "@/components/ui/WelcomeModal";
+import ImportSharedModal from "@/components/ui/ImportSharedModal"; // 👈 کامپوننت اشتراک لینک ایمپورت شد
 import { useCourseStore } from "@/store/useCourseStore";
 
 export default function Home() {
@@ -20,25 +21,15 @@ export default function Home() {
   return (
     <main className="container mx-auto p-4 max-w-7xl relative min-h-screen flex flex-col pb-8">
 
-      {/*  فراخوانی مودال خوش‌آمدگویی */}
+      <ImportSharedModal />
+
       <WelcomeModal />
-
-      {/* نوار ابزار بالا */}
       <Topbar />
-
-      {/* فرم افزودن درس */}
       <CourseForm />
-
-      {/* جدول مخصوص دسکتاپ (در موبایل مخفی است) */}
       <DesktopGrid />
-
-      {/* تایم‌لاین مخصوص موبایل (در دسکتاپ مخفی است) */}
       <MobileTimeline />
 
-      {/* اسپیسر برای هل دادن فوتر به پایین */}
       <div className="flex-1"></div>
-
-      {/* فوتر */}
       <Footer />
 
     </main>

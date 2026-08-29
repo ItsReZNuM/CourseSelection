@@ -18,6 +18,12 @@ import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 
 const initialSession: Session = { day: DAYS[0], start: "", end: "" };
 
+const toEnglishDigitsFilter = (value: string) => {
+    return value
+        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
+        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
+};
+
 export default function CourseForm() {
     const { courses, addCourse, updateCourse, selectedCourseId, setSelectedCourseId, theme } = useCourseStore();
 
@@ -88,11 +94,26 @@ export default function CourseForm() {
 
         if (!name || !code) return toast.error("نام و کد درس الزامی است.");
 
+        if (!noExam && examTime) {
+            const examMin = parseTimeToMinutes(examTime);
+            if (examMin < 480 || examMin > 1140) {
+                return toast.error("ساعت کلاس / امتحان باید از بین ساعت 8 تا 19 باشد !");
+            }
+        }
+
         for (let i = 0; i < sessions.length; i++) {
             const s = sessions[i];
             if (!s.start || !s.end) return toast.error(`ساعت شروع و پایان جلسه ${i + 1} الزامی است.`);
-            if (parseTimeToMinutes(s.start) >= parseTimeToMinutes(s.end)) {
+
+            const startMin = parseTimeToMinutes(s.start);
+            const endMin = parseTimeToMinutes(s.end);
+
+            if (startMin >= endMin) {
                 return toast.error(`در جلسه ${i + 1}، ساعت پایان باید بعد از شروع باشد.`);
+            }
+
+            if (startMin < 480 || endMin > 1140) {
+                return toast.error("ساعت کلاس / امتحان باید از بین ساعت 8 تا 19 باشد !");
             }
         }
 
@@ -142,7 +163,7 @@ export default function CourseForm() {
                     <label className="block text-xs text-muted mb-1.5 ml-1">کد درس</label>
                     <input
                         value={code}
-                        onChange={e => setCode(toEnglishDigits(e.target.value))}
+                        onChange={e => setCode(toEnglishDigitsFilter(e.target.value))}
                         className="glass-input font-mono text-left"
                         placeholder="e.g: 40123"
                         dir="ltr"
@@ -170,7 +191,7 @@ export default function CourseForm() {
                     <label className="block text-xs text-muted mb-1.5 ml-1">تعداد واحد</label>
                     <input
                         value={units}
-                        onChange={e => setUnits(toEnglishDigits(e.target.value))}
+                        onChange={e => setUnits(toEnglishDigitsFilter(e.target.value))}
                         type="number"
                         step="0.01"
                         min="0"

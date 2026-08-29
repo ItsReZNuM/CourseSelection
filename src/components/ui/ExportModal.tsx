@@ -2,10 +2,11 @@
 
 import { useState } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
-import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2 } from "lucide-react";
+import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2, Share2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { toPng, toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
+import { compressToEncodedURIComponent } from "lz-string"; 
 
 interface Props {
     isOpen: boolean;
@@ -17,6 +18,17 @@ export default function ExportModal({ isOpen, onClose }: Props) {
     const [isCapturing, setIsCapturing] = useState(false);
 
     if (!isOpen && !isCapturing) return null;
+
+    const handleShareLink = () => {
+        if (courses.length === 0) return toast.error("برنامه‌ای برای اشتراک‌گذاری وجود ندارد.");
+
+        const compressedData = compressToEncodedURIComponent(JSON.stringify(courses));
+        const shareUrl = `${window.location.origin}/?schedule=${compressedData}`;
+
+        navigator.clipboard.writeText(shareUrl);
+        toast.success("لینک برنامه کپی شد! حالا برای دوستانت بفرست.");
+        onClose();
+    };
 
     const handleExportJSON = () => {
         if (courses.length === 0) return toast.error("برنامه‌ای برای خروجی وجود ندارد.");
@@ -85,7 +97,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
         const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
 
-        // Cleanup
         element.classList.remove('export-mode');
         element.style.cssText = originalCssText;
         setIsCapturing(false);
@@ -132,7 +143,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
     return (
         <>
-
             {isCapturing && (
                 <div className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-background/80 backdrop-blur-2xl transition-all">
                     <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -141,7 +151,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                 </div>
             )}
 
-            {/* مودال انتخاب فرمت خروجی */}
             {isOpen && !isCapturing && (
                 <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
@@ -154,6 +163,14 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                         <h3 className="text-lg font-bold text-primary mb-6 border-b border-border pb-2 pr-1">خروجی و اشتراک‌گذاری</h3>
 
                         <div className="flex flex-col gap-4">
+
+                            <button onClick={handleShareLink} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full shadow-primary/20 border-primary/20 text-primary">
+                                <Share2 size={18} className="shrink-0" />
+                                <span className="text-sm font-bold">کپی لینک اشتراک‌گذاری</span>
+                            </button>
+
+                            <div className="h-px w-full bg-border my-1"></div>
+
                             <button onClick={handleExportPNG} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
                                 <ImageIcon size={18} className="text-primary shrink-0" />
                                 <span className="text-sm font-bold">دانلود به صورت عکس (PNG)</span>

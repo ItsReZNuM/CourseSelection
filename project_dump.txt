@@ -111,6 +111,7 @@ export default eslintConfig;
 FILE: next.config.ts
 ====================================================================================================
 
+// next.config.ts
 import type { NextConfig } from "next";
 import withPWAInit from "@ducanh2912/next-pwa";
 
@@ -127,6 +128,7 @@ const withPWA = withPWAInit({
 
 const nextConfig: NextConfig = {
   reactCompiler: true,
+  turbopack: {},
 };
 
 export default withPWA(nextConfig);
@@ -139,8 +141,8 @@ FILE: next-env.d.ts
 
 /// <reference types="next" />
 /// <reference types="next/image-types/global" />
-import "./.next/types/routes.d.ts";
-import "./.next/types/root-params.d.ts";
+import "./.next/dev/types/routes.d.ts";
+import "./.next/dev/types/root-params.d.ts";
 
 // NOTE: This file should not be edited
 // see https://nextjs.org/docs/app/api-reference/config/typescript for more information.
@@ -208,7 +210,7 @@ export default config;
 FILE: public\sw.js
 ====================================================================================================
 
-if(!self.define){let e,s={};const n=(n,c)=>(n=new URL(n+".js",c).href,s[n]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=n,e.onload=s,document.head.appendChild(e)}else e=n,importScripts(n),s()}).then(()=>{let e=s[n];if(!e)throw new Error(`Module ${n} didn’t register its module`);return e}));self.define=(c,a)=>{const t=e||("document"in self?document.currentScript.src:"")||location.href;if(s[t])return;let i={};const r=e=>n(e,t),o={module:{uri:t},exports:i,require:r};s[t]=Promise.all(c.map(e=>o[e]||r(e))).then(e=>(a(...e),i))}}define(["./workbox-f1770938"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/static/chunks/164f4fb6-dc09f912aff2c0b1.js",revision:"dc09f912aff2c0b1"},{url:"/_next/static/chunks/240.2cb9d8682b919ed6.js",revision:"2cb9d8682b919ed6"},{url:"/_next/static/chunks/2f0b94e8-ba7c6756109c215e.js",revision:"ba7c6756109c215e"},{url:"/_next/static/chunks/342.3ac3668849edcb3c.js",revision:"3ac3668849edcb3c"},{url:"/_next/static/chunks/398-ec464eb5518c0d21.js",revision:"ec464eb5518c0d21"},{url:"/_next/static/chunks/4bd1b696-259dab30d0ff6b57.js",revision:"259dab30d0ff6b57"},{url:"/_next/static/chunks/609-5228b7de17dd0641.js",revision:"5228b7de17dd0641"},{url:"/_next/static/chunks/913.399ef4a604cd1890.js",revision:"399ef4a604cd1890"},{url:"/_next/static/chunks/971.1d64b0790cb4d04a.js",revision:"1d64b0790cb4d04a"},{url:"/_next/static/chunks/ad2866b8.cd04cfa6656c098f.js",revision:"cd04cfa6656c098f"},{url:"/_next/static/chunks/app/_global-error/page-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/_not-found/page-ea9df729e954e72a.js",revision:"ea9df729e954e72a"},{url:"/_next/static/chunks/app/icon/route-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/layout-3ce8c9ec5d03c9f8.js",revision:"3ce8c9ec5d03c9f8"},{url:"/_next/static/chunks/app/manifest.webmanifest/route-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/page-a918ab70f995a5e2.js",revision:"a918ab70f995a5e2"},{url:"/_next/static/chunks/bc98253f.38df8d62cbe6da72.js",revision:"38df8d62cbe6da72"},{url:"/_next/static/chunks/framework-b820d88d6bcfde5e.js",revision:"b820d88d6bcfde5e"},{url:"/_next/static/chunks/main-54ea0b11f57cd27e.js",revision:"54ea0b11f57cd27e"},{url:"/_next/static/chunks/main-app-c3a28d292a6e3e39.js",revision:"c3a28d292a6e3e39"},{url:"/_next/static/chunks/next/dist/client/components/builtin/app-error-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/forbidden-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/global-error-8da50c816a7d2d37.js",revision:"8da50c816a7d2d37"},{url:"/_next/static/chunks/next/dist/client/components/builtin/not-found-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/unauthorized-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-4ba81a95abb5af69.js",revision:"4ba81a95abb5af69"},{url:"/_next/static/css/8c3724dacf75214d.css",revision:"8c3724dacf75214d"},{url:"/_next/static/css/c4e5bc3513118f6a.css",revision:"c4e5bc3513118f6a"},{url:"/_next/static/sDTebIL5QViH9uwBAzsTh/_buildManifest.js",revision:"d39eb0df181df8563346a0a81947e86c"},{url:"/_next/static/sDTebIL5QViH9uwBAzsTh/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/font/DanaFaNum.ttf",revision:"46dc609d47a260b0f3676f6a147db905"},{url:"/font/JetBrainsMono.ttf",revision:"a0147b5ab9e4946e81879aef45313def"},{url:"/icons/apple-touch-icon.png",revision:"ae4f3f55e540fc0be9ebce55237a7f48"},{url:"/icons/icon-192.png",revision:"d1febfb294e55dfedec3988b6b963b15"},{url:"/icons/icon-512.png",revision:"10f6fd650e131a12cf01458d3bf7e55d"},{url:"/icons/icon-maskable-512.png",revision:"490ce64693b4812aaafd77ceaf3edb3a"},{url:"/swe-worker-5c72df51bb1f6ee0.js",revision:"76fdd3369f623a3edcf74ce2200bfdd0"}],{ignoreURLParametersMatching:[/^utm_/,/^fbclid$/]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({response:e})=>e&&"opaqueredirect"===e.type?new Response(e.body,{status:200,statusText:"OK",headers:e.headers}):e}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:2592e3})]}),"GET"),e.registerRoute(/\/_next\/static.+\.js$/i,new e.CacheFirst({cacheName:"next-static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4|webm)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:48,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e,url:{pathname:s}})=>!(!e||s.startsWith("/api/auth/callback")||!s.startsWith("/api/")),new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:s},sameOrigin:n})=>"1"===e.headers.get("RSC")&&"1"===e.headers.get("Next-Router-Prefetch")&&n&&!s.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc-prefetch",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:s},sameOrigin:n})=>"1"===e.headers.get("RSC")&&n&&!s.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:{pathname:e},sameOrigin:s})=>s&&!e.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e})=>!e,new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET"),self.__WB_DISABLE_DEV_LOGS=!0});
+if(!self.define){let e,s={};const n=(n,a)=>(n=new URL(n+".js",a).href,s[n]||new Promise(s=>{if("document"in self){const e=document.createElement("script");e.src=n,e.onload=s,document.head.appendChild(e)}else e=n,importScripts(n),s()}).then(()=>{let e=s[n];if(!e)throw new Error(`Module ${n} didn’t register its module`);return e}));self.define=(a,t)=>{const c=e||("document"in self?document.currentScript.src:"")||location.href;if(s[c])return;let i={};const r=e=>n(e,c),o={module:{uri:c},exports:i,require:r};s[c]=Promise.all(a.map(e=>o[e]||r(e))).then(e=>(t(...e),i))}}define(["./workbox-f1770938"],function(e){"use strict";importScripts(),self.skipWaiting(),e.clientsClaim(),e.precacheAndRoute([{url:"/_next/static/chunks/164f4fb6-dc09f912aff2c0b1.js",revision:"dc09f912aff2c0b1"},{url:"/_next/static/chunks/240.2cb9d8682b919ed6.js",revision:"2cb9d8682b919ed6"},{url:"/_next/static/chunks/2f0b94e8-ba7c6756109c215e.js",revision:"ba7c6756109c215e"},{url:"/_next/static/chunks/342.3ac3668849edcb3c.js",revision:"3ac3668849edcb3c"},{url:"/_next/static/chunks/345-cbcda4d33995d6db.js",revision:"cbcda4d33995d6db"},{url:"/_next/static/chunks/398-ec464eb5518c0d21.js",revision:"ec464eb5518c0d21"},{url:"/_next/static/chunks/4bd1b696-259dab30d0ff6b57.js",revision:"259dab30d0ff6b57"},{url:"/_next/static/chunks/913.399ef4a604cd1890.js",revision:"399ef4a604cd1890"},{url:"/_next/static/chunks/971.1d64b0790cb4d04a.js",revision:"1d64b0790cb4d04a"},{url:"/_next/static/chunks/ad2866b8.cd04cfa6656c098f.js",revision:"cd04cfa6656c098f"},{url:"/_next/static/chunks/app/_global-error/page-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/_not-found/page-ea9df729e954e72a.js",revision:"ea9df729e954e72a"},{url:"/_next/static/chunks/app/icon/route-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/layout-6d457f18a9af0e13.js",revision:"6d457f18a9af0e13"},{url:"/_next/static/chunks/app/manifest.webmanifest/route-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/app/page-f93511b5c6f6d544.js",revision:"f93511b5c6f6d544"},{url:"/_next/static/chunks/bc98253f.38df8d62cbe6da72.js",revision:"38df8d62cbe6da72"},{url:"/_next/static/chunks/framework-b820d88d6bcfde5e.js",revision:"b820d88d6bcfde5e"},{url:"/_next/static/chunks/main-54ea0b11f57cd27e.js",revision:"54ea0b11f57cd27e"},{url:"/_next/static/chunks/main-app-c3a28d292a6e3e39.js",revision:"c3a28d292a6e3e39"},{url:"/_next/static/chunks/next/dist/client/components/builtin/app-error-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/forbidden-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/global-error-8da50c816a7d2d37.js",revision:"8da50c816a7d2d37"},{url:"/_next/static/chunks/next/dist/client/components/builtin/not-found-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/next/dist/client/components/builtin/unauthorized-98fefb27efec1091.js",revision:"98fefb27efec1091"},{url:"/_next/static/chunks/polyfills-42372ed130431b0a.js",revision:"846118c33b2c0e922d7b3a7676f81f6f"},{url:"/_next/static/chunks/webpack-4ba81a95abb5af69.js",revision:"4ba81a95abb5af69"},{url:"/_next/static/css/2b0b98d5829890df.css",revision:"2b0b98d5829890df"},{url:"/_next/static/css/8c3724dacf75214d.css",revision:"8c3724dacf75214d"},{url:"/_next/static/shFNtMUBjojsTjY73aA0K/_buildManifest.js",revision:"d39eb0df181df8563346a0a81947e86c"},{url:"/_next/static/shFNtMUBjojsTjY73aA0K/_ssgManifest.js",revision:"b6652df95db52feb4daf4eca35380933"},{url:"/font/DanaFaNum.ttf",revision:"46dc609d47a260b0f3676f6a147db905"},{url:"/font/JetBrainsMono.ttf",revision:"a0147b5ab9e4946e81879aef45313def"},{url:"/icons/apple-touch-icon.png",revision:"ae4f3f55e540fc0be9ebce55237a7f48"},{url:"/icons/icon-192.png",revision:"d1febfb294e55dfedec3988b6b963b15"},{url:"/icons/icon-512.png",revision:"10f6fd650e131a12cf01458d3bf7e55d"},{url:"/icons/icon-maskable-512.png",revision:"490ce64693b4812aaafd77ceaf3edb3a"},{url:"/swe-worker-5c72df51bb1f6ee0.js",revision:"76fdd3369f623a3edcf74ce2200bfdd0"}],{ignoreURLParametersMatching:[/^utm_/,/^fbclid$/]}),e.cleanupOutdatedCaches(),e.registerRoute("/",new e.NetworkFirst({cacheName:"start-url",plugins:[{cacheWillUpdate:async({response:e})=>e&&"opaqueredirect"===e.type?new Response(e.body,{status:200,statusText:"OK",headers:e.headers}):e}]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:gstatic)\.com\/.*/i,new e.CacheFirst({cacheName:"google-fonts-webfonts",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:31536e3})]}),"GET"),e.registerRoute(/^https:\/\/fonts\.(?:googleapis)\.com\/.*/i,new e.StaleWhileRevalidate({cacheName:"google-fonts-stylesheets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:eot|otf|ttc|ttf|woff|woff2|font.css)$/i,new e.StaleWhileRevalidate({cacheName:"static-font-assets",plugins:[new e.ExpirationPlugin({maxEntries:4,maxAgeSeconds:604800})]}),"GET"),e.registerRoute(/\.(?:jpg|jpeg|gif|png|svg|ico|webp)$/i,new e.StaleWhileRevalidate({cacheName:"static-image-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:2592e3})]}),"GET"),e.registerRoute(/\/_next\/static.+\.js$/i,new e.CacheFirst({cacheName:"next-static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/image\?url=.+$/i,new e.StaleWhileRevalidate({cacheName:"next-image",plugins:[new e.ExpirationPlugin({maxEntries:64,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp3|wav|ogg)$/i,new e.CacheFirst({cacheName:"static-audio-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:mp4|webm)$/i,new e.CacheFirst({cacheName:"static-video-assets",plugins:[new e.RangeRequestsPlugin,new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:js)$/i,new e.StaleWhileRevalidate({cacheName:"static-js-assets",plugins:[new e.ExpirationPlugin({maxEntries:48,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:css|less)$/i,new e.StaleWhileRevalidate({cacheName:"static-style-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\/_next\/data\/.+\/.+\.json$/i,new e.StaleWhileRevalidate({cacheName:"next-data",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(/\.(?:json|xml|csv)$/i,new e.NetworkFirst({cacheName:"static-data-assets",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e,url:{pathname:s}})=>!(!e||s.startsWith("/api/auth/callback")||!s.startsWith("/api/")),new e.NetworkFirst({cacheName:"apis",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:16,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:s},sameOrigin:n})=>"1"===e.headers.get("RSC")&&"1"===e.headers.get("Next-Router-Prefetch")&&n&&!s.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc-prefetch",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({request:e,url:{pathname:s},sameOrigin:n})=>"1"===e.headers.get("RSC")&&n&&!s.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages-rsc",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({url:{pathname:e},sameOrigin:s})=>s&&!e.startsWith("/api/"),new e.NetworkFirst({cacheName:"pages",plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:86400})]}),"GET"),e.registerRoute(({sameOrigin:e})=>!e,new e.NetworkFirst({cacheName:"cross-origin",networkTimeoutSeconds:10,plugins:[new e.ExpirationPlugin({maxEntries:32,maxAgeSeconds:3600})]}),"GET"),self.__WB_DISABLE_DEV_LOGS=!0});
 
 
 
@@ -500,6 +502,14 @@ FILE: src\app\globals.css
   -webkit-backdrop-filter: none !important;
 }
 
+/* جلوگیری از نمایش تولتیپ هاور کارت‌ها در خروجی عکس/پی‌دی‌اف.
+   مودال export بلافاصله بسته می‌شود و اگر ماوس روی یک کارت باشد،
+   مرورگر حالت hover را فعال نگه می‌دارد؛ همین باعث می‌شد پنل
+   بلوردار تولتیپ در تصویر نهایی گرفته شود. */
+.export-mode .card-tooltip {
+  display: none !important;
+}
+
 @keyframes heartbeat {
 
   0%,
@@ -571,9 +581,8 @@ export default function Icon() {
 FILE: src\app\layout.tsx
 ====================================================================================================
 
-// src/app/layout.tsx
 import type { Metadata, Viewport } from "next";
-import { Toaster } from "react-hot-toast";
+import CustomToaster from "@/components/ui/CustomToaster"; 
 import "./globals.css";
 
 export const viewport: Viewport = {
@@ -607,22 +616,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fa" dir="rtl" className="dark">
-      <body className="min-h-screen flex flex-col font-sans">
+      <body className="min-h-screen flex flex-col font-sans" suppressHydrationWarning>
         {children}
 
-        <Toaster
-          position="top-center"
-          toastOptions={{
-            duration: 4000,
-            className: '!bg-[var(--glass-bg)] !backdrop-blur-2xl !border !border-[var(--border-color)] !text-foreground !shadow-2xl !rounded-2xl',
-            style: {
-              background: 'transparent',
-              boxShadow: 'none',
-              padding: '12px 20px',
-              fontFamily: 'var(--font-sans)',
-            }
-          }}
-        />
+        <CustomToaster />
+
       </body>
     </html>
   );
@@ -634,7 +632,6 @@ export default function RootLayout({
 FILE: src\app\manifest.ts
 ====================================================================================================
 
-// src/app/manifest.ts
 import { MetadataRoute } from 'next'
 
 export default function manifest(): MetadataRoute.Manifest {
@@ -649,13 +646,13 @@ export default function manifest(): MetadataRoute.Manifest {
     orientation: 'portrait-primary',
     icons: [
       {
-        src: '/icon-192x192.png',
+        src: '/icons/icon-192.png',
         sizes: '192x192',
         type: 'image/png',
         purpose: 'maskable'
       },
       {
-        src: '/icon-512x512.png',
+        src: '/icons/icon-512.png',
         sizes: '512x512',
         type: 'image/png',
         purpose: 'any'
@@ -679,7 +676,8 @@ import DesktopGrid from "@/components/course/DesktopGrid";
 import CourseForm from "@/components/form/CourseForm";
 import MobileTimeline from "@/components/course/MobileTimeline";
 import Footer from "@/components/layout/Footer";
-import WelcomeModal from "@/components/ui/WelcomeModal"; // 👈 ایمپورت کامپوننت جدید
+import WelcomeModal from "@/components/ui/WelcomeModal";
+import ImportSharedModal from "@/components/ui/ImportSharedModal"; // 👈 کامپوننت اشتراک لینک ایمپورت شد
 import { useCourseStore } from "@/store/useCourseStore";
 
 export default function Home() {
@@ -692,25 +690,15 @@ export default function Home() {
   return (
     <main className="container mx-auto p-4 max-w-7xl relative min-h-screen flex flex-col pb-8">
 
-      {/*  فراخوانی مودال خوش‌آمدگویی */}
+      <ImportSharedModal />
+
       <WelcomeModal />
-
-      {/* نوار ابزار بالا */}
       <Topbar />
-
-      {/* فرم افزودن درس */}
       <CourseForm />
-
-      {/* جدول مخصوص دسکتاپ (در موبایل مخفی است) */}
       <DesktopGrid />
-
-      {/* تایم‌لاین مخصوص موبایل (در دسکتاپ مخفی است) */}
       <MobileTimeline />
 
-      {/* اسپیسر برای هل دادن فوتر به پایین */}
       <div className="flex-1"></div>
-
-      {/* فوتر */}
       <Footer />
 
     </main>
@@ -723,11 +711,10 @@ export default function Home() {
 FILE: src\components\course\CourseCard.tsx
 ====================================================================================================
 
-// src/components/course/CourseCard.tsx
 "use client";
 
 import { Course, Session } from "@/types";
-import { parseTimeToMinutes, colorFor } from "@/utils/helpers";
+import { parseTimeToMinutes, colorFor, toEnglishDigits } from "@/utils/helpers"; 
 import { START_HOUR, PX_PER_MIN, TOP_OFFSET, DAYS } from "./DesktopGrid";
 import { useCourseStore } from "@/store/useCourseStore";
 import { User, BookOpen, CalendarDays, Clock } from "lucide-react";
@@ -779,7 +766,6 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     return (
         <div
             onClick={() => setSelectedCourseId(course.id)}
-            // FIXED: Replaced transition-all with specific transitions to make z-index update INSTANTLY!
             className={`absolute p-1.5 md:p-2 rounded-xl shadow-sm overflow-visible group cursor-pointer transition-transform transition-colors transition-shadow duration-300 hover:scale-[1.02] hover:shadow-lg hover:z-[70] backdrop-blur-md ${isSelected ? "ring-2 ring-primary ring-offset-2 ring-offset-[var(--bg)] z-[55]" : "z-10"
                 }`}
             style={{
@@ -804,19 +790,18 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                     <div className="flex flex-col items-center mt-1.5 w-full px-1 shrink-0">
                         <div className="flex items-center justify-center gap-1 text-[8px] md:text-[9px] font-bold text-primary bg-primary/10 px-1 py-0.5 rounded w-full overflow-hidden">
                             <span className="shrink-0">{getExamDay(course.exam_date)}</span>
-                            <span dir="ltr" className="truncate font-mono">{course.exam_date}</span>
+                            <span dir="ltr" className="truncate font-mono">{toEnglishDigits(course.exam_date)}</span>
                         </div>
                         {course.exam_time && (
                             <span className="text-[8px] md:text-[9px] font-mono font-bold text-primary mt-0.5 shrink-0" dir="ltr">
-                                {course.exam_time}
+                                {toEnglishDigits(course.exam_time)}
                             </span>
                         )}
                     </div>
                 )}
             </div>
 
-            {/* Desktop Hover Tooltip */}
-            <div className={`hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
+            <div className={`card-tooltip hidden md:flex absolute flex-col opacity-0 scale-95 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300 ease-out z-[9999] w-72 pointer-events-none bg-card/95 backdrop-blur-3xl border border-border shadow-2xl rounded-2xl p-4 gap-2.5 ${yPosition} ${xPosition} ${transformOrigin}`}>
                 <div>
                     <h3 className="font-bold text-primary text-base mb-0.5">{course.name}</h3>
                     <p className="font-mono text-xs text-muted">{course.code}</p>
@@ -856,7 +841,7 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                                     <CalendarDays size={14} />
                                     <span>تاریخ امتحان</span>
                                 </div>
-                                <span className="font-mono text-xs text-primary font-bold" dir="ltr">{course.exam_date}</span>
+                                <span className="font-mono text-xs text-primary font-bold" dir="ltr">{toEnglishDigits(course.exam_date)}</span>
                             </div>
 
                             {course.exam_time && (
@@ -865,7 +850,7 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
                                         <Clock size={14} />
                                         <span>ساعت امتحان</span>
                                     </div>
-                                    <span className="font-mono text-xs text-primary font-bold" dir="ltr">{course.exam_time}</span>
+                                    <span className="font-mono text-xs text-primary font-bold" dir="ltr">{toEnglishDigits(course.exam_time)}</span>
                                 </div>
                             )}
                         </>
@@ -1083,6 +1068,7 @@ export default function MobileTimeline() {
 FILE: src\components\form\CourseForm.tsx
 ====================================================================================================
 
+// src/components/form/CourseForm.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -1091,9 +1077,10 @@ import { Plus, Save, X, Edit2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { Session } from "@/types";
 import { DAYS } from "../course/DesktopGrid";
-import { parseTimeToMinutes, overlap } from "@/utils/helpers";
+import { parseTimeToMinutes, overlap, toEnglishDigits } from "@/utils/helpers";
 import AnimatedCheckbox from "../ui/AnimatedCheckbox";
 import WheelTimePicker from "../ui/WheelTimePicker";
+import InstallAppBtn from "../ui/InstallAppBtn";
 
 import DatePicker from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
@@ -1101,6 +1088,12 @@ import persian_fa from "react-date-object/locales/persian_fa";
 import "react-multi-date-picker/styles/backgrounds/bg-dark.css";
 
 const initialSession: Session = { day: DAYS[0], start: "", end: "" };
+
+const toEnglishDigitsFilter = (value: string) => {
+    return value
+        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
+        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
+};
 
 export default function CourseForm() {
     const { courses, addCourse, updateCourse, selectedCourseId, setSelectedCourseId, theme } = useCourseStore();
@@ -1172,11 +1165,29 @@ export default function CourseForm() {
 
         if (!name || !code) return toast.error("نام و کد درس الزامی است.");
 
+        // 👈 بررسی رنج ساعت برای زمان امتحان
+        if (!noExam && examTime) {
+            const examMin = parseTimeToMinutes(examTime);
+            // 480 = 08:00, 1140 = 19:00
+            if (examMin < 480 || examMin > 1140) {
+                return toast.error("ساعت کلاس / امتحان باید از بین ساعت 8 تا 19 باشد !");
+            }
+        }
+
         for (let i = 0; i < sessions.length; i++) {
             const s = sessions[i];
             if (!s.start || !s.end) return toast.error(`ساعت شروع و پایان جلسه ${i + 1} الزامی است.`);
-            if (parseTimeToMinutes(s.start) >= parseTimeToMinutes(s.end)) {
+
+            const startMin = parseTimeToMinutes(s.start);
+            const endMin = parseTimeToMinutes(s.end);
+
+            if (startMin >= endMin) {
                 return toast.error(`در جلسه ${i + 1}، ساعت پایان باید بعد از شروع باشد.`);
+            }
+
+            // 👈 بررسی رنج ساعت برای ساعات جلسات کلاس
+            if (startMin < 480 || endMin > 1140) {
+                return toast.error("ساعت کلاس / امتحان باید از بین ساعت 8 تا 19 باشد !");
             }
         }
 
@@ -1219,22 +1230,48 @@ export default function CourseForm() {
                 )}
             </div>
 
+            <InstallAppBtn className="flex md:hidden w-full py-3 mb-5 text-sm" />
+
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">کد درس</label>
-                    <input value={code} onChange={e => setCode(e.target.value)} className="glass-input font-mono text-left" placeholder="e.g: 40123" dir="ltr" />
+                    <input
+                        value={code}
+                        onChange={e => setCode(toEnglishDigitsFilter(e.target.value))}
+                        className="glass-input font-mono text-left"
+                        placeholder="e.g: 40123"
+                        dir="ltr"
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">نام درس</label>
-                    <input value={name} onChange={e => setName(e.target.value)} className="glass-input" placeholder="مثال: برنامه‌نویسی پیشرفته" />
+                    <input
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        className="glass-input"
+                        placeholder="مثال: برنامه‌نویسی پیشرفته"
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">نام استاد</label>
-                    <input value={professor} onChange={e => setProfessor(e.target.value)} className="glass-input" placeholder="دکتر ...." />
+                    <input
+                        value={professor}
+                        onChange={e => setProfessor(e.target.value)}
+                        className="glass-input"
+                        placeholder="دکتر ...."
+                    />
                 </div>
                 <div>
                     <label className="block text-xs text-muted mb-1.5 ml-1">تعداد واحد</label>
-                    <input value={units} onChange={e => setUnits(e.target.value)} type="number" step="0.5" min="0" className="glass-input font-mono text-center" placeholder="3" />
+                    <input
+                        value={units}
+                        onChange={e => setUnits(toEnglishDigitsFilter(e.target.value))}
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        className="glass-input font-mono text-center"
+                        placeholder="3"
+                    />
                 </div>
             </div>
 
@@ -1418,6 +1455,7 @@ export default function Footer() {
 FILE: src\components\layout\Topbar.tsx
 ====================================================================================================
 
+// src/components/layout/Topbar.tsx
 "use client";
 
 import { useState } from "react";
@@ -1428,6 +1466,7 @@ import ThemeToggle from "../ui/ThemeToggle";
 import ExportModal from "../ui/ExportModal";
 import Logo from "../ui/Logo";
 import ConfirmModal from "../ui/ConfirmModal";
+import InstallAppBtn from "../ui/InstallAppBtn";
 
 export default function Topbar() {
     const { courses, selectedCourseId, deleteCourse, setSelectedCourseId } = useCourseStore();
@@ -1468,7 +1507,6 @@ export default function Topbar() {
                     <Logo className="w-7 h-7 sm:w-9 sm:h-9 md:w-11 md:h-11 shrink-0" />
 
                     <div className="flex flex-col justify-center min-w-0">
-                        {/* Title gets truncated on ultra-small screens */}
                         <h1 className="text-sm sm:text-base md:text-xl font-bold text-foreground leading-tight truncate mb-0.5 md:mb-1.5">
                             ابزار انتخاب واحد
                         </h1>
@@ -1487,6 +1525,10 @@ export default function Topbar() {
                 </div>
 
                 <div className="flex items-center gap-1 sm:gap-1.5 md:gap-3 shrink-0 py-3 px-1 sm:px-2 -my-3 -mx-2">
+
+                    {/* 👈 دکمه نصب در موبایل مخفی میشه و فقط تو دسکتاپ میاد */}
+                    <InstallAppBtn className="hidden md:flex p-1.5 md:px-4 md:py-2" />
+
                     <button
                         onClick={() => setSelectedCourseId(null)}
                         className="glass-btn p-1.5 sm:px-2 sm:py-1.5 md:px-4 md:py-2 flex gap-1 md:gap-2 text-primary border-primary/20 hover:bg-primary hover:text-white dark:hover:bg-primary transition-colors shrink-0"
@@ -1593,7 +1635,7 @@ import ConfirmModal from "./ConfirmModal";
 import DateObject from "react-date-object";
 import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
-
+import { toEnglishDigits } from "@/utils/helpers";
 interface Props {
     course: Course | null;
     onClose: () => void;
@@ -1696,7 +1738,7 @@ export default function BottomSheet({ course, onClose }: Props) {
                                         <span className="text-sm">تاریخ امتحان</span>
                                     </div>
                                     <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold" dir="ltr">
-                                        {course.exam_date}
+                                        {toEnglishDigits(course.exam_date)}
                                     </span>
                                 </div>
                             </>
@@ -1716,8 +1758,8 @@ export default function BottomSheet({ course, onClose }: Props) {
                                     <Clock size={18} />
                                     <span className="text-sm">ساعت امتحان</span>
                                 </div>
-                                <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold">
-                                    {course.exam_time}
+                                <span className="font-mono text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-lg font-bold" dir="ltr">
+                                    {toEnglishDigits(course.exam_time)}
                                 </span>
                             </div>
                         )}
@@ -1812,17 +1854,104 @@ export default function ConfirmModal({ isOpen, onClose, onConfirm, courseName }:
 
 
 ====================================================================================================
+FILE: src\components\ui\CustomToaster.tsx
+====================================================================================================
+
+// src/components/ui/CustomToaster.tsx
+"use client";
+
+import { useEffect } from "react";
+import { Toaster, toast } from "react-hot-toast";
+
+export default function CustomToaster() {
+    
+    useEffect(() => {
+        const handleToastClick = (e: MouseEvent) => {
+            const target = e.target as HTMLElement;
+            if (target.closest('.clickable-toast')) {
+                toast.dismiss();
+            }
+        };
+        
+        const stopProgressAnimationEnd = (e: AnimationEvent) => {
+            if (e.animationName === 'toast-progress') {
+                e.stopPropagation(); 
+            }
+        };
+
+        document.addEventListener('click', handleToastClick);
+        window.addEventListener('animationend', stopProgressAnimationEnd, true);
+
+        return () => {
+            document.removeEventListener('click', handleToastClick);
+            window.removeEventListener('animationend', stopProgressAnimationEnd, true);
+        };
+    }, []);
+
+    return (
+        <>
+            <style dangerouslySetInnerHTML={{__html: `
+                .clickable-toast {
+                    position: relative;
+                    overflow: hidden;
+                }
+                
+                .clickable-toast::after {
+                    content: '';
+                    position: absolute;
+                    bottom: 0;
+                    left: 0;
+                    height: 3px;
+                    width: 100%;
+                    background: var(--color-primary);
+                    opacity: 0.8;
+                    /* زمان دقیقاً ۴.۳ ثانیه تنظیم شد (۴ ثانیه ماندگاری + ۳۰۰ میلی‌ثانیه ورود) */
+                    animation: toast-progress 4.3s linear forwards;
+                }
+
+                .clickable-toast:hover::after {
+                    animation-play-state: paused;
+                }
+
+                @keyframes toast-progress {
+                    0% { width: 100%; }
+                    100% { width: 0%; }
+                }
+            `}} />
+
+            <Toaster
+                position="top-center"
+                toastOptions={{
+                    duration: 4000,
+                    className: '!bg-[var(--glass-bg)] !backdrop-blur-2xl !border !border-[var(--border-color)] !text-foreground !shadow-2xl !rounded-2xl !cursor-pointer clickable-toast transition-transform active:scale-[0.98]',
+                    style: {
+                        background: 'transparent',
+                        boxShadow: 'none',
+                        padding: '12px 20px',
+                        fontFamily: 'var(--font-sans)',
+                    }
+                }}
+            />
+        </>
+    );
+}
+
+
+
+====================================================================================================
 FILE: src\components\ui\ExportModal.tsx
 ====================================================================================================
 
+// src/components/ui/ExportModal.tsx
 "use client";
 
 import { useState } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
-import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2 } from "lucide-react";
+import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2, Share2 } from "lucide-react";
 import toast from "react-hot-toast";
 import { toPng, toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
+import { compressToEncodedURIComponent } from "lz-string"; // 👈 پکیج فشرده‌ساز
 
 interface Props {
     isOpen: boolean;
@@ -1834,6 +1963,18 @@ export default function ExportModal({ isOpen, onClose }: Props) {
     const [isCapturing, setIsCapturing] = useState(false);
 
     if (!isOpen && !isCapturing) return null;
+
+    // 👈 تابع ساخت لینک اشتراک‌گذاری
+    const handleShareLink = () => {
+        if (courses.length === 0) return toast.error("برنامه‌ای برای اشتراک‌گذاری وجود ندارد.");
+
+        const compressedData = compressToEncodedURIComponent(JSON.stringify(courses));
+        const shareUrl = `${window.location.origin}/?schedule=${compressedData}`;
+
+        navigator.clipboard.writeText(shareUrl);
+        toast.success("لینک برنامه کپی شد! حالا برای دوستانت بفرست.");
+        onClose();
+    };
 
     const handleExportJSON = () => {
         if (courses.length === 0) return toast.error("برنامه‌ای برای خروجی وجود ندارد.");
@@ -1902,7 +2043,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
         const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
 
-        // Cleanup
         element.classList.remove('export-mode');
         element.style.cssText = originalCssText;
         setIsCapturing(false);
@@ -1949,7 +2089,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
     return (
         <>
-
             {isCapturing && (
                 <div className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-background/80 backdrop-blur-2xl transition-all">
                     <Loader2 className="w-12 h-12 text-primary animate-spin mb-4" />
@@ -1958,7 +2097,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                 </div>
             )}
 
-            {/* مودال انتخاب فرمت خروجی */}
             {isOpen && !isCapturing && (
                 <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
@@ -1971,6 +2109,15 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                         <h3 className="text-lg font-bold text-primary mb-6 border-b border-border pb-2 pr-1">خروجی و اشتراک‌گذاری</h3>
 
                         <div className="flex flex-col gap-4">
+
+                            {/* 👈 دکمه اشتراک‌گذاری با لینک */}
+                            <button onClick={handleShareLink} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full shadow-primary/20 border-primary/20 text-primary">
+                                <Share2 size={18} className="shrink-0" />
+                                <span className="text-sm font-bold">کپی لینک اشتراک‌گذاری</span>
+                            </button>
+
+                            <div className="h-px w-full bg-border my-1"></div>
+
                             <button onClick={handleExportPNG} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
                                 <ImageIcon size={18} className="text-primary shrink-0" />
                                 <span className="text-sm font-bold">دانلود به صورت عکس (PNG)</span>
@@ -1998,6 +2145,247 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                 </div>
             )}
         </>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\ImportSharedModal.tsx
+====================================================================================================
+
+// src/components/ui/ImportSharedModal.tsx
+"use client";
+
+import { useEffect, useState, Suspense } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { createPortal } from "react-dom";
+import { decompressFromEncodedURIComponent, compressToEncodedURIComponent } from "lz-string";
+import { useCourseStore } from "@/store/useCourseStore";
+import { Course } from "@/types";
+import { AlertTriangle, Download, X, BookOpen, Link as LinkIcon } from "lucide-react";
+import toast from "react-hot-toast";
+
+function ModalContent() {
+    const searchParams = useSearchParams();
+    const router = useRouter();
+    // 👈 courses اضافه شد تا بتونیم ازش بکاپ بگیریم
+    const { courses, importCourses } = useCourseStore();
+
+    const [sharedData, setSharedData] = useState<Course[] | null>(null);
+    const [isOpen, setIsOpen] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+        const data = searchParams.get("schedule");
+
+        if (data) {
+            try {
+                const json = decompressFromEncodedURIComponent(data);
+                if (json) {
+                    const parsed = JSON.parse(json);
+                    if (Array.isArray(parsed)) {
+                        setSharedData(parsed);
+                        setIsOpen(true);
+                    }
+                }
+            } catch (e) {
+                toast.error("لینک اشتراک‌گذاری نامعتبر یا منقضی شده است.");
+                closeAndCleanURL();
+            }
+        }
+    }, [searchParams]);
+
+    // 👈 قفل کردن اسکرولِ پشتِ مودال
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden";
+        } else {
+            document.body.style.overflow = "unset";
+        }
+        return () => { document.body.style.overflow = "unset"; };
+    }, [isOpen]);
+
+    const handleConfirm = () => {
+        if (sharedData) {
+            importCourses(sharedData);
+            toast.success("برنامه با موفقیت جایگزین شد!");
+        }
+        closeAndCleanURL();
+    };
+
+    // 👈 تابع گرفتن لینک بکاپ از برنامه فعلی کاربر
+    const handleBackupLink = () => {
+        if (courses.length === 0) {
+            return toast("برنامه فعلی شما خالی است، نیازی به بکاپ نیست!", { icon: 'ℹ️' });
+        }
+        const compressedData = compressToEncodedURIComponent(JSON.stringify(courses));
+        const shareUrl = `${window.location.origin}/?schedule=${compressedData}`;
+        navigator.clipboard.writeText(shareUrl);
+        toast.success("لینک برنامه فعلی شما کپی شد!");
+    };
+
+    const closeAndCleanURL = () => {
+        setIsOpen(false);
+        router.replace("/");
+    };
+
+    if (!isOpen || !mounted || !sharedData) return null;
+
+    const totalUnits = sharedData.reduce((sum, c) => sum + (c.units || 0), 0);
+
+    return createPortal(
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center p-4">
+            {/* 👈 onClick از اینجا حذف شد تا با کلیک بیرون بسته نشه */}
+            <div className="absolute inset-0 bg-black/60 backdrop-blur-md animate-fade-in"></div>
+
+            <div className="glass-panel p-6 w-full max-w-sm relative z-10 animate-slide-up bg-[var(--card)]/95 flex flex-col items-center">
+
+                <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-3 border border-danger/20 shrink-0">
+                    <AlertTriangle size={28} className="text-danger animate-pulse" />
+                </div>
+
+                <h3 className="text-lg font-bold text-danger mb-1 text-center">هشدار جایگزینی!</h3>
+                <p className="text-xs text-muted text-center leading-relaxed mb-5">
+                    در صورت تایید، <strong className="text-foreground">برنامه فعلی شما کاملاً پاک خواهد شد</strong> و این برنامه جایگزین آن می‌شود.
+                </p>
+
+                <div className="w-full bg-black/5 dark:bg-white/5 rounded-2xl border border-[var(--border-color)] overflow-hidden flex flex-col max-h-48 mb-6">
+                    <div className="flex items-center justify-between p-3 bg-black/5 dark:bg-white/5 border-b border-[var(--border-color)] shrink-0">
+                        <div className="flex items-center gap-1.5">
+                            <BookOpen size={16} className="text-primary" />
+                            <span className="text-xs font-bold text-foreground">{sharedData.length} درس</span>
+                        </div>
+                        <div className="text-xs font-mono font-bold text-primary bg-primary/10 px-2 py-1 rounded-md">
+                            {totalUnits} واحد
+                        </div>
+                    </div>
+
+                    <div className="p-3 overflow-y-auto no-scrollbar flex flex-col gap-2">
+                        {sharedData.map((course, i) => (
+                            <div key={i} className="text-xs text-foreground font-bold flex items-center gap-2">
+                                <span className="w-1.5 h-1.5 rounded-full bg-muted shrink-0"></span>
+                                <span className="truncate">{course.name}</span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex flex-col w-full gap-3 shrink-0">
+                    <div className="flex items-center justify-between w-full gap-3">
+                        <button onClick={closeAndCleanURL} className="glass-btn flex-1 py-3.5 text-sm text-muted hover:text-foreground font-bold transition-all">
+                            <X size={16} className="inline mr-1.5" />
+                            لغو
+                        </button>
+                        <button onClick={handleConfirm} className="glass-btn flex-1 py-3.5 text-sm bg-danger text-white border-transparent hover:bg-danger/90 font-bold shadow-md shadow-danger/20 transition-all">
+                            <Download size={16} className="inline mr-1.5" />
+                            تایید و دریافت
+                        </button>
+                    </div>
+
+                    {/* 👈 دکمه‌ی تمام‌عرض برای گرفتن بکاپ */}
+                    <button onClick={handleBackupLink} className="glass-btn w-full py-3 text-sm text-primary border-primary/20 hover:bg-primary hover:text-white font-bold transition-all">
+                        <LinkIcon size={14} className="inline mr-2" />
+                        لینک برنامه قبلی منو کپی کن !
+                    </button>
+                </div>
+            </div>
+        </div>,
+        document.body
+    );
+}
+
+export default function ImportSharedModal() {
+    return (
+        <Suspense fallback={null}>
+            <ModalContent />
+        </Suspense>
+    );
+}
+
+
+
+====================================================================================================
+FILE: src\components\ui\InstallAppBtn.tsx
+====================================================================================================
+
+// src/components/ui/InstallAppBtn.tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { Smartphone } from "lucide-react";
+import toast from "react-hot-toast";
+
+interface Props {
+    className?: string;
+}
+
+export default function InstallAppBtn({ className = "" }: Props) {
+    const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
+    const [isIOS, setIsIOS] = useState(false);
+    const [isInstalled, setIsInstalled] = useState(false);
+
+    useEffect(() => {
+        if (window.matchMedia('(display-mode: standalone)').matches || (window.navigator as any).standalone) {
+            setIsInstalled(true);
+        }
+
+        const ua = window.navigator.userAgent.toLowerCase();
+        if (/iphone|ipad|ipod/.test(ua)) {
+            setIsIOS(true);
+        }
+
+        const handleBeforeInstall = (e: Event) => {
+            e.preventDefault();
+            setDeferredPrompt(e);
+        };
+
+        window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+
+        return () => {
+            window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+        };
+    }, []);
+
+    const handleInstall = async () => {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                setDeferredPrompt(null);
+                setIsInstalled(true);
+            }
+        } else if (isIOS) {
+            toast(
+                (t) => (
+                    <div className="flex flex-col gap-2 text-sm font-bold text-center leading-relaxed">
+                        <span className="text-primary mb-1">نصب در آیفون (iOS) 🍏</span>
+                        <span className="text-xs font-normal text-muted">۱. در نوار پایین مرورگر، دکمه <b>Share</b> (مربع با فلش رو به بالا) را بزنید.</span>
+                        <span className="text-xs font-normal text-muted">۲. گزینه <b>Add to Home Screen</b> (علامت +) را انتخاب کنید.</span>
+                        <button onClick={() => toast.dismiss(t.id)} className="mt-3 w-full bg-primary/10 text-primary border border-primary/20 rounded-lg py-1.5 transition-colors hover:bg-primary hover:text-white">متوجه شدم</button>
+                    </div>
+                ),
+                { duration: 8000 }
+            );
+        } else {
+            toast("اپلیکیشن قبلاً نصب شده یا مرورگر شما از این قابلیت پشتیبانی نمی‌کند.", { icon: '📱' });
+        }
+    };
+
+    if (isInstalled) return null;
+    if (!deferredPrompt && !isIOS) return null;
+
+    return (
+        <button
+            type="button"
+            onClick={handleInstall}
+            className={`glass-btn flex items-center justify-center gap-1.5 md:gap-2 text-ok border-ok/20 bg-ok/5 hover:bg-ok hover:text-white transition-colors shrink-0 animate-pulse shadow-[0_0_15px_rgba(66,183,42,0.3)] ${className}`}
+            title="نصب اپلیکیشن"
+        >
+            <Smartphone className="w-4 h-4 md:w-5 md:h-5 shrink-0" />
+            <span className="text-xs md:text-sm font-bold mt-0.5">نصب اپلیکیشن</span>
+        </button>
     );
 }
 
@@ -2740,7 +3128,6 @@ export interface Course {
 FILE: src\utils\helpers.ts
 ====================================================================================================
 
-// src/utils/helpers.ts
 
 import { Course, Session } from "../types";
 
@@ -2783,8 +3170,14 @@ export function colorFor(key: string): string {
         h |= 0;
     }
     const hue = Math.abs(h) % 360;
-    // Increased saturation and adjusted lightness for vivid but clean colors
     return `hsl(${hue}, 85%, 60%)`;
+}
+
+export function toEnglishDigits(str: string): string {
+    if (!str) return "";
+    return str
+        .replace(/[۰-۹]/g, (w) => String(['۰', '۱', '۲', '۳', '۴', '۵', '۶', '۷', '۸', '۹'].indexOf(w)))
+        .replace(/[٠-٩]/g, (w) => String(['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'].indexOf(w)));
 }
 
 
@@ -2870,7 +3263,10 @@ PROJECT TREE
             |-- AnimatedCheckbox.tsx
             |-- BottomSheet.tsx
             |-- ConfirmModal.tsx
+            |-- CustomToaster.tsx
             |-- ExportModal.tsx
+            |-- ImportSharedModal.tsx
+            |-- InstallAppBtn.tsx
             |-- Logo.tsx
             |-- ThemeToggle.tsx
             |-- WelcomeModal.tsx
