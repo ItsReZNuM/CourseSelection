@@ -1,4 +1,3 @@
-// src/components/ui/WelcomeModal.tsx
 "use client";
 
 import { useState, useEffect, useRef, UIEvent } from "react";
@@ -55,7 +54,6 @@ export default function WelcomeModal() {
 
             <div className="glass-panel w-full max-w-lg relative z-10 animate-slide-up bg-[var(--card)]/95 shadow-2xl overflow-hidden flex flex-col max-h-[85vh]">
 
-                {/* هدر */}
                 <div className="flex flex-col items-center justify-center pt-8 pb-4 shrink-0 relative border-b border-border/50">
                     <div className="text-5xl md:text-6xl mb-4 origin-bottom animate-[wave_2s_ease-in-out_infinite]">👋</div>
                     <h2 className="text-xl md:text-2xl font-extrabold text-primary px-4 text-center leading-tight">
@@ -63,11 +61,10 @@ export default function WelcomeModal() {
                     </h2>
                 </div>
 
-                {/* محتوای اسکرول‌خور */}
                 <div
                     ref={contentRef}
                     onScroll={handleScroll}
-                    className="flex-1 overflow-y-auto no-scrollbar p-6 space-y-8"
+                    className="flex-1 overflow-y-auto overscroll-none no-scrollbar p-6 space-y-8"
                 >
                     <p className="text-base text-foreground/90 leading-relaxed font-bold text-center">
                         سلام! اینجا همه‌چیز برای راحتی تو طراحی شده تا بدون سردرد یه برنامه هفتگی بی‌نقص بچینی. بیا تا سریع بهت بگم سایت چطوری کار می‌کنه:
@@ -133,7 +130,6 @@ export default function WelcomeModal() {
                         </div>
                     </div>
 
-                    {/* باکس ارتباط با ادمین */}
                     <div className="mt-4 p-5 rounded-2xl bg-black/5 dark:bg-white/5 border border-border shadow-inner flex flex-col items-center text-center">
                         <div className="w-10 h-10 rounded-full bg-foreground/5 flex items-center justify-center text-foreground mb-3">
                             <MessageSquareHeart size={20} />
@@ -159,13 +155,12 @@ export default function WelcomeModal() {
                     <div className="h-6"></div>
                 </div>
 
-                {/* دکمه انتهای فرم */}
-                <div className="p-4 md:p-5 border-t border-[var(--border-color)] bg-black/5 dark:bg-white/5 shrink-0">
+                <div className="p-4 md:p-5 border-t border-[var(--border-color)] bg-black/5 dark:bg-white/5 shrink-0 w-full">
                     <button
                         onClick={handleClose}
                         className={`w-full flex items-center justify-center gap-2 py-4 rounded-xl font-extrabold text-base transition-all duration-300 shadow-md ${isAtBottom
-                                ? "bg-primary text-white hover:bg-primary/90 shadow-primary/30"
-                                : "bg-black/10 dark:bg-white/10 text-muted hover:text-foreground hover:bg-black/20 dark:hover:bg-white/20"
+                            ? "bg-primary text-white hover:bg-primary/90 shadow-primary/30"
+                            : "bg-black/10 dark:bg-white/10 text-muted hover:text-foreground hover:bg-black/20 dark:hover:bg-white/20"
                             }`}
                     >
                         {isAtBottom ? (
