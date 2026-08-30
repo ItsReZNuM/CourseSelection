@@ -1,7 +1,7 @@
 "use client";
 
 import { Course, Session } from "@/types";
-import { parseTimeToMinutes, colorFor, toEnglishDigits } from "@/utils/helpers"; 
+import { parseTimeToMinutes, colorForCourse, toEnglishDigits } from "@/utils/helpers"; 
 import { START_HOUR, PX_PER_MIN, TOP_OFFSET, DAYS } from "./DesktopGrid";
 import { useCourseStore } from "@/store/useCourseStore";
 import { User, BookOpen, CalendarDays, Clock } from "lucide-react";
@@ -16,7 +16,7 @@ interface Props {
 }
 
 export default function CourseCard({ course, session, dayIndex }: Props) {
-    const { selectedCourseId, setSelectedCourseId } = useCourseStore();
+    const { courses, selectedCourseId, setSelectedCourseId } = useCourseStore();
     const isSelected = selectedCourseId === course.id;
 
     const startMin = parseTimeToMinutes(session.start);
@@ -28,7 +28,9 @@ export default function CourseCard({ course, session, dayIndex }: Props) {
     const height = Math.max(durationMin * PX_PER_MIN - 6, 15);
 
     const widthPct = 100 / DAYS.length;
-    const baseColor = colorFor(course.name);
+
+    const baseColor = colorForCourse(course.id, courses);
+
     const glassBg = baseColor.replace('hsl', 'hsla').replace(')', ', 0.15)');
     const borderColor = baseColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
 

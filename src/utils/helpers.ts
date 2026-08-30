@@ -1,7 +1,6 @@
 
 import { Course, Session } from "../types";
 
-// Normalize time strings (e.g. 8.5 to 08:30)
 export function normalizeTimeStr(t: string | number): string {
     let str = (t || "").toString().trim();
     if (!str) return "";
@@ -19,7 +18,6 @@ export function normalizeTimeStr(t: string | number): string {
     return `${hh}:${mm}`;
 }
 
-// Convert time to minutes (e.g. 8:30 to 510)
 export function parseTimeToMinutes(t: string): number {
     const n = normalizeTimeStr(t);
     const [h, m] = n.split(":").map(Number);
@@ -27,19 +25,17 @@ export function parseTimeToMinutes(t: string): number {
     return h * 60 + m;
 }
 
-// Check time overlap
 export function overlap(a1: number, a2: number, b1: number, b2: number): boolean {
     return Math.max(a1, b1) < Math.min(a2, b2);
 }
 
-// Generate vibrant colors for glassmorphism
-export function colorFor(key: string): string {
-    let h = 0;
-    for (let i = 0; i < key.length; i++) {
-        h = ((h << 5) - h) + key.charCodeAt(i);
-        h |= 0;
-    }
-    const hue = Math.abs(h) % 360;
+export function colorForCourse(courseId: number, courses: Course[]): string {
+    const sortedIds = [...courses].map(c => c.id).sort((a, b) => a - b);
+    let index = sortedIds.indexOf(courseId);
+    
+    if (index === -1) index = 0;
+
+    const hue = (210 + (index * 137.5)) % 360;
     return `hsl(${hue}, 85%, 60%)`;
 }
 

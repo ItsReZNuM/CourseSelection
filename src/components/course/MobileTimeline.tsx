@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
 import { Course } from "@/types";
 import { DAYS } from "./DesktopGrid";
-import { colorFor, parseTimeToMinutes } from "@/utils/helpers";
+import { colorForCourse, parseTimeToMinutes } from "@/utils/helpers"; 
 import BottomSheet from "../ui/BottomSheet";
 
 export default function MobileTimeline() {
@@ -30,8 +30,8 @@ export default function MobileTimeline() {
                         key={day}
                         onClick={() => setActiveDay(day)}
                         className={`shrink-0 px-5 py-2.5 rounded-xl font-bold text-sm transition-all duration-300 ${activeDay === day
-                                ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
-                                : "glass-btn text-muted hover:text-foreground"
+                            ? "bg-primary text-white shadow-md shadow-primary/20 scale-105"
+                            : "glass-btn text-muted hover:text-foreground"
                             }`}
                     >
                         {day}
@@ -48,7 +48,7 @@ export default function MobileTimeline() {
                     </div>
                 ) : (
                     daySessions.map(({ course, session }, index) => {
-                        const baseColor = colorFor(course.name);
+                        const baseColor = colorForCourse(course.id, courses);
                         const glassBg = baseColor.replace('hsl', 'hsla').replace(')', ', 0.1)');
                         const borderColor = baseColor.replace('hsl', 'hsla').replace(')', ', 0.3)');
 
@@ -95,7 +95,6 @@ export default function MobileTimeline() {
                 )}
             </div>
 
-            {/* Mobile Bottom Sheet (Modal) */}
             <BottomSheet
                 course={selectedCourse}
                 onClose={() => setSelectedCourse(null)}
