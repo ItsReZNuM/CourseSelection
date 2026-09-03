@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
-import { Plus, Save, X, Edit2 } from "lucide-react";
+import { Plus, Save, X, Edit2, RotateCcw } from "lucide-react";
 import toast from "react-hot-toast";
 import { Session } from "@/types";
 import { DAYS } from "../course/DesktopGrid";
-import { parseTimeToMinutes, overlap, toEnglishDigits } from "@/utils/helpers";
+import { parseTimeToMinutes, overlap } from "@/utils/helpers";
 import AnimatedCheckbox from "../ui/AnimatedCheckbox";
 import WheelTimePicker from "../ui/WheelTimePicker";
 import InstallAppBtn from "../ui/InstallAppBtn";
@@ -51,11 +51,28 @@ export default function CourseForm() {
                 setSessions(JSON.parse(JSON.stringify(course.sessions)));
             }
         } else {
-            setCode(""); setName(""); setProfessor(""); setUnits("");
-            setNoExam(false); setExamDate(""); setExamTime("");
-            setSessions([{ ...initialSession }]);
+            resetFields();
         }
     }, [selectedCourseId, courses]);
+
+    const resetFields = () => {
+        setCode("");
+        setName("");
+        setProfessor("");
+        setUnits("");
+        setNoExam(false);
+        setExamDate("");
+        setExamTime("");
+        setSessions([{ ...initialSession }]);
+    };
+
+    const handleResetForm = () => {
+        resetFields();
+        if (selectedCourseId) {
+            setSelectedCourseId(null);
+        }
+        toast.success("اطلاعات فرم پاک شد.");
+    };
 
     const updateSession = (index: number, field: keyof Session, value: string) => {
         const newSessions = [...sessions];
@@ -137,9 +154,7 @@ export default function CourseForm() {
         } else {
             addCourse({ id: Date.now(), ...courseData });
             toast.success("درس با موفقیت به برنامه اضافه شد.");
-            setCode(""); setName(""); setProfessor(""); setUnits("");
-            setNoExam(false); setExamDate(""); setExamTime("");
-            setSessions([{ ...initialSession }]);
+            resetFields();
         }
     };
 
@@ -149,11 +164,28 @@ export default function CourseForm() {
                 <h2 className="text-lg font-bold text-primary">
                     {selectedCourseId ? "ویرایش درس" : "افزودن درس جدید"}
                 </h2>
-                {selectedCourseId && (
-                    <button type="button" onClick={() => setSelectedCourseId(null)} className="text-xs text-danger hover:underline">
-                        لغو ویرایش
+
+                <div className="flex items-center gap-2">
+                    <button
+                        type="button"
+                        onClick={handleResetForm}
+                        className="text-xs text-muted hover:text-danger transition-colors flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-black/5 dark:bg-white/5 border border-border cursor-pointer active:scale-95"
+                        title="خالی کردن تمام فیلدها"
+                    >
+                        <RotateCcw size={13} />
+                        <span>پاک کردن فرم</span>
                     </button>
-                )}
+
+                    {selectedCourseId && (
+                        <button
+                            type="button"
+                            onClick={() => setSelectedCourseId(null)}
+                            className="text-xs text-danger hover:underline mr-1"
+                        >
+                            لغو ویرایش
+                        </button>
+                    )}
+                </div>
             </div>
 
             <InstallAppBtn className="flex md:hidden w-full py-3 mb-5 text-sm" />
