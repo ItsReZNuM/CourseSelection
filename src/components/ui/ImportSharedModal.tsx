@@ -6,7 +6,7 @@ import { createPortal } from "react-dom";
 import { decompressFromEncodedURIComponent, compressToEncodedURIComponent } from "lz-string";
 import { useCourseStore } from "@/store/useCourseStore";
 import { Course } from "@/types";
-import { AlertTriangle, Download, X, BookOpen, Link as LinkIcon } from "lucide-react";
+import { AlertTriangle, Download, X, BookOpen, Link as LinkIcon, Loader2 } from "lucide-react";
 import toast from "react-hot-toast";
 
 function ModalContent() {
@@ -16,15 +16,36 @@ function ModalContent() {
 
     const [sharedData, setSharedData] = useState<Course[] | null>(null);
     const [isOpen, setIsOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
-        const data = searchParams.get("schedule");
+        const shortCode = searchParams.get("s");
+        const legacyData = searchParams.get("schedule");
 
-        if (data) {
+        if (shortCode) {
+            setIsLoading(true);
+            fetch(`/api/share?id=${shortCode}`)
+                .then((res) => {
+                    if (!res.ok) throw new Error("Not found");
+                    return res.json();
+                })
+                .then((data) => {
+                    if (Array.isArray(data.courses)) {
+                        setSharedData(data.courses);
+                        setIsOpen(true);
+                    }
+                })
+                .catch(() => {
+                    toast.error("برنامه مورد نظر یافت نشد یا منقضی شده است.");
+                    closeAndCleanURL();
+                })
+                .finally(() => setIsLoading(false));
+        }
+        else if (legacyData) {
             try {
-                const json = decompressFromEncodedURIComponent(data);
+                const json = decompressFromEncodedURIComponent(legacyData);
                 if (json) {
                     const parsed = JSON.parse(json);
                     if (Array.isArray(parsed)) {
@@ -32,8 +53,8 @@ function ModalContent() {
                         setIsOpen(true);
                     }
                 }
-            } catch (e) {
-                toast.error("لینک اشتراک‌گذاری نامعتبر یا منقضی شده است.");
+            } catch {
+                toast.error("لینک اشتراک‌گذاری نامعتبر است.");
                 closeAndCleanURL();
             }
         }
@@ -58,18 +79,28 @@ function ModalContent() {
 
     const handleBackupLink = () => {
         if (courses.length === 0) {
-            return toast("برنامه فعلی شما خالی است، نیازی به بکاپ نیست!", { icon: 'ℹ️' });
+            return toast("برنامه فعلی شما خالی است، نیازی به کپی نیست!", { icon: "ℹ️" });
         }
         const compressedData = compressToEncodedURIComponent(JSON.stringify(courses));
         const shareUrl = `${window.location.origin}/?schedule=${compressedData}`;
         navigator.clipboard.writeText(shareUrl);
-        toast.success("لینک برنامه فعلی شما کپی شد!");
+        toast.success("لینک برنامه قبلی شما کپی شد!");
     };
 
     const closeAndCleanURL = () => {
         setIsOpen(false);
         router.replace("/");
     };
+
+    if (isLoading) {
+        return createPortal(
+            <div className="fixed inset-0 z-[999999] flex flex-col items-center justify-center bg-black/60 backdrop-blur-md">
+                <Loader2 size={36} className="text-primary animate-spin mb-3" />
+                <p className="text-sm font-bold text-white">در حال دریافت اطلاعات برنامه...</p>
+            </div>,
+            document.body
+        );
+    }
 
     if (!isOpen || !mounted || !sharedData) return null;
 
@@ -80,7 +111,6 @@ function ModalContent() {
             <div className="absolute inset-0 bg-black/60 backdrop-blur-md animate-fade-in"></div>
 
             <div className="glass-panel p-6 w-full max-w-sm relative z-10 animate-slide-up bg-[var(--card)]/95 flex flex-col items-center">
-
                 <div className="w-14 h-14 rounded-full bg-danger/10 flex items-center justify-center mb-3 border border-danger/20 shrink-0">
                     <AlertTriangle size={28} className="text-danger animate-pulse" />
                 </div>
@@ -101,7 +131,7 @@ function ModalContent() {
                         </div>
                     </div>
 
-                    <div className="p-3 overflow-y-auto no-scrollbar flex flex-col gap-2">
+                    <div className="p-3 overflow-y-auto overscroll-none no-scrollbar flex flex-col gap-2">
                         {sharedData.map((course, i) => (
                             <div key={i} className="text-xs text-foreground font-bold flex items-center gap-2">
                                 <span className="w-1.5 h-1.5 rounded-full bg-muted shrink-0"></span>

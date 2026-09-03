@@ -2,11 +2,24 @@
 
 import { useState } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
-import { X, Image as ImageIcon, FileText, FileJson, Upload, Loader2, Share2 } from "lucide-react";
+import {
+    X,
+    Image as ImageIcon,
+    FileText,
+    FileJson,
+    Upload,
+    Loader2,
+    Share2,
+    ArrowRight,
+    Copy,
+    Check,
+    Link as LinkIcon,
+    Sparkles
+} from "lucide-react";
 import toast from "react-hot-toast";
 import { toPng, toJpeg } from "html-to-image";
 import jsPDF from "jspdf";
-import { compressToEncodedURIComponent } from "lz-string"; 
+import { compressToEncodedURIComponent } from "lz-string";
 
 interface Props {
     isOpen: boolean;
@@ -17,17 +30,57 @@ export default function ExportModal({ isOpen, onClose }: Props) {
     const { courses, importCourses } = useCourseStore();
     const [isCapturing, setIsCapturing] = useState(false);
 
+    const [isShareView, setIsShareView] = useState(false);
+    const [isGenerating, setIsGenerating] = useState(false);
+    const [shortUrl, setShortUrl] = useState("");
+    const [directUrl, setDirectUrl] = useState("");
+    const [copiedTarget, setCopiedTarget] = useState<"short" | "direct" | null>(null);
+
+    const handleCloseModal = () => {
+        setIsShareView(false);
+        setCopiedTarget(null);
+        onClose();
+    };
+
     if (!isOpen && !isCapturing) return null;
 
-    const handleShareLink = () => {
+    const handleGenerateLinks = async () => {
         if (courses.length === 0) return toast.error("برنامه‌ای برای اشتراک‌گذاری وجود ندارد.");
 
-        const compressedData = compressToEncodedURIComponent(JSON.stringify(courses));
-        const shareUrl = `${window.location.origin}/?schedule=${compressedData}`;
+        setIsGenerating(true);
 
-        navigator.clipboard.writeText(shareUrl);
-        toast.success("لینک برنامه کپی شد! حالا برای دوستانت بفرست.");
-        onClose();
+        const compressed = compressToEncodedURIComponent(JSON.stringify(courses));
+        const direct = `${window.location.origin}/?schedule=${compressed}`;
+        setDirectUrl(direct);
+
+        try {
+            const res = await fetch("/api/share", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ courses }),
+            });
+
+            const data = await res.json();
+
+            if (res.ok && data.id) {
+                setShortUrl(`${window.location.origin}/?s=${data.id}`);
+            } else {
+                setShortUrl("");
+            }
+        } catch {
+            setShortUrl("");
+            toast("ارتباط با سرور لینک کوتاه برقرار نشد؛ لینک اصلی آماده است.", { icon: "⚠️" });
+        } finally {
+            setIsGenerating(false);
+            setIsShareView(true);
+        }
+    };
+
+    const handleCopy = async (text: string, target: "short" | "direct") => {
+        await navigator.clipboard.writeText(text);
+        setCopiedTarget(target);
+        toast.success(target === "short" ? "لینک کوتاه کپی شد!" : "لینک اصلی کپی شد!");
+        setTimeout(() => setCopiedTarget(null), 2000);
     };
 
     const handleExportJSON = () => {
@@ -38,7 +91,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         link.download = "my-course-schedule.json";
         link.click();
         toast.success("فایل JSON دانلود شد.");
-        onClose();
+        handleCloseModal();
     };
 
     const handleImportJSON = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,11 +105,11 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                 if (Array.isArray(data)) {
                     importCourses(data);
                     toast.success("برنامه با موفقیت وارد شد!");
-                    onClose();
+                    handleCloseModal();
                 } else {
                     throw new Error("Invalid format");
                 }
-            } catch (err) {
+            } catch {
                 toast.error("فایل انتخاب شده نامعتبر است.");
             }
         };
@@ -67,23 +120,23 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         setIsCapturing(true);
         onClose();
 
-        await new Promise(r => setTimeout(r, 100));
+        await new Promise((r) => setTimeout(r, 100));
 
         const element = document.getElementById("schedule-grid");
         if (!element) throw new Error("جدول پیدا نشد.");
 
         const originalCssText = element.style.cssText;
-        const isDark = document.documentElement.classList.contains('dark');
+        const isDark = document.documentElement.classList.contains("dark");
 
-        element.classList.add('export-mode');
+        element.classList.add("export-mode");
 
-        element.style.setProperty('display', 'flex', 'important');
-        element.style.setProperty('width', '1000px', 'important');
-        element.style.setProperty('padding', '24px', 'important');
-        element.style.setProperty('background-color', isDark ? '#050507' : '#f5f7fa', 'important');
-        element.style.setProperty('border-radius', '16px', 'important');
+        element.style.setProperty("display", "flex", "important");
+        element.style.setProperty("width", "1000px", "important");
+        element.style.setProperty("padding", "24px", "important");
+        element.style.setProperty("background-color", isDark ? "#050507" : "#f5f7fa", "important");
+        element.style.setProperty("border-radius", "16px", "important");
 
-        await new Promise(r => setTimeout(r, 400));
+        await new Promise((r) => setTimeout(r, 400));
 
         const width = element.offsetWidth;
         const height = element.offsetHeight;
@@ -91,13 +144,13 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         const options = {
             quality: 0.9,
             pixelRatio: 1.5,
-            style: { margin: '0' },
+            style: { margin: "0" },
             cacheBust: true,
         };
 
         const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
 
-        element.classList.remove('export-mode');
+        element.classList.remove("export-mode");
         element.style.cssText = originalCssText;
         setIsCapturing(false);
 
@@ -113,8 +166,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
             link.href = dataUrl;
             link.click();
             toast.success("عکس با موفقیت ذخیره شد.");
-        } catch (error) {
-            console.error("PNG rendering error:", error);
+        } catch {
             setIsCapturing(false);
             toast.error("خطا در تولید عکس.");
         }
@@ -131,11 +183,10 @@ export default function ExportModal({ isOpen, onClose }: Props) {
             const pdfWidth = pdf.internal.pageSize.getWidth();
             const pdfHeight = (height * pdfWidth) / width;
 
-            pdf.addImage(dataUrl, "JPEG", 0, 10, pdfWidth, pdfHeight, undefined, 'FAST');
+            pdf.addImage(dataUrl, "JPEG", 0, 10, pdfWidth, pdfHeight, undefined, "FAST");
             pdf.save("my-schedule.pdf");
             toast.success("فایل PDF با موفقیت ذخیره شد.");
-        } catch (error) {
-            console.error("PDF rendering error:", error);
+        } catch {
             setIsCapturing(false);
             toast.error("خطا در تولید PDF.");
         }
@@ -153,47 +204,129 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
             {isOpen && !isCapturing && (
                 <div className="fixed inset-0 z-[80] flex items-center justify-center p-4">
-                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={onClose}></div>
+                    <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={handleCloseModal}></div>
 
                     <div className="glass-panel p-6 w-full max-w-sm relative z-10 animate-slide-up bg-card/95">
-                        <button onClick={onClose} className="absolute top-4 left-4 p-2 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors">
-                            <X size={18} />
-                        </button>
 
-                        <h3 className="text-lg font-bold text-primary mb-6 border-b border-border pb-2 pr-1">خروجی و اشتراک‌گذاری</h3>
+                        <div className="flex items-center justify-between mb-5 border-b border-border pb-2.5">
+                            <div className="flex items-center gap-2">
+                                {isShareView && (
+                                    <button
+                                        onClick={() => setIsShareView(false)}
+                                        className="p-1 text-muted hover:text-foreground transition-colors"
+                                        title="بازگشت به منوی خروجی"
+                                    >
+                                        <ArrowRight size={18} />
+                                    </button>
+                                )}
+                                <h3 className="text-base font-bold text-primary">
+                                    {isShareView ? "اشتراک‌گذاری برنامه" : "خروجی و اشتراک‌گذاری"}
+                                </h3>
+                            </div>
 
-                        <div className="flex flex-col gap-4">
-
-                            <button onClick={handleShareLink} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full shadow-primary/20 border-primary/20 text-primary">
-                                <Share2 size={18} className="shrink-0" />
-                                <span className="text-sm font-bold">کپی لینک اشتراک‌گذاری</span>
+                            <button onClick={handleCloseModal} className="p-1.5 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors mb-2 ">
+                                <X size={16} />
                             </button>
-
-                            <div className="h-px w-full bg-border my-1"></div>
-
-                            <button onClick={handleExportPNG} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
-                                <ImageIcon size={18} className="text-primary shrink-0" />
-                                <span className="text-sm font-bold">دانلود به صورت عکس (PNG)</span>
-                            </button>
-
-                            <button onClick={handleExportPDF} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
-                                <FileText size={18} className="text-danger shrink-0" />
-                                <span className="text-sm font-bold">دانلود به صورت فایل PDF</span>
-                            </button>
-
-                            <div className="h-px w-full bg-border my-1"></div>
-
-                            <button onClick={handleExportJSON} className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
-                                <FileJson size={18} className="text-ok shrink-0" />
-                                <span className="text-sm font-bold">خروجی فایل JSON (بکاپ)</span>
-                            </button>
-
-                            <label className="glass-btn !justify-start !px-5 py-3 gap-4 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 w-full">
-                                <Upload size={18} className="text-muted shrink-0" />
-                                <span className="text-sm font-bold">وارد کردن برنامه (Import)</span>
-                                <input type="file" accept=".json" className="hidden" onChange={handleImportJSON} />
-                            </label>
                         </div>
+
+                        {isShareView ? (
+                            <div className="flex flex-col gap-4 animate-fade-in">
+
+                                {shortUrl && (
+                                    <div className="flex flex-col gap-2 bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                        <div className="flex items-center justify-between text-xs">
+                                            <span className="font-bold text-primary flex items-center gap-1">
+                                                <Sparkles size={13} />
+                                                لینک اختصاصی (کوتاه)
+                                            </span>
+                                        </div>
+
+                                        <input
+                                            type="text"
+                                            readOnly
+                                            value={shortUrl}
+                                            className="glass-input font-mono text-xs py-2 px-3 text-left truncate select-all bg-black/10 dark:bg-white/10"
+                                            dir="ltr"
+                                        />
+
+                                        <button
+                                            onClick={() => handleCopy(shortUrl, "short")}
+                                            className="glass-btn w-full py-2.5 text-xs font-bold text-primary border-primary/30 bg-primary/10 hover:bg-primary hover:text-white transition-all flex items-center justify-center gap-2"
+                                        >
+                                            {copiedTarget === "short" ? <Check size={15} /> : <Copy size={15} />}
+                                            <span>کپی لینک کوتاه</span>
+                                        </button>
+                                    </div>
+                                )}
+
+                                <div className="flex flex-col gap-2 bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
+                                    <div className="flex items-center justify-between text-xs">
+                                        <span className="font-bold text-foreground flex items-center gap-1">
+                                            <LinkIcon size={13} />
+                                            لینک مستقیم (آفلاین)
+                                        </span>
+                                    </div>
+
+                                    <input
+                                        type="text"
+                                        readOnly
+                                        value={directUrl}
+                                        className="glass-input font-mono text-xs py-2 px-3 text-left truncate select-all bg-black/10 dark:bg-white/10 text-muted"
+                                        dir="ltr"
+                                    />
+
+                                    <button
+                                        onClick={() => handleCopy(directUrl, "direct")}
+                                        className="glass-btn w-full py-2.5 text-xs font-bold text-muted hover:text-foreground transition-all flex items-center justify-center gap-2"
+                                    >
+                                        {copiedTarget === "direct" ? <Check size={15} /> : <Copy size={15} />}
+                                        <span>کپی لینک اصلی</span>
+                                    </button>
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="flex flex-col gap-3">
+                                <button
+                                    onClick={handleGenerateLinks}
+                                    disabled={isGenerating}
+                                    className="glass-btn !justify-start !px-5 py-3 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full shadow-primary/20 border-primary/20 text-primary disabled:opacity-50"
+                                >
+                                    {isGenerating ? (
+                                        <Loader2 size={18} className="animate-spin shrink-0" />
+                                    ) : (
+                                        <Share2 size={18} className="shrink-0" />
+                                    )}
+                                    <span className="text-sm font-bold">
+                                        {isGenerating ? "در حال ساخت لینک اختصاصی..." : "کپی لینک اشتراک‌گذاری"}
+                                    </span>
+                                </button>
+
+                                <div className="h-px w-full bg-border my-1"></div>
+
+                                <button onClick={handleExportPNG} className="glass-btn !justify-start !px-5 py-2.5 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                    <ImageIcon size={18} className="text-primary shrink-0" />
+                                    <span className="text-sm font-bold">دانلود به صورت عکس (PNG)</span>
+                                </button>
+
+                                <button onClick={handleExportPDF} className="glass-btn !justify-start !px-5 py-2.5 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                    <FileText size={18} className="text-danger shrink-0" />
+                                    <span className="text-sm font-bold">دانلود به صورت فایل PDF</span>
+                                </button>
+
+                                <div className="h-px w-full bg-border my-1"></div>
+
+                                <button onClick={handleExportJSON} className="glass-btn !justify-start !px-5 py-2.5 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                    <FileJson size={18} className="text-ok shrink-0" />
+                                    <span className="text-sm font-bold">خروجی فایل JSON (بکاپ)</span>
+                                </button>
+
+                                <label className="glass-btn !justify-start !px-5 py-2.5 gap-4 cursor-pointer hover:bg-black/10 dark:hover:bg-white/10 w-full">
+                                    <Upload size={18} className="text-muted shrink-0" />
+                                    <span className="text-sm font-bold">وارد کردن برنامه (Import)</span>
+                                    <input type="file" accept=".json" className="hidden" onChange={handleImportJSON} />
+                                </label>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
