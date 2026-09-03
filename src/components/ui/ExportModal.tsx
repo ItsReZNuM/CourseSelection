@@ -1,6 +1,7 @@
+// src/components/ui/ExportModal.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useCourseStore } from "@/store/useCourseStore";
 import {
     X,
@@ -17,9 +18,13 @@ import {
     Sparkles
 } from "lucide-react";
 import toast from "react-hot-toast";
-import { toPng, toJpeg } from "html-to-image";
+import { toPng } from "html-to-image";
 import jsPDF from "jspdf";
 import { compressToEncodedURIComponent } from "lz-string";
+import DateObject from "react-date-object";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import { toEnglishDigits } from "@/utils/helpers";
 
 interface Props {
     isOpen: boolean;
@@ -27,14 +32,26 @@ interface Props {
 }
 
 export default function ExportModal({ isOpen, onClose }: Props) {
-    const { courses, importCourses } = useCourseStore();
+    const { courses, importCourses, theme } = useCourseStore();
     const [isCapturing, setIsCapturing] = useState(false);
+    const [isPdfRendering, setIsPdfRendering] = useState(false);
 
     const [isShareView, setIsShareView] = useState(false);
     const [isGenerating, setIsGenerating] = useState(false);
     const [shortUrl, setShortUrl] = useState("");
     const [directUrl, setDirectUrl] = useState("");
     const [copiedTarget, setCopiedTarget] = useState<"short" | "direct" | null>(null);
+
+    const [siteHost, setSiteHost] = useState("");
+    const [todayPersianStr, setTodayPersianStr] = useState("");
+
+    useEffect(() => {
+        try {
+            setSiteHost(window.location.host);
+            const now = new DateObject({ calendar: persian, locale: persian_fa });
+            setTodayPersianStr(now.format("DD MMMM YYYY"));
+        } catch { }
+    }, []);
 
     const handleCloseModal = () => {
         setIsShareView(false);
@@ -116,79 +133,142 @@ export default function ExportModal({ isOpen, onClose }: Props) {
         reader.readAsText(file);
     };
 
-    const captureGrid = async (asJpeg = false) => {
+    // خروجی تصویر PNG
+    const handleExportPNG = async () => {
+        if (courses.length === 0) return toast.error("جدول خالی است!");
         setIsCapturing(true);
         onClose();
 
         await new Promise((r) => setTimeout(r, 100));
 
         const element = document.getElementById("schedule-grid");
-        if (!element) throw new Error("جدول پیدا نشد.");
+        if (!element) {
+            setIsCapturing(false);
+            return toast.error("جدول پیدا نشد.");
+        }
 
         const originalCssText = element.style.cssText;
-        const isDark = document.documentElement.classList.contains("dark");
+        const isDark = theme === "dark";
 
         element.classList.add("export-mode");
-
         element.style.setProperty("display", "flex", "important");
-        element.style.setProperty("width", "1000px", "important");
+        element.style.setProperty("flex-direction", "column", "important");
+        element.style.setProperty("width", "1050px", "important");
         element.style.setProperty("padding", "24px", "important");
         element.style.setProperty("background-color", isDark ? "#050507" : "#f5f7fa", "important");
-        element.style.setProperty("border-radius", "16px", "important");
+        element.style.setProperty("border-radius", "18px", "important");
 
-        await new Promise((r) => setTimeout(r, 400));
+        await new Promise((r) => setTimeout(r, 350));
 
-        const width = element.offsetWidth;
-        const height = element.offsetHeight;
-
-        const options = {
-            quality: 0.9,
-            pixelRatio: 1.5,
-            style: { margin: "0" },
-            cacheBust: true,
-        };
-
-        const dataUrl = asJpeg ? await toJpeg(element, options) : await toPng(element, options);
-
-        element.classList.remove("export-mode");
-        element.style.cssText = originalCssText;
-        setIsCapturing(false);
-
-        return { dataUrl, width, height };
-    };
-
-    const handleExportPNG = async () => {
-        if (courses.length === 0) return toast.error("جدول خالی است!");
         try {
-            const { dataUrl } = await captureGrid(false);
+            const dataUrl = await toPng(element, {
+                quality: 0.98,
+                pixelRatio: 1.5,
+                cacheBust: true,
+            });
+
             const link = document.createElement("a");
             link.download = "my-schedule.png";
             link.href = dataUrl;
             link.click();
             toast.success("عکس با موفقیت ذخیره شد.");
         } catch {
-            setIsCapturing(false);
             toast.error("خطا در تولید عکس.");
+        } finally {
+            element.classList.remove("export-mode");
+            element.style.cssText = originalCssText;
+            setIsCapturing(false);
         }
     };
 
+    // خروجی PDF با رندر تم لایت و صفحه‌بندی منظم
     const handleExportPDF = async () => {
         if (courses.length === 0) return toast.error("جدول خالی است!");
-        try {
-            const { dataUrl, width, height } = await captureGrid(true);
 
-            if (isNaN(width) || isNaN(height) || width === 0) throw new Error("Invalid dimensions");
+        setIsCapturing(true);
+        setIsPdfRendering(true);
+        onClose();
+
+        await new Promise((r) => setTimeout(r, 300));
+
+        const element = document.getElementById("pdf-table-export-node");
+        if (!element) {
+            setIsCapturing(false);
+            setIsPdfRendering(false);
+            return toast.error("قالب جدول پیدا نشد.");
+        }
+
+        try {
+            const dataUrl = await toPng(element, {
+                quality: 1,
+                pixelRatio: 2,
+                backgroundColor: "#ffffff",
+                cacheBust: true,
+            });
+
+            const img = new Image();
+            img.src = dataUrl;
+            await new Promise((r) => (img.onload = r));
 
             const pdf = new jsPDF("p", "mm", "a4");
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = (height * pdfWidth) / width;
+            const pageWidth = 210;
+            const pageHeight = 297;
+            const margin = 10;
+            const printWidth = pageWidth - margin * 2;
+            const printHeight = pageHeight - margin * 2;
 
-            pdf.addImage(dataUrl, "JPEG", 0, 10, pdfWidth, pdfHeight, undefined, "FAST");
-            pdf.save("my-schedule.pdf");
-            toast.success("فایل PDF با موفقیت ذخیره شد.");
+            const totalPdfHeight = (img.height * printWidth) / img.width;
+
+            if (totalPdfHeight <= printHeight) {
+                pdf.addImage(dataUrl, "PNG", margin, margin, printWidth, totalPdfHeight, undefined, "FAST");
+            } else {
+                const pxPerPage = Math.floor(img.width * (printHeight / printWidth));
+                let yOffset = 0;
+                let pageIndex = 0;
+
+                while (yOffset < img.height) {
+                    if (pageIndex > 0) pdf.addPage();
+
+                    const currentSliceHeight = Math.min(pxPerPage, img.height - yOffset);
+                    const canvas = document.createElement("canvas");
+                    canvas.width = img.width;
+                    canvas.height = currentSliceHeight;
+
+                    const ctx = canvas.getContext("2d");
+                    if (ctx) {
+                        ctx.fillStyle = "#ffffff";
+                        ctx.fillRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, yOffset, img.width, currentSliceHeight, 0, 0, img.width, currentSliceHeight);
+
+                        const sliceUrl = canvas.toDataURL("image/png");
+                        const slicePdfHeight = (currentSliceHeight * printWidth) / img.width;
+                        pdf.addImage(sliceUrl, "PNG", margin, margin, printWidth, slicePdfHeight, undefined, "FAST");
+                    }
+
+                    yOffset += currentSliceHeight;
+                    pageIndex++;
+                }
+            }
+
+            pdf.save("my-courses-table.pdf");
+            toast.success("فایل PDF جدول با موفقیت ذخیره شد.");
         } catch {
+            toast.error("خطا در تولید فایل PDF.");
+        } finally {
+            setIsPdfRendering(false);
             setIsCapturing(false);
-            toast.error("خطا در تولید PDF.");
+        }
+    };
+
+    const totalUnits = courses.reduce((sum, c) => sum + (c.units || 0), 0);
+
+    const getExamDay = (dateStr: string) => {
+        if (!dateStr) return "";
+        try {
+            const date = new DateObject({ date: dateStr, format: "YYYY/MM/DD", calendar: persian, locale: persian_fa });
+            return date.format("dddd");
+        } catch {
+            return "";
         }
     };
 
@@ -207,7 +287,6 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                     <div className="absolute inset-0 bg-black/50 backdrop-blur-sm animate-fade-in" onClick={handleCloseModal}></div>
 
                     <div className="glass-panel p-6 w-full max-w-sm relative z-10 animate-slide-up bg-card/95">
-
                         <div className="flex items-center justify-between mb-5 border-b border-border pb-2.5">
                             <div className="flex items-center gap-2">
                                 {isShareView && (
@@ -224,14 +303,13 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                                 </h3>
                             </div>
 
-                            <button onClick={handleCloseModal} className="p-1.5 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors mb-2 ">
+                            <button onClick={handleCloseModal} className="p-1.5 bg-black/5 dark:bg-white/10 rounded-full text-muted hover:text-foreground transition-colors">
                                 <X size={16} />
                             </button>
                         </div>
 
                         {isShareView ? (
                             <div className="flex flex-col gap-4 animate-fade-in">
-
                                 {shortUrl && (
                                     <div className="flex flex-col gap-2 bg-black/5 dark:bg-white/5 p-3 rounded-2xl border border-[var(--border-color)]">
                                         <div className="flex items-center justify-between text-xs">
@@ -239,6 +317,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                                                 <Sparkles size={13} />
                                                 لینک اختصاصی (کوتاه)
                                             </span>
+                                            <span className="text-[10px] text-muted">حروف و اعداد کوچک</span>
                                         </div>
 
                                         <input
@@ -265,6 +344,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                                             <LinkIcon size={13} />
                                             لینک مستقیم (آفلاین)
                                         </span>
+                                        <span className="text-[10px] text-muted">بدون نیاز به سرور</span>
                                     </div>
 
                                     <input
@@ -310,7 +390,7 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
                                 <button onClick={handleExportPDF} className="glass-btn !justify-start !px-5 py-2.5 gap-4 hover:bg-black/10 dark:hover:bg-white/10 w-full">
                                     <FileText size={18} className="text-danger shrink-0" />
-                                    <span className="text-sm font-bold">دانلود به صورت فایل PDF</span>
+                                    <span className="text-sm font-bold">دانلود جدول دروس (PDF)</span>
                                 </button>
 
                                 <div className="h-px w-full bg-border my-1"></div>
@@ -328,6 +408,132 @@ export default function ExportModal({ isOpen, onClose }: Props) {
                             </div>
                         )}
                     </div>
+                </div>
+            )}
+
+            {/* قالب جدول اختصاصی PDF */}
+            {isPdfRendering && (
+                <div
+                    id="pdf-table-export-node"
+                    className="fixed top-0 left-0 z-[50000] p-8 font-sans bg-[#ffffff] text-[#0f172a]"
+                    style={{ width: "880px" }}
+                    dir="rtl"
+                >
+                    {/* هدر سند PDF */}
+                    <div className="flex items-start justify-between border-b border-[#e2e8f0] pb-5 mb-5">
+                        <div>
+                            <h1 className="text-xl font-black mb-1 text-[#1877f2]">
+                                جدول دروس و برنامه هفتگی
+                            </h1>
+                            <p className="text-xs text-[#64748b] font-medium">ساخته شده با ابزار انتخاب واحد</p>
+                        </div>
+
+                        <div className="flex flex-col items-end text-left" dir="ltr">
+                            <span className="font-mono text-xs font-bold text-[#1877f2]">
+                                {siteHost}
+                            </span>
+                            <div className="mt-1 px-3 py-0.5 rounded-full bg-[#1877f2]/10 border border-[#1877f2]/30 text-[#1877f2] text-[11px] font-bold" dir="rtl">
+                                {todayPersianStr}
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* خلاصه وضعیت */}
+                    <div className="flex items-center gap-4 mb-5 text-xs font-bold">
+                        <div className="px-3 py-1.5 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] text-[#334155]">
+                            تعداد دروس: <span className="font-mono font-bold text-[#0f172a]">{courses.length}</span>
+                        </div>
+                        <div className="px-3 py-1.5 rounded-lg border border-[#1877f2]/30 bg-[#1877f2]/10 text-[#1877f2]">
+                            مجموع واحدها: <span className="font-mono font-bold">{toEnglishDigits(totalUnits.toString())}</span> واحد
+                        </div>
+                    </div>
+
+                    {/* جدول دروس */}
+                    <table className="w-full text-right border-collapse text-xs">
+                        <thead>
+                            <tr className="bg-[#f1f5f9] text-[#334155]">
+                                <th className="p-3 border border-[#cbd5e1] text-center font-bold w-10">#</th>
+                                <th className="p-3 border border-[#cbd5e1] text-center font-bold w-24">کد درس</th>
+                                <th className="p-3 border border-[#cbd5e1] font-bold">نام درس</th>
+                                <th className="p-3 border border-[#cbd5e1] font-bold w-32">استاد</th>
+                                <th className="p-3 border border-[#cbd5e1] text-center font-bold w-14">واحد</th>
+                                <th className="p-3 border border-[#cbd5e1] font-bold w-52">جلسات کلاس</th>
+                                <th className="p-3 border border-[#cbd5e1] font-bold w-44">امتحان پایان‌ترم</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {courses.map((c, i) => (
+                                <tr
+                                    key={c.id}
+                                    className={i % 2 === 0 ? "bg-[#ffffff]" : "bg-[#f8fafc]"}
+                                >
+                                    <td className="p-3 border border-[#e2e8f0] text-center font-mono font-bold text-[#64748b] align-middle">
+                                        {i + 1}
+                                    </td>
+                                    <td className="p-3 border border-[#e2e8f0] text-center font-mono font-bold text-[#0f172a] align-middle" dir="ltr">
+                                        {toEnglishDigits(c.code)}
+                                    </td>
+                                    <td className="p-3 border border-[#e2e8f0] font-bold text-[#0f172a] align-middle">
+                                        {c.name}
+                                    </td>
+                                    <td className="p-3 border border-[#e2e8f0] text-[#334155] align-middle">
+                                        {c.professor || "-"}
+                                    </td>
+                                    <td className="p-3 border border-[#e2e8f0] text-center font-mono font-bold text-[#0f172a] align-middle">
+                                        {toEnglishDigits(c.units.toString())}
+                                    </td>
+
+                                    {/* ستون جلسات کلاس: روز در سمت راست و ساعت در سمت چپ دقیقاً روبه‌روی هم در یک خط */}
+                                    <td className="p-2.5 border border-[#e2e8f0] text-[#0f172a] align-middle">
+                                        <div className="flex flex-col gap-1.5 w-full">
+                                            {c.sessions.map((s, sIdx) => (
+                                                <div
+                                                    key={sIdx}
+                                                    className="flex items-center justify-between gap-3 bg-slate-50 px-2.5 py-1 rounded border border-slate-200/70"
+                                                >
+                                                    <span className="font-bold text-[11px] text-slate-700 shrink-0 whitespace-nowrap">
+                                                        {s.day}
+                                                    </span>
+                                                    <span
+                                                        className="font-mono text-[11px] font-semibold text-slate-600 tracking-tight shrink-0 whitespace-nowrap"
+                                                        dir="ltr"
+                                                    >
+                                                        {toEnglishDigits(s.start)} - {toEnglishDigits(s.end)}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </td>
+
+                                    {/* ستون امتحان پایان‌ترم: کادربندی مشابه و منظم */}
+                                    <td className="p-2.5 border border-[#e2e8f0] text-[#0f172a] align-middle">
+                                        {c.exam_date ? (
+                                            <div className="flex flex-col gap-1 w-full bg-slate-50 px-2.5 py-1 rounded border border-slate-200/70">
+                                                <div className="flex items-center justify-between gap-2">
+                                                    <span className="font-bold text-[11px] text-slate-700 shrink-0 whitespace-nowrap">
+                                                        {getExamDay(c.exam_date)}
+                                                    </span>
+                                                    <span className="font-mono text-[11px] font-bold text-primary shrink-0 whitespace-nowrap" dir="ltr">
+                                                        {toEnglishDigits(c.exam_date)}
+                                                    </span>
+                                                </div>
+                                                {c.exam_time && (
+                                                    <div className="flex items-center justify-between gap-2 text-[10px] text-slate-500 border-t border-slate-200/60 pt-0.5">
+                                                        <span>ساعت امتحان</span>
+                                                        <span className="font-mono font-bold text-slate-700" dir="ltr">
+                                                            {toEnglishDigits(c.exam_time)}
+                                                        </span>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        ) : (
+                                            <span className="text-[#94a3b8] text-center block">ندارد</span>
+                                        )}
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             )}
         </>

@@ -188,3 +188,8 @@
   display: inline-block;
   transform-origin: center;
 }
+
+/* نمایش هدر اختصاصی فقط حین خروجی تصویر */
+.export-mode .export-header {
+  display: flex !important;
+}
