@@ -149,14 +149,17 @@ export default function ExportModal({ isOpen, onClose }: Props) {
 
         const originalCssText = element.style.cssText;
         const isDark = theme === "dark";
+        const bgColor = isDark ? "#050507" : "#f5f7fa";
 
         element.classList.add("export-mode");
         element.style.setProperty("display", "flex", "important");
         element.style.setProperty("flex-direction", "column", "important");
         element.style.setProperty("width", "1050px", "important");
+        element.style.setProperty("margin", "0", "important");
+        element.style.setProperty("margin-top", "0", "important");
         element.style.setProperty("padding", "24px", "important");
-        element.style.setProperty("background-color", isDark ? "#050507" : "#f5f7fa", "important");
-        element.style.setProperty("border-radius", "18px", "important");
+        element.style.setProperty("background-color", bgColor, "important");
+        element.style.setProperty("border-radius", "0px", "important");
 
         await new Promise((r) => setTimeout(r, 350));
 
@@ -164,6 +167,12 @@ export default function ExportModal({ isOpen, onClose }: Props) {
             const dataUrl = await toPng(element, {
                 quality: 0.98,
                 pixelRatio: 1.5,
+                backgroundColor: bgColor,
+                style: {
+                    margin: "0",
+                    marginTop: "0",
+                    transform: "none",
+                },
                 cacheBust: true,
             });
 

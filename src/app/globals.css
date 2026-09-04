@@ -189,7 +189,11 @@
   transform-origin: center;
 }
 
-/* نمایش هدر اختصاصی فقط حین خروجی تصویر */
+.export-mode {
+  margin: 0 !important;
+  margin-top: 0 !important;
+}
+
 .export-mode .export-header {
   display: flex !important;
 }
